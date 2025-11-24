@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Thrif Dashboard</title>
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+
+        <!-- Styles -->
+        <script>
+            (function() {
+                try {
+                    const stored = localStorage.getItem('darkMode');
+                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (stored === 'true' || (stored === null && prefersDark)) {
+                        document.documentElement.classList.add('dark');
+                    }
+                } catch (e) {}
+            })();
+        </script>
+        <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::styles(); ?>
+
+        <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
+        <style>
+            html, body { touch-action: pan-x pan-y; overscroll-behavior: none; overflow-x: hidden; }
+        </style>
+    </head>
+    <body class="antialiased font-sans bg-gray-50 dark:bg-gray-900" x-data>
+        <div class="min-h-screen flex flex-col">
+            <?php echo $__env->make('landing.sections.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
+            <main class="flex-1">
+                <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                    <?php echo $__env->make('landing.sections.status-alert', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
+                    <?php echo $__env->make('landing.sections.hero', [
+                        'featuredProducts' => $featuredProducts,
+                        'hasMoreProducts' => $hasMoreProducts,
+                    ], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
+                    <section class="mt-20 md:mt-24 grid gap-6 lg:gap-8 lg:grid-cols-2 items-stretch">
+                        <?php echo $__env->make('landing.sections.about', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                        <?php echo $__env->make('landing.sections.contact', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                    </section>
+                </div>
+            </main>
+
+            <?php echo $__env->make('landing.sections.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+        </div>
+        <?php echo $__env->make('landing.sections.login-modal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+        <?php if (isset($component)) { $__componentOriginal7cfab914afdd05940201ca0b2cbc009b = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal7cfab914afdd05940201ca0b2cbc009b = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.toast','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('toast'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal7cfab914afdd05940201ca0b2cbc009b)): ?>
+<?php $attributes = $__attributesOriginal7cfab914afdd05940201ca0b2cbc009b; ?>
+<?php unset($__attributesOriginal7cfab914afdd05940201ca0b2cbc009b); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal7cfab914afdd05940201ca0b2cbc009b)): ?>
+<?php $component = $__componentOriginal7cfab914afdd05940201ca0b2cbc009b; ?>
+<?php unset($__componentOriginal7cfab914afdd05940201ca0b2cbc009b); ?>
+<?php endif; ?>
+        <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::scripts(); ?>
+
+    </body>
+</html>
+<?php /**PATH C:\laragon\www\thrif\resources\views/welcome.blade.php ENDPATH**/ ?>
