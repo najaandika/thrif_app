@@ -1,11 +1,11 @@
-<div class="space-y-6">
+<div class="profile-section">
     @if (session()->has('addressSaved'))
         <div class="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
             {{ session('addressSaved') }}
         </div>
     @endif
 
-    <form wire:submit.prevent="save" class="space-y-6">
+    <form wire:submit.prevent="save" class="profile-section">
         <div class="grid gap-6 md:grid-cols-2">
             <div class="space-y-2">
                 <label class="text-sm font-semibold text-gray-700 dark:text-gray-200">Nama penerima</label>
@@ -28,40 +28,6 @@
             <label class="text-sm font-semibold text-gray-700 dark:text-gray-200">Alamat lengkap</label>
             <textarea wire:model.defer="address_line" rows="3" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100" placeholder="Nama jalan, nomor rumah, detail patokan"></textarea>
             @error('address_line')
-                <p class="text-sm font-semibold text-red-600">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div class="grid gap-6 md:grid-cols-3">
-            <div class="space-y-2">
-                <label class="text-sm font-semibold text-gray-700 dark:text-gray-200">Kota / Kabupaten</label>
-                <input type="text" wire:model.defer="city" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100" />
-                @error('city')
-                    <p class="text-sm font-semibold text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="space-y-2">
-                <label class="text-sm font-semibold text-gray-700 dark:text-gray-200">Provinsi</label>
-                <input type="text" wire:model.defer="province" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100" />
-                @error('province')
-                    <p class="text-sm font-semibold text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="space-y-2">
-                <label class="text-sm font-semibold text-gray-700 dark:text-gray-200">Kode pos</label>
-                <input type="text" wire:model.defer="postal_code" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100" />
-                @error('postal_code')
-                    <p class="text-sm font-semibold text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-        </div>
-
-        <div class="space-y-2">
-            <label class="text-sm font-semibold text-gray-700 dark:text-gray-200">Catatan tambahan</label>
-            <textarea wire:model.defer="notes" rows="2" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100" placeholder="Kode akses, jadwal kurir, dll"></textarea>
-            @error('notes')
                 <p class="text-sm font-semibold text-red-600">{{ $message }}</p>
             @enderror
         </div>

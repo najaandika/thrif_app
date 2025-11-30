@@ -26,18 +26,6 @@
                 <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl transform -translate-x-1/3 translate-y-1/3"></div>
             </div>
 
-            <div class="relative z-10 mb-8">
-                <a href="/" wire:navigate class="flex items-center gap-3 group focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-500 rounded-2xl">
-                    <div class="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white font-bold flex items-center justify-center shadow-xl shadow-indigo-500/50 transition-transform group-hover:scale-110">
-                        <span class="text-xl">MC</span>
-                    </div>
-                    <div>
-                        <div class="text-lg font-bold text-gray-900 dark:text-gray-100">Mr. Crab Shopp</div>
-                        <div class="text-xs text-gray-600 dark:text-gray-400">Thrifting curated drops</div>
-                    </div>
-                </a>
-            </div>
-
             <div class="relative z-10 w-full sm:max-w-md px-4 sm:px-5 py-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl shadow-2xl overflow-hidden sm:rounded-3xl border border-gray-200 dark:border-gray-700">
                 {{ $slot }}
             </div>

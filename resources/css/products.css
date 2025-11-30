@@ -1,0 +1,35 @@
+/* Product Styles */
+
+/* Product Image */
+.product-img {
+    @apply h-14 w-14 rounded-xl object-cover shadow-md ring-2 ring-indigo-100 dark:ring-indigo-900 hover:scale-110 transition-transform duration-200;
+}
+
+.product-img-placeholder {
+    @apply h-14 w-14 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-xl flex items-center justify-center shadow-md;
+}
+
+/* Badges */
+.stock-badge {
+    @apply px-3 py-1 inline-flex text-xs font-semibold rounded-full;
+}
+
+.stock-badge-available {
+    @apply bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200;
+}
+
+.stock-badge-low {
+    @apply bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200;
+}
+
+.condition-badge {
+    @apply px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md;
+}
+
+.status-badge-available {
+    @apply px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/50 animate-pulse;
+}
+
+.status-badge-sold {
+    @apply px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-lg shadow-red-500/50;
+}

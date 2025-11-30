@@ -44,7 +44,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                         </svg>
                                     </div>
-                                    <input wire:model.live="search" id="order_search" name="order_search" type="text" placeholder="Cari order..." class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md">
+                                    <input wire:model.live="search" id="order_search" name="order_search" type="text" placeholder="Cari order..." class="w-full pl-12 pr-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500 transition-all duration-200 shadow-sm hover:shadow-md">
                                 </div>
                                 <div class="w-auto">
                                     <select wire:model.live="status" id="order_status" name="order_status" class="pl-4 pr-11 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none bg-no-repeat bg-[length:0.75em] bg-[right_1rem_center]" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 24 24%27 stroke=%27%236b7280%27%3E%3Cpath stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%272%27 d=%27M19 9l-7 7-7-7%27/%3E%3C/svg%3E');">
@@ -80,12 +80,6 @@
                                         </button>
                                     </form>
                                 </div>
-                                <a href="<?php echo e(route('orders.create')); ?>" class="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 border border-transparent rounded-xl font-semibold text-xs sm:text-sm text-white uppercase tracking-wider hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap w-full sm:w-auto max-w-xs mx-auto">
-                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                    </svg>
-                                    Tambah Order
-                                </a>
                             </div>
                         </div>
 
@@ -111,11 +105,13 @@
                                             </td>
                                             <td class="px-6 py-4">
                                                 <div class="text-sm font-medium text-gray-900 dark:text-gray-100"><?php echo e($order->product->name ?? '-'); ?></div>
-                                                <div class="text-xs text-gray-500 dark:text-gray-400">Rp <?php echo e(number_format($order->product->price ?? 0, 0, ',', '.')); ?></div>
+                                                <div class="text-xs text-gray-500 dark:text-gray-400"><?php echo e($order->quantity); ?> x Rp <?php echo e(number_format($order->product->price ?? 0, 0, ',', '.')); ?></div>
                                             </td>
                                             <td class="px-6 py-4">
                                                 <div class="text-sm font-medium text-gray-900 dark:text-gray-100"><?php echo e($order->buyer_name); ?></div>
                                                 <div class="text-xs text-gray-500 dark:text-gray-400"><?php echo e($order->buyer_contact ?: '-'); ?></div>
+                                                <div class="text-xs text-gray-400 dark:text-gray-500 truncate max-w-[150px] mt-0.5" title="<?php echo e($order->shipping_address); ?>"><?php echo e($order->shipping_address ?: '-'); ?></div>
+                                                <div class="text-xs text-gray-900 dark:text-gray-100 font-medium mt-0.5"><?php echo e($order->payment_method === 'cash' ? 'Cash On Delivery' : ucfirst($order->payment_method ?? '-')); ?></div>
                                             </td>
                                             <td class="px-6 py-4">
                                                 <span class="px-3 py-1 inline-flex text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"><?php echo e($order->quantity); ?></span>
@@ -127,7 +123,7 @@
                                                 <?php
                                                     $statusColors = [
                                                         'pending' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200',
-                                                        'paid' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200',
+                                                        'paid' => 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-200',
                                                         'shipped' => 'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200',
                                                         'completed' => 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-200',
                                                         'cancelled' => 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200',
@@ -140,12 +136,23 @@
                                             </td>
                                             <td class="px-6 py-4 text-right">
                                                 <div class="flex items-center justify-end gap-2">
-                                                    <a href="<?php echo e(route('orders.edit', $order)); ?>" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs font-semibold rounded-lg hover:from-indigo-600 hover:to-purple-600 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105">
+                                                    <button type="button" wire:click="viewOrder(<?php echo e($order->id); ?>)" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-slate-600 to-slate-800 text-white text-xs font-semibold rounded-lg hover:from-slate-700 hover:to-slate-900 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105">
                                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                                         </svg>
-                                                        Edit
-                                                    </a>
+                                                        Lihat
+                                                    </button>
+                                                    <!--[if BLOCK]><![endif]--><?php if($order->status === 'pending'): ?>
+                                                    <form wire:submit.prevent="confirmOrder(<?php echo e($order->id); ?>)" class="inline-block">
+                                                        <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-green-500 text-white text-xs font-semibold rounded-lg hover:from-emerald-600 hover:to-green-600 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105">
+                                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                            </svg>
+                                                            Konfirmasi
+                                                        </button>
+                                                    </form>
+                                                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                                     <button type="button" onclick="confirmDelete(<?php echo e($order->id); ?>)" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-semibold rounded-lg hover:from-red-600 hover:to-pink-600 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 relative z-10">
                                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -173,5 +180,89 @@
             </div>
         </div>
     </div>
+
+    <!-- Order Detail Modal -->
+    <!--[if BLOCK]><![endif]--><?php if($showModal && $selectedOrder): ?>
+        <div class="modal-overlay" wire:click="closeModal">
+            <div class="modal-container" wire:click.stop>
+                <div class="modal-header">
+                    <h3 class="modal-title">Detail Order #<?php echo e(str_pad($selectedOrder->id, 4, '0', STR_PAD_LEFT)); ?></h3>
+                    <button wire:click="closeModal" class="modal-close">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <!-- Order Info -->
+                    <div class="receipt-section">
+                        <div class="receipt-row">
+                            <span class="receipt-label">Tanggal:</span>
+                            <span class="receipt-value"><?php echo e($selectedOrder->created_at->format('d M Y, H:i')); ?></span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Status:</span>
+                            <span class="status-badge <?php echo e($selectedOrder->status === 'paid' ? 'status-paid' : ($selectedOrder->status === 'pending' ? 'status-unpaid' : 'status-badge-info')); ?>">
+                                <?php echo e(ucfirst($selectedOrder->status)); ?>
+
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Buyer Info -->
+                    <div class="receipt-section">
+                        <h4 class="receipt-section-title">Informasi Pembeli</h4>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Nama:</span>
+                            <span class="receipt-value"><?php echo e($selectedOrder->buyer_name); ?></span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Kontak:</span>
+                            <span class="receipt-value"><?php echo e($selectedOrder->buyer_contact ?: '-'); ?></span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Alamat:</span>
+                            <span class="receipt-value text-right max-w-[200px]"><?php echo e($selectedOrder->shipping_address ?: '-'); ?></span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Pembayaran:</span>
+                            <span class="receipt-value"><?php echo e($selectedOrder->payment_method === 'cash' ? 'Cash On Delivery' : ucfirst($selectedOrder->payment_method ?? '-')); ?></span>
+                        </div>
+                    </div>
+
+                    <!-- Items -->
+                    <div class="receipt-section">
+                        <h4 class="receipt-section-title">Item Produk</h4>
+                        <div class="receipt-items">
+                            <div class="receipt-item">
+                                <div class="receipt-item-info">
+                                    <div class="receipt-item-name"><?php echo e($selectedOrder->product->name ?? 'Produk tidak tersedia'); ?></div>
+                                    <div class="receipt-item-detail"><?php echo e($selectedOrder->quantity); ?> x Rp <?php echo e(number_format($selectedOrder->product->price ?? 0, 0, ',', '.')); ?></div>
+                                </div>
+                                <div class="receipt-item-subtotal">Rp <?php echo e(number_format($selectedOrder->total_price, 0, ',', '.')); ?></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="receipt-section receipt-summary">
+                        <div class="receipt-row">
+                            <span class="receipt-label">Total Qty:</span>
+                            <span class="receipt-value font-semibold"><?php echo e($selectedOrder->quantity); ?></span>
+                        </div>
+                        <div class="receipt-row receipt-total">
+                            <span class="receipt-label">Total Harga:</span>
+                            <span class="receipt-value">Rp <?php echo e(number_format($selectedOrder->total_price, 0, ',', '.')); ?></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button wire:click="closeModal" class="btn-close-modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 </div>
 <?php /**PATH C:\laragon\www\thrif\resources\views/livewire/orders/index.blade.php ENDPATH**/ ?>

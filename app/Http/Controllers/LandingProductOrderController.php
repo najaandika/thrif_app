@@ -22,12 +22,22 @@ class LandingProductOrderController extends Controller
             'buyer_contact' => ['nullable', 'string', 'max:255'],
             'shipping_address' => ['nullable', 'string', 'max:1000'],
             'quantity' => ['required', 'integer', 'min:1'],
+            'size' => ['required', 'string'],
             'notes' => ['nullable', 'string', 'max:500'],
+            'payment_method' => ['required', 'string', 'in:cash,transfer,midtrans'],
         ]);
 
-        if (! $product->is_available || $product->stock < $data['quantity']) {
+        $variant = $product->sizes()->where('size', $data['size'])->first();
+
+        if (! $variant) {
             throw ValidationException::withMessages([
-                'quantity' => 'Stok produk tidak mencukupi.',
+                'size' => 'Ukuran tidak valid.',
+            ])->errorBag('order');
+        }
+
+        if (! $product->is_available || $variant->stock < $data['quantity']) {
+            throw ValidationException::withMessages([
+                'quantity' => 'Stok produk untuk ukuran ini tidak mencukupi.',
             ])->errorBag('order');
         }
 
@@ -37,7 +47,12 @@ class LandingProductOrderController extends Controller
         $buyerContact = $buyerContactInput ?: ($user->address?->phone ?: $user->email);
         $shippingAddress = $shippingAddressInput ?: $user->address?->asTextarea();
 
-        DB::transaction(function () use ($data, $product, $user, $buyerContact, $shippingAddress) {
+        DB::transaction(function () use ($data, $product, $user, $buyerContact, $shippingAddress, $variant) {
+            // Deduct stock from variant
+            $variant->stock -= $data['quantity'];
+            $variant->save();
+
+            // Update main product stock
             $product->stock -= $data['quantity'];
 
             if ($product->stock <= 0) {
@@ -55,9 +70,11 @@ class LandingProductOrderController extends Controller
                 'buyer_contact' => $buyerContact,
                 'shipping_address' => $shippingAddress,
                 'quantity' => $data['quantity'],
+                'size' => $data['size'],
                 'total_price' => $product->price * $data['quantity'],
                 'status' => 'pending',
                 'notes' => $data['notes'] ?? null,
+                'payment_method' => $data['payment_method'],
             ]);
         });
 

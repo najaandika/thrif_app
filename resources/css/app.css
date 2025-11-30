@@ -1,3 +1,20 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import './admin-shared.css';
+@import './dashboard.css';
+@import './pos.css';
+@import './products.css';
+@import './categories.css';
+@import './orders.css';
+@import './transactions.css';
+@import './profile.css';
+@import './settings.css';
+@import './auth.css';
+@import './landing.css';
+@import './responsive.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

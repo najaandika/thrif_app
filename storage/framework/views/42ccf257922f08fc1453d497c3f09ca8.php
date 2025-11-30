@@ -1,7 +1,7 @@
-<div class="py-12">
+<div class="admin-wrapper">
     <div>
         <!--[if BLOCK]><![endif]--><?php if(session()->has('message')): ?>
-            <div class="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900 dark:to-emerald-900 text-green-700 dark:text-green-200 rounded-xl border-l-4 border-green-500 shadow-lg animate-pulse">
+            <div class="alert-message">
                 <div class="flex items-center">
                     <svg class="w-5 h-5 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
@@ -11,7 +11,7 @@
             </div>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-        <div class="flex flex-row gap-6">
+        <div class="admin-layout">
             <?php if (isset($component)) { $__componentOriginal2880b66d47486b4bfeaf519598a469d6 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal2880b66d47486b4bfeaf519598a469d6 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.sidebar','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -34,19 +34,19 @@
 <?php endif; ?>
 
             <!-- Main Content -->
-            <div class="flex-1 min-w-0 px-4 sm:px-6 lg:px-8">
-                <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 overflow-hidden shadow-xl sm:rounded-2xl border border-gray-100 dark:border-gray-700">
-                    <div class="p-8">
-                        <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                            <div class="relative flex-1 w-full sm:w-auto">
+            <div class="admin-content">
+                <div class="admin-card">
+                    <div class="admin-card-body">
+                        <div class="admin-header-simple">
+                            <div class="relative flex-1">
                                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                     <svg class="h-5 w-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                     </svg>
                                 </div>
-                                <input wire:model.live="search" id="product_search" name="product_search" type="text" placeholder="Search products..." class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md">
+                                <input wire:model.live="search" id="product_search" name="product_search" type="text" placeholder="Search products..." class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md">
                             </div>
-                            <a href="<?php echo e(route('products.create')); ?>" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 border border-transparent rounded-xl font-semibold text-sm text-white uppercase tracking-wider hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap">
+                            <a href="<?php echo e(route('products.create')); ?>" class="btn-primary">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                 </svg>
@@ -54,24 +54,25 @@
                             </a>
                         </div>
 
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead class="bg-gray-50 dark:bg-gray-700">
+                    <div class="admin-table-container">
+                        <table class="admin-table">
+                            <thead class="admin-thead">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Image</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Price</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Stock</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Condition</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Category</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                                    <th class="admin-th">Image</th>
+                                    <th class="admin-th">Name</th>
+                                    <th class="admin-th">Price</th>
+                                    <th class="admin-th">Stock</th>
+                                    <th class="admin-th">Condition</th>
+                                    <th class="admin-th">Category</th>
+                                    <th class="admin-th">Size</th>
+                                    <th class="admin-th">Status</th>
+                                    <th class="admin-th-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                            <tbody class="admin-tbody">
                                 <!--[if BLOCK]><![endif]--><?php $__empty_1 = true; $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                    <tr class="hover:bg-indigo-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                    <tr class="admin-tr">
+                                        <td class="admin-td">
                                             <!--[if BLOCK]><![endif]--><?php if($product->image): ?>
                                                 <img src="<?php echo e(Storage::url($product->image)); ?>" alt="<?php echo e($product->name); ?>" class="h-14 w-14 rounded-xl object-cover shadow-md ring-2 ring-indigo-100 dark:ring-indigo-900 hover:scale-110 transition-transform duration-200">
                                             <?php else: ?>
@@ -83,41 +84,43 @@
                                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                         </td>
                                         <td class="px-6 py-4">
-                                            <div class="text-sm font-medium text-gray-900 dark:text-gray-100"><?php echo e($product->name); ?></div>
+                                            <div class="text-primary"><?php echo e($product->name); ?></div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900 dark:text-gray-100">Rp <?php echo e(number_format($product->price, 0, ',', '.')); ?></div>
+                                        <td class="admin-td">
+                                            <div class="text-primary">Rp <?php echo e(number_format($product->price, 0, ',', '.')); ?></div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-3 py-1 inline-flex text-xs font-semibold rounded-full <?php echo e($product->stock > 0 ? 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200' : 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200'); ?>">
+                                        <td class="admin-td">
+                                            <span class="stock-badge <?php echo e($product->stock > 0 ? 'stock-badge-available' : 'stock-badge-low'); ?>">
                                                 <?php echo e($product->stock); ?> in stock
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="admin-td">
                                             <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md">
                                                 <?php echo e(ucfirst($product->condition)); ?>
 
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                                            <?php echo e($product->category ?? '-'); ?>
-
+                                        <td class="admin-td">
+                                            <span class="text-secondary"><?php echo e($product->category ?? '-'); ?></span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="admin-td">
+                                            <span class="text-secondary"><?php echo e($product->sizes->pluck('size')->join(', ') ?: '-'); ?></span>
+                                        </td>
+                                        <td class="admin-td">
                                             <!--[if BLOCK]><![endif]--><?php if($product->is_available): ?>
-                                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/50 animate-pulse">Available</span>
+                                                <span class="status-badge-available">Available</span>
                                             <?php else: ?>
-                                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-lg shadow-red-500/50">Sold</span>
+                                                <span class="status-badge-sold">Sold</span>
                                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                                            <a href="<?php echo e(route('products.edit', $product)); ?>" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs font-semibold rounded-lg hover:from-indigo-600 hover:to-purple-600 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105">
+                                        <td class="admin-td text-right space-x-2">
+                                            <a href="<?php echo e(route('products.edit', $product)); ?>" class="btn-action-edit">
                                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                 </svg>
                                                 Edit
                                             </a>
-                                            <button type="button" onclick="confirmDelete(<?php echo e($product->id); ?>)" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-semibold rounded-lg hover:from-red-600 hover:to-pink-600 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 relative z-10">
+                                            <button type="button" onclick="confirmDelete(<?php echo e($product->id); ?>)" class="btn-action-delete">
                                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                 </svg>
@@ -127,7 +130,7 @@
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                     <tr>
-                                        <td colspan="7" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                                        <td colspan="9" class="empty-state">
                                             No products found.
                                         </td>
                                     </tr>
@@ -136,7 +139,7 @@
                         </table>
                     </div>
 
-                    <div class="mt-4">
+                    <div class="pagination-wrapper">
                         <?php echo e($products->links()); ?>
 
                     </div>

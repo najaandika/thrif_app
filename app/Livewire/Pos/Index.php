@@ -3,6 +3,7 @@ namespace App\Livewire\Pos;
 
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -16,6 +17,7 @@ class Index extends Component
     public $payment_method = 'cash';
     public $amount_received = 0;
     public $discount = 0;
+    public $discountType = 'fixed'; // 'fixed' or 'percent'
     public $loadProducts = false;
 
     public function getProductsProperty()
@@ -38,19 +40,27 @@ class Index extends Component
         $this->loadProducts = ! $this->loadProducts;
     }
 
-    public function getTotalProperty()
+    #[Computed]
+    public function total()
     {
         $total = 0;
         foreach ($this->cart as $item) {
             $total += $item['price'] * $item['qty'];
         }
 
-        return max($total - $this->discount, 0);
+        if ($this->discountType === 'percent') {
+            $discountAmount = $total * ((float) $this->discount / 100);
+        } else {
+            $discountAmount = (float) $this->discount;
+        }
+
+        return max($total - $discountAmount, 0);
     }
 
-    public function getChangeProperty()
+    #[Computed]
+    public function change()
     {
-        return max($this->amount_received - $this->total, 0);
+        return max((float) $this->amount_received - $this->total(), 0);
     }
 
     public function addToCart($productId)
@@ -98,6 +108,12 @@ class Index extends Component
         }
     }
 
+    public function updatedDiscountType()
+    {
+        $this->discount = 0;
+        $this->dispatch('reset-discount');
+    }
+
     public function saveTransaction()
     {
         if (count($this->cart) == 0) {
@@ -107,40 +123,59 @@ class Index extends Component
 
             DB::beginTransaction();
             try {
-                // hitung total quantity dari cart
-                $totalQty = 0;
-                foreach ($this->cart as $item) {
-                    $totalQty += (int) ($item['qty'] ?? 0);
-                }
+                // hitung total quantity dan subtotal dari cart
+            $totalQty = 0;
+            $subtotal = 0;
+            foreach ($this->cart as $item) {
+                $totalQty += (int) ($item['qty'] ?? 0);
+                $subtotal += $item['price'] * $item['qty'];
+            }
 
-                // Simpan ke tabel transactions (terpisah dari orders)
-                $transaction = \App\Models\Transaction::create([
-                    'user_id' => Auth::id(),
-                    'total_qty' => $totalQty,
-                    'total_price' => $this->total,
-                    'payment_method' => $this->payment_method,
-                    'payment_status' => 'paid',
-                    'paid_at' => now(),
-                    'notes' => null,
+            // Hitung nilai diskon
+            if ($this->discountType === 'percent') {
+                $discountAmount = $subtotal * ((float) $this->discount / 100);
+            } else {
+                $discountAmount = (float) $this->discount;
+            }
+
+            // Simpan ke tabel transactions (terpisah dari orders)
+            $transaction = \App\Models\Transaction::create([
+                'user_id' => Auth::id(),
+                'total_qty' => $totalQty,
+                'total_price' => $this->total, // Ini sudah harga setelah diskon
+                'discount' => $discountAmount,
+                'payment_method' => $this->payment_method,
+                'payment_status' => 'paid',
+                'paid_at' => now(),
+                'notes' => null,
+            ]);
+
+            foreach ($this->cart as $item) {
+                \App\Models\TransactionItem::create([
+                    'transaction_id' => $transaction->id,
+                    'product_id' => $item['id'],
+                    'price' => $item['price'],
+                    'qty' => $item['qty'],
+                    'subtotal' => $item['price'] * $item['qty'],
                 ]);
 
-                foreach ($this->cart as $item) {
-                    \App\Models\TransactionItem::create([
-                        'transaction_id' => $transaction->id,
-                        'product_id' => $item['id'],
-                        'price' => $item['price'],
-                        'qty' => $item['qty'],
-                        'subtotal' => $item['price'] * $item['qty'],
-                    ]);
+                // Kurangi stok produk
+                $product = \App\Models\Product::find($item['id']);
+                if ($product) {
+                    $product->decrement('stock', $item['qty']);
                 }
+            }
 
-                DB::commit();
+            DB::commit();
 
             $this->cart = [];
             $this->cartQty = [];
             $this->amount_received = 0;
             $this->discount = 0;
+            $this->discountType = 'fixed';
             $this->payment_method = 'cash';
+
+            $this->dispatch('transaction-completed');
 
             session()->flash('success', 'Transaksi berhasil disimpan!');
         } catch (\Exception $e) {

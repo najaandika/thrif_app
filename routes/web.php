@@ -29,10 +29,8 @@ use App\Livewire\Dashboard;
 use App\Livewire\Products\Index as ProductsIndex;
 use App\Livewire\Products\Create as ProductsCreate;
 use App\Livewire\Products\Edit as ProductsEdit;
-use App\Livewire\Shipping\Index as ShippingIndex;
+// ShippingIndex import dihapus
 use App\Livewire\Orders\Index as OrdersIndex;
-use App\Livewire\Orders\Create as OrdersCreate;
-use App\Livewire\Orders\Edit as OrdersEdit;
 use App\Livewire\LandingProducts\Index as LandingProductsIndex;
 use App\Livewire\Transactions\Index as TransactionsIndex;
 
@@ -103,11 +101,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 
     // Orders (Livewire)
     Route::get('/orders', OrdersIndex::class)->name('orders.index');
-    Route::get('/orders/create', OrdersCreate::class)->name('orders.create');
-    Route::get('/orders/{order}/edit', OrdersEdit::class)->name('orders.edit');
 
-    // Shipping & Settings & Categories (Livewire)
-    Route::get('/shipping', ShippingIndex::class)->name('shipping.index');
+    // Settings & Categories (Livewire)
 
     Route::get('/categories', \App\Livewire\Categories\Index::class)->name('categories.index');
     Route::get('/categories/create', \App\Livewire\Categories\Create::class)->name('categories.create');
@@ -115,5 +110,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 
     Route::get('/settings', \App\Livewire\Settings\Index::class)->name('settings.index');
 });
+
+// Google Login
+use App\Http\Controllers\AuthGoogleController;
+Route::get('/auth/google/redirect', [AuthGoogleController::class, 'redirect'])->name('google.redirect');
+Route::get('/auth/google/callback', [AuthGoogleController::class, 'callback'])->name('google.callback');
 
 require __DIR__ . '/auth.php';

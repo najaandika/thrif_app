@@ -17,6 +17,20 @@ class Index extends Component
     public $search = '';
     public $status = 'all';
     protected $listeners = ['delete'];
+    public $selectedOrder;
+    public $showModal = false;
+
+    public function viewOrder($id)
+    {
+        $this->selectedOrder = Order::with('product')->findOrFail($id);
+        $this->showModal = true;
+    }
+
+    public function closeModal()
+    {
+        $this->showModal = false;
+        $this->selectedOrder = null;
+    }
 
     protected $queryString = [
         'search' => ['except' => ''],
@@ -58,7 +72,15 @@ class Index extends Component
         return in_array($status, ['pending', 'paid', 'shipped', 'completed'], true);
     }
 
-
+    public function confirmOrder($id)
+    {
+        $order = Order::findOrFail($id);
+        if ($order->status === 'pending') {
+            $order->status = 'paid';
+            $order->save();
+            session()->flash('message', 'Order berhasil dikonfirmasi!');
+        }
+    }
 
     public function render()
     {

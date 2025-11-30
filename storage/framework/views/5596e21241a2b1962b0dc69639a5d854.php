@@ -1,5 +1,5 @@
-<div class="py-12">
-    <div class="flex flex-row gap-6">
+<div class="dashboard-container">
+    <div class="dashboard-layout">
         <?php if (isset($component)) { $__componentOriginal2880b66d47486b4bfeaf519598a469d6 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal2880b66d47486b4bfeaf519598a469d6 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.sidebar','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -21,39 +21,39 @@
 <?php unset($__componentOriginal2880b66d47486b4bfeaf519598a469d6); ?>
 <?php endif; ?>
         
-        <div class="flex-1 min-w-0 px-4 sm:px-6 lg:px-8">
-            <div class="max-w-7xl mx-auto">
-        <div class="space-y-6">
+        <div class="dashboard-content-wrapper">
+            <div class="dashboard-content">
+                <div class="dashboard-grid-gap">
                     <!-- Stats & Chart -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="stats-grid">
                         <!-- Donut chart card -->
-                        <div class="lg:col-span-2 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg p-6">
+                        <div class="card-base card-chart">
                             <div class="flex flex-col sm:flex-row items-center gap-6">
                                 <div class="flex-1 w-full">
-                                    <div class="flex items-center justify-between mb-4">
+                                    <div class="chart-header">
                                         <div>
-                                            <p class="text-xs font-semibold tracking-wider text-gray-500 dark:text-gray-400 uppercase">Status Produk</p>
-                                            <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">Ringkasan</h3>
+                                            <p class="chart-title-sm">Status Produk</p>
+                                            <h3 class="chart-title-lg">Ringkasan</h3>
                                         </div>
                                     </div>
 
-                                    <div class="grid grid-cols-2 gap-3">
-                                        <div class="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 shadow-sm">
-                                            <div class="h-8 w-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center flex-shrink-0">
-                                                <div class="h-3 w-3 rounded-full bg-emerald-500"></div>
+                                    <div class="chart-legend-grid">
+                                        <div class="chart-legend-item">
+                                            <div class="legend-icon-wrapper bg-emerald-100 dark:bg-emerald-900/30">
+                                                <div class="legend-dot bg-emerald-500"></div>
                                             </div>
                                             <div>
-                                                <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Available</p>
-                                                <p class="text-lg font-bold text-gray-900 dark:text-gray-100"><?php echo e($stats['available_products']); ?></p>
+                                                <p class="legend-text-sm">Tersedia</p>
+                                                <p class="legend-text-lg"><?php echo e($stats['available_products']); ?></p>
                                             </div>
                                         </div>
-                                        <div class="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 shadow-sm">
-                                            <div class="h-8 w-8 rounded-full bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center flex-shrink-0">
-                                                <div class="h-3 w-3 rounded-full bg-rose-500"></div>
+                                        <div class="chart-legend-item">
+                                            <div class="legend-icon-wrapper bg-rose-100 dark:bg-rose-900/30">
+                                                <div class="legend-dot bg-rose-500"></div>
                                             </div>
                                             <div>
-                                                <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Sold</p>
-                                                <p class="text-lg font-bold text-gray-900 dark:text-gray-100"><?php echo e($stats['sold_products']); ?></p>
+                                                <p class="legend-text-sm">Terjual</p>
+                                                <p class="legend-text-lg"><?php echo e($stats['sold_products']); ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -68,74 +68,74 @@
                         </div>
 
                         <!-- Total value card -->
-                        <div class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg p-8 text-white">
+                        <div class="card-base card-total-value">
                             <div class="flex flex-col h-full justify-between">
                                 <div>
-                                    <p class="text-xs font-semibold tracking-wider uppercase opacity-90">Total Value</p>
-                                    <div class="mt-6">
-                                        <p class="text-sm font-medium opacity-75">Rp</p>
-                                        <p class="mt-1 text-4xl font-bold"><?php echo e(number_format($stats['total_value'], 0, ',', '.')); ?></p>
+                                    <p class="total-value-label">Total Nilai</p>
+                                    <div class="total-value-amount-wrapper">
+                                        <p class="total-value-currency">Rp</p>
+                                        <p class="total-value-amount"><?php echo e(number_format($stats['total_value'], 0, ',', '.')); ?></p>
                                     </div>
                                 </div>
-                                <div class="mt-6 pt-6 border-t border-white/20">
-                                    <p class="text-sm opacity-90">Akumulasi nilai semua produk yang kamu listing.</p>
+                                <div class="total-value-footer">
+                                    <p class="total-value-desc">Akumulasi nilai semua produk yang kamu listing.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Bottom grid -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bottom-grid">
                         <!-- Recent Products -->
-                        <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg overflow-hidden">
-                            <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
-                                <div class="flex items-center justify-between">
+                        <div class="card-base card-recent-products">
+                            <div class="card-header">
+                                <div class="card-header-content">
                                     <div>
-                                        <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">Recent Products</h3>
-                                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Produk terakhir yang kamu tambahkan</p>
+                                        <h3 class="card-title">Produk Terbaru</h3>
+                                        <p class="card-subtitle">Produk terakhir yang kamu tambahkan</p>
                                     </div>
-                                    <a href="<?php echo e(route('products.index')); ?>" class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors">
+                                    <a href="<?php echo e(route('products.index')); ?>" class="view-all-btn">
                                         Lihat semua
                                     </a>
                                 </div>
                             </div>
 
-                            <div class="p-6 space-y-3">
+                            <div class="list-container">
                                 <!--[if BLOCK]><![endif]--><?php $__empty_1 = true; $__currentLoopData = $recent_products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                    <div class="flex items-center gap-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 p-4 hover:border-indigo-300 dark:hover:border-indigo-600 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all duration-200">
+                                    <div class="product-item">
                                         <!--[if BLOCK]><![endif]--><?php if($product->image): ?>
-                                            <img src="<?php echo e(Storage::url($product->image)); ?>" alt="<?php echo e($product->name); ?>" class="h-12 w-12 rounded-lg object-cover ring-2 ring-gray-200 dark:ring-gray-700" />
+                                            <img src="<?php echo e(Storage::url($product->image)); ?>" alt="<?php echo e($product->name); ?>" class="product-image-sm" />
                                         <?php else: ?>
-                                            <div class="h-12 w-12 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center text-gray-400 ring-2 ring-gray-200 dark:ring-gray-700">
+                                            <div class="product-placeholder">
                                                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                                 </svg>
                                             </div>
                                         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate"><?php echo e($product->name); ?></p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400 font-medium">Rp <?php echo e(number_format($product->price, 0, ',', '.')); ?></p>
+                                        <div class="product-details">
+                                            <p class="product-name"><?php echo e($product->name); ?></p>
+                                            <p class="product-price-sm">Rp <?php echo e(number_format($product->price, 0, ',', '.')); ?></p>
                                         </div>
 
                                         <div>
                                             <!--[if BLOCK]><![endif]--><?php if($product->is_available): ?>
-                                                <span class="inline-flex items-center rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 px-3 py-1 text-xs font-semibold">Available</span>
+                                                <span class="badge-available">Tersedia</span>
                                             <?php else: ?>
-                                                <span class="inline-flex items-center rounded-full bg-rose-100 text-rose-700 dark:bg-rose-900/50 dark:text-rose-300 px-3 py-1 text-xs font-semibold">Sold</span>
+                                                <span class="badge-sold">Terjual</span>
                                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                         </div>
                                     </div>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                    <div class="flex flex-col items-center justify-center py-12 text-center">
-                                        <div class="h-16 w-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
+                                    <div class="empty-state-container">
+                                        <div class="empty-state-icon-wrapper">
                                             <svg class="h-8 w-8 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                                             </svg>
                                         </div>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100">Belum ada produk</p>
-                                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Mulai dengan menambahkan produk pertama</p>
-                                        <a href="<?php echo e(route('products.create')); ?>" class="mt-4 inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-semibold rounded-xl shadow-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 hover:scale-105">
+                                        <p class="empty-state-title">Belum ada produk</p>
+                                        <p class="empty-state-desc">Mulai dengan menambahkan produk pertama</p>
+                                        <a href="<?php echo e(route('products.create')); ?>" class="add-first-product-btn">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                             </svg>
@@ -147,70 +147,70 @@
                         </div>
 
                         <!-- Quick Actions -->
-                        <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg overflow-hidden">
-                            <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
-                                <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">Quick Actions</h3>
-                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Aksi yang sering kamu pakai</p>
+                        <div class="card-base card-quick-actions">
+                            <div class="card-header">
+                                <h3 class="card-title">Aksi Cepat</h3>
+                                <p class="card-subtitle">Aksi yang sering kamu pakai</p>
                             </div>
 
-                            <div class="p-6 space-y-3">
-                                <a href="<?php echo e(route('products.create')); ?>" class="flex items-center justify-between rounded-xl border-2 border-gray-200 dark:border-gray-700 p-4 hover:border-indigo-300 dark:hover:border-indigo-600 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all duration-200 group">
-                                    <div class="flex items-center gap-4">
-                                        <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-200">
+                            <div class="list-container">
+                                <a href="<?php echo e(route('products.create')); ?>" class="action-item">
+                                    <div class="action-details">
+                                        <div class="action-icon-wrapper">
                                             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                             </svg>
                                         </div>
                                         <div>
-                                            <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Tambah produk baru</p>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">Tambah barang baru untuk dijual</p>
+                                            <p class="action-title">Tambah produk baru</p>
+                                            <p class="action-desc">Tambah barang baru untuk dijual</p>
                                         </div>
                                     </div>
-                                    <span class="text-xs font-mono text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">⌘N</span>
+                                    <span class="shortcut-badge">⌘N</span>
                                 </a>
 
-                                <a href="<?php echo e(route('products.index')); ?>" class="flex items-center justify-between rounded-xl border-2 border-gray-200 dark:border-gray-700 p-4 hover:border-sky-300 dark:hover:border-sky-600 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all duration-200 group">
-                                    <div class="flex items-center gap-4">
-                                        <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-200">
+                                <a href="<?php echo e(route('products.index')); ?>" class="action-item">
+                                    <div class="action-details">
+                                        <div class="action-icon-wrapper">
                                             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                                             </svg>
                                         </div>
                                         <div>
-                                            <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Kelola produk</p>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">Lihat dan edit semua listing</p>
+                                            <p class="action-title">Kelola produk</p>
+                                            <p class="action-desc">Lihat dan edit semua listing</p>
                                         </div>
                                     </div>
-                                    <span class="text-xs font-mono text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">⌘P</span>
+                                    <span class="shortcut-badge">⌘P</span>
                                 </a>
 
-                                <div class="flex flex-col justify-between rounded-xl border-2 border-gray-200 dark:border-gray-700 p-4 hover:border-indigo-300 dark:hover:border-indigo-600 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all duration-200 group cursor-pointer">
-                                    <div class="flex items-center justify-between mb-3">
+                                <div class="weekly-sales-container">
+                                    <div class="weekly-sales-header">
                                         <div class="flex items-center gap-3">
-                                            <div class="h-10 w-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                                            <div class="weekly-sales-icon-wrapper">
                                                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                                 </svg>
                                             </div>
                                             <div>
-                                                <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Weekly Sales</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">Last 7 days performance</p>
+                                                <p class="weekly-sales-title">Penjualan Mingguan</p>
+                                                <p class="weekly-sales-subtitle">Performa 7 hari terakhir</p>
                                             </div>
                                         </div>
                                         <div class="text-right">
-                                            <p class="text-sm font-bold text-gray-900 dark:text-gray-100">Rp <?php echo e(number_format($chart_data->sum(), 0, ',', '.')); ?></p>
+                                            <p class="weekly-sales-amount">Rp <?php echo e(number_format($chart_data->sum(), 0, ',', '.')); ?></p>
                                         </div>
                                     </div>
 
                                     <!-- Mini Bar Chart -->
-                                    <div class="flex items-end justify-between h-12 gap-1 pt-2">
+                                    <div class="chart-bars-container">
                                         <?php $max = $chart_data->max() ?: 1; ?>
                                         <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $chart_data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <div class="w-full bg-indigo-100 dark:bg-indigo-900/30 rounded-t-sm relative group/bar">
-                                                <div style="height: <?php echo e(($value / $max) * 100); ?>%" class="bg-indigo-500 rounded-t-sm transition-all duration-500"></div>
+                                            <div class="chart-bar-wrapper">
+                                                <div style="height: <?php echo e(($value / $max) * 100); ?>%" class="chart-bar-fill"></div>
                                                 <!-- Tooltip -->
-                                                <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 hidden group-hover/bar:block z-10">
-                                                    <div class="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+                                                <div class="chart-tooltip">
+                                                    <div class="chart-tooltip-text">
                                                         Rp <?php echo e(number_format($value, 0, ',', '.')); ?>
 
                                                     </div>

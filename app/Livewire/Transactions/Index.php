@@ -11,6 +11,10 @@ use App\Models\Transaction;
 class Index extends Component
 {
     public $search = '';
+    public $showModal = false;
+    public $selectedTransaction = null;
+    
+    protected $listeners = ['deleteTransaction' => 'delete'];
 
     public function getTransactionsProperty()
     {
@@ -23,6 +27,28 @@ class Index extends Component
             ->orderByDesc('id')
             ->with('items.product')
             ->paginate(10);
+    }
+
+    public function viewTransaction($id)
+    {
+        $this->selectedTransaction = Transaction::with('items.product')->find($id);
+        $this->showModal = true;
+    }
+
+    public function closeModal()
+    {
+        $this->showModal = false;
+        $this->selectedTransaction = null;
+    }
+
+    public function delete($id)
+    {
+        $transaction = Transaction::find($id);
+        
+        if ($transaction) {
+            $transaction->delete();
+            session()->flash('message', 'Transaksi berhasil dihapus.');
+        }
     }
 
     public function render()

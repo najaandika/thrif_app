@@ -23,6 +23,7 @@ class Product extends Model
         'price',
         'condition',
         'category',
+        'size',
         'stock',
         'image',
         'is_available',
@@ -42,6 +43,16 @@ class Product extends Model
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function sizes(): HasMany
+    {
+        return $this->hasMany(ProductSize::class);
+    }
+
+    public function getTotalStockAttribute(): int
+    {
+        return $this->sizes()->sum('stock');
     }
 
     public function getConditionLabelAttribute(): string

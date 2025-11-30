@@ -15,6 +15,7 @@ class Order extends Model
         'buyer_contact',
         'shipping_address',
         'quantity',
+        'size',
         'total_price',
         'status',
         'payment_method',

@@ -1,0 +1,78 @@
+/* Profile Pages Styles */
+
+/* Profile Form Sections */
+.profile-section {
+    @apply space-y-6;
+}
+
+.profile-section-header {
+    @apply border-b border-gray-200 dark:border-gray-700 pb-4;
+}
+
+.profile-section-title {
+    @apply text-lg font-semibold text-gray-900 dark:text-white;
+}
+
+.profile-section-description {
+    @apply mt-1 text-sm text-gray-600 dark:text-gray-400;
+}
+
+/* Form Elements */
+.profile-form {
+    @apply mt-6 space-y-6;
+}
+
+.profile-form-actions {
+    @apply flex items-center gap-4;
+}
+
+/* Order History */
+.order-history-card {
+    @apply bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-shadow;
+}
+
+.order-history-header {
+    @apply flex justify-between items-start mb-3;
+}
+
+.order-id {
+    @apply text-sm font-semibold text-gray-900 dark:text-white;
+}
+
+.order-date {
+    @apply text-xs text-gray-500 dark:text-gray-400;
+}
+
+.order-product-name {
+    @apply text-sm font-medium text-gray-700 dark:text-gray-300;
+}
+
+.order-price {
+    @apply text-xs text-gray-500 dark:text-gray-400;
+}
+
+.order-status-badge {
+    @apply px-2 py-1 text-xs font-medium rounded-full;
+}
+
+/* Address Form */
+.address-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+}
+
+/* Delete Account */
+.danger-section {
+    @apply border border-red-200 dark:border-red-800 rounded-lg p-6 bg-red-50 dark:bg-red-900/10;
+}
+
+.danger-title {
+    @apply text-lg font-semibold text-red-900 dark:text-red-200;
+}
+
+.danger-description {
+    @apply mt-1 text-sm text-red-700 dark:text-red-300;
+}
+
+.danger-button {
+    @apply mt-4 inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all;
+}

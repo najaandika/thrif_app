@@ -1,0 +1,102 @@
+/* Auth Pages Styles */
+
+/* Login & Register Header */
+.auth-header {
+    @apply mb-6 text-center;
+}
+
+.auth-icon-wrapper {
+    @apply inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white mb-3 shadow-lg shadow-indigo-500/40;
+}
+
+.auth-title {
+    @apply text-xl font-bold text-gray-900 dark:text-white;
+}
+
+.auth-subtitle {
+    @apply text-xs text-gray-600 dark:text-gray-400 mt-1;
+}
+
+/* Form */
+.auth-form {
+    @apply space-y-3.5;
+}
+
+/* Remember Me */
+.remember-label {
+    @apply inline-flex items-center cursor-pointer;
+}
+
+.remember-checkbox {
+    @apply rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800;
+}
+
+.remember-text {
+    @apply ms-2 text-xs text-gray-600 dark:text-gray-400;
+}
+
+/* Actions */
+.auth-actions {
+    @apply flex items-center justify-between gap-3 pt-2;
+}
+
+.forgot-password-link {
+    @apply text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium transition-colors;
+}
+
+/* Divider */
+.auth-divider {
+    @apply relative;
+}
+
+.auth-divider-line {
+    @apply absolute inset-0 flex items-center;
+}
+
+.auth-divider-text {
+    @apply relative flex justify-center text-xs;
+}
+
+/* Google Login */
+.google-login-btn {
+    @apply w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white border border-gray-300 dark:bg-gray-900 dark:border-gray-700 shadow hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 text-sm font-semibold transition-all duration-200;
+}
+
+/* Register Link */
+.auth-register-section {
+    @apply text-center;
+}
+
+.auth-register-text {
+    @apply text-xs text-gray-600 dark:text-gray-400;
+}
+
+.auth-register-link {
+    @apply font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors;
+}
+
+/* Benefits Section */
+.benefits-section {
+    @apply mt-6 pt-5 border-t border-gray-200 dark:border-gray-700;
+}
+
+.benefits-title {
+    @apply text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2.5;
+}
+
+.benefits-list {
+    @apply space-y-1.5;
+}
+
+.benefit-item {
+    @apply flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300;
+}
+
+.benefit-icon {
+    @apply w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5;
+}
+
+/* Back to Home */
+.back-home-btn {
+    @apply mt-3.5 w-full inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700/50 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors;
+}

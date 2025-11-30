@@ -4,7 +4,7 @@
     
     <div class="space-y-3 relative z-10">
         <div class="flex items-center gap-3">
-            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/50">
+            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                 </svg>
@@ -20,6 +20,7 @@
     <?php
         $shopPhone = \App\Models\Setting::get('shop_phone');
         $socialInstagram = \App\Models\Setting::get('social_instagram');
+        $socialTiktok = \App\Models\Setting::get('social_tiktok');
     ?>
     
     <div class="flex flex-col gap-3 text-sm relative z-10">
@@ -66,13 +67,25 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
             </svg>
         </a>
-        <?php else: ?>
-        <div class="rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 px-4 py-3 flex items-start gap-3">
-            <svg class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        <?php endif; ?>
+        <?php if($socialTiktok): ?>
+        <a href="<?php echo e($socialTiktok); ?>"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="group inline-flex items-center gap-3 rounded-2xl border-2 border-black/30 dark:border-black/60 bg-white dark:bg-black/40 px-5 py-3.5 text-black dark:text-white font-semibold shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:border-black/50 dark:hover:border-black hover:bg-gray-50 dark:hover:bg-black/60">
+            <div class="h-8 w-8 rounded-lg bg-gradient-to-br from-black via-gray-700 to-pink-600 flex items-center justify-center text-white">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12.5 2v14.5a3.5 3.5 0 11-3.5-3.5c.2 0 .4.02.6.05V13a2 2 0 10-2 2c0 1.1.9 2 2 2a2 2 0 002-2V2h1zm4 2v8.5a5.5 5.5 0 11-5.5-5.5c.2 0 .4.02.6.05V7a3 3 0 10-3 3c0 1.7 1.3 3 3 3a3 3 0 003-3V4h1z"/>
+                </svg>
+            </div>
+            <div class="flex-1 text-left">
+                <div class="text-xs text-black/80 dark:text-white/80">TikTok</div>
+                <div class="font-bold"><?php echo e(parse_url($socialTiktok, PHP_URL_PATH) ?: '@yourshop'); ?></div>
+            </div>
+            <svg class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
             </svg>
-            <p class="text-xs text-gray-600 dark:text-gray-400 font-medium">Instagram belum tersedia. Hubungi melalui WhatsApp.</p>
-        </div>
+        </a>
         <?php endif; ?>
         
         <?php if(auth()->guard()->guest()): ?>
@@ -80,16 +93,9 @@
                 <svg class="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                <p class="text-xs text-amber-800 dark:text-amber-200 font-medium">Login/daftar via menu utama sebelum melakukan order.</p>
+                <p class="text-xs text-amber-800 dark:text-amber-200 font-medium">Login/daftar untuk melakukan order, akses stok lengkap, dan riwayat penjualan.</p>
             </div>
         <?php endif; ?>
-    </div>
-    
-    <div class="rounded-xl bg-indigo-100/50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 px-4 py-3 flex items-start gap-3 relative z-10">
-        <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-        </svg>
-        <p class="text-xs text-indigo-800 dark:text-indigo-200 font-medium">Login untuk akses stok lengkap & riwayat penjualan.</p>
     </div>
 </div>
 <?php /**PATH C:\laragon\www\thrif\resources\views/landing/sections/contact.blade.php ENDPATH**/ ?>

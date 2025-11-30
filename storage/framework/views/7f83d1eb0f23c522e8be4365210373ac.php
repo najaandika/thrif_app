@@ -6,48 +6,6 @@ use Illuminate\Support\Str;
 ?>
 
 <nav x-data="{ open: false, sidebarOpen: false }" class="bg-white dark:bg-gray-800 sticky top-0 z-30">
-    <!-- Mobile Sidebar Drawer (Full Screen) -->
-    <div x-show="sidebarOpen"
-         x-transition:enter="transition ease-out duration-200"
-         x-transition:enter-start="-translate-x-full"
-         x-transition:enter-end="translate-x-0"
-         x-transition:leave="transition ease-in duration-150"
-         x-transition:leave-start="translate-x-0"
-         x-transition:leave-end="-translate-x-full"
-         class="fixed inset-0 bg-white dark:bg-gray-800 z-50 lg:hidden transform"
-         style="display: none;"
-         x-cloak>
-        
-        <!-- Close Button -->
-        <button @click="sidebarOpen = false" class="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 transition-colors">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
-
-        <div class="h-full overflow-y-auto p-6 pt-20">
-            <?php if (isset($component)) { $__componentOriginal01bf3b01a557c75eb9cd135a2177f1b0 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal01bf3b01a557c75eb9cd135a2177f1b0 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.sidebar.menu','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('sidebar.menu'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes([]); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal01bf3b01a557c75eb9cd135a2177f1b0)): ?>
-<?php $attributes = $__attributesOriginal01bf3b01a557c75eb9cd135a2177f1b0; ?>
-<?php unset($__attributesOriginal01bf3b01a557c75eb9cd135a2177f1b0); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal01bf3b01a557c75eb9cd135a2177f1b0)): ?>
-<?php $component = $__componentOriginal01bf3b01a557c75eb9cd135a2177f1b0; ?>
-<?php unset($__componentOriginal01bf3b01a557c75eb9cd135a2177f1b0); ?>
-<?php endif; ?>
-        </div>
-    </div>
 
     <?php
         $isAdmin = auth()->user()->isAdmin();
@@ -209,7 +167,7 @@ use Illuminate\Support\Str;
             <!-- Hamburger / Mobile header area -->
             <div class="-me-2 flex items-center sm:hidden gap-2">
                 <!-- Theme Toggle (Mobile) -->
-                <button @click="$store.darkMode.toggle()" aria-label="Toggle theme" class="inline-flex items-center justify-center h-9 w-9 p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200">
+                <button @click="$store.darkMode.toggle(); document.activeElement.blur();" aria-label="Toggle theme" tabindex="-1" class="inline-flex items-center justify-center h-9 w-9 p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200">
                     <svg x-show="!$store.darkMode.on" x-cloak class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
                     </svg>

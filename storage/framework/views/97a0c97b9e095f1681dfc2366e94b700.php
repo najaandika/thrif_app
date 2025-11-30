@@ -82,10 +82,25 @@
                                 <?php endif; ?>
                             </div>
                             <div class="md:w-64 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/60 p-4 text-sm text-gray-600 dark:text-gray-300">
-                                <p class="font-semibold text-gray-900 dark:text-gray-100">Detail Pengiriman</p>
-                                <p class="mt-2">Nama: <?php echo e($order->buyer_name); ?></p>
-                                <p>Kontak: <?php echo e($order->buyer_contact ?? '-'); ?></p>
-                                <p>Alamat: <?php echo e($order->shipping_address ?? 'Belum diisi'); ?></p>
+                                <p class="font-semibold text-gray-900 dark:text-gray-100 mb-3">Detail Pengiriman</p>
+                                <div class="space-y-3">
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Nama Penerima</p>
+                                        <p class="font-medium text-gray-900 dark:text-gray-200"><?php echo e($order->buyer_name); ?></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Kontak</p>
+                                        <p class="font-medium text-gray-900 dark:text-gray-200"><?php echo e($order->buyer_contact ?? '-'); ?></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Alamat</p>
+                                        <p class="font-medium text-gray-900 dark:text-gray-200"><?php echo e($order->shipping_address ?? 'Belum diisi'); ?></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Metode Pembayaran</p>
+                                        <p class="font-medium text-gray-900 dark:text-gray-200"><?php echo e($order->payment_method === 'cash' ? 'Cash On Delivery' : ucfirst($order->payment_method)); ?></p>
+                                    </div>
+                                </div>
                             </div>
                         </article>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>

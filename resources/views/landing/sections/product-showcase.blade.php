@@ -113,7 +113,7 @@
                         <div class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100 dark:border-gray-700">
                             <div>
                                 <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-0.5">Harga</p>
-                                <span data-product-price class="text-base font-bold text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                                <span data-product-price class="text-base font-bold text-green-600">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
                             </div>
                             @php
                                 $badgeClass = $product->stock > 0 && $product->is_available

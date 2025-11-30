@@ -13,20 +13,21 @@
 
         <!-- Dark mode pre-init to avoid flash -->
         <script>
-            document.body && (document.body.style.visibility = 'hidden');
             (function() {
                 try {
                     const stored = localStorage.getItem('darkMode');
                     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                    if (stored === 'true' || (stored === null && prefersDark)) {
+                    const isDark = stored === 'true' || (stored === null && prefersDark);
+                    
+                    // Set background color immediately to prevent flicker
+                    if (isDark) {
+                        document.documentElement.style.backgroundColor = 'rgb(17 24 39)';
                         document.documentElement.classList.add('dark');
-                        document.body.classList.add('dark');
                     } else {
+                        document.documentElement.style.backgroundColor = 'rgb(243 244 246)';
                         document.documentElement.classList.remove('dark');
-                        document.body.classList.remove('dark');
                     }
                 } catch (e) {}
-                document.body && (document.body.style.visibility = 'visible');
             })();
         </script>
 
@@ -36,6 +37,11 @@
 
         <style>
             html, body { touch-action: pan-x pan-y; overscroll-behavior: none; overflow-x: hidden; }
+            
+            /* Smooth transition for Livewire navigation */
+            body {
+                transition: opacity 0.15s ease-in-out;
+            }
         </style>
     </head>
     <body class="font-sans antialiased">
@@ -81,35 +87,67 @@ if (isset($__slots)) unset($__slots);
         </div>
         <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::scripts(); ?>
 
+        <script>
+            // Configure Livewire to reduce flicker
+            document.addEventListener('livewire:init', () => {
+                Livewire.hook('commit', ({ component, commit, respond, succeed, fail }) => {
+                    succeed(({ snapshot, effect }) => {
+                        // Smooth transition
+                        document.body.style.opacity = '0.95';
+                        setTimeout(() => {
+                            document.body.style.opacity = '1';
+                        }, 50);
+                    });
+                });
+            });
+        </script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
-        function confirmDelete(id) {
+        // SweetAlert2 Configuration
+        const swalConfig = {
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal',
+            width: '320px',
+            padding: '1rem',
+            customClass: {
+                popup: 'swal-compact',
+                title: 'swal-title-compact',
+                htmlContainer: 'swal-text-compact',
+                confirmButton: 'swal-btn-compact',
+                cancelButton: 'swal-btn-compact'
+            }
+        };
+
+        // Generic delete confirmation helper
+        function showDeleteConfirmation(id, title, eventName) {
             Swal.fire({
-                title: 'Yakin hapus data ini?',
-                text: 'Data yang dihapus tidak bisa dikembalikan!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Ya, hapus!',
-                cancelButtonText: 'Batal',
-                width: '320px',
-                padding: '1rem',
-                customClass: {
-                    popup: 'swal-compact',
-                    title: 'swal-title-compact',
-                    htmlContainer: 'swal-text-compact',
-                    confirmButton: 'swal-btn-compact',
-                    cancelButton: 'swal-btn-compact'
-                }
+                ...swalConfig,
+                title: title,
+                text: 'Data yang dihapus tidak bisa dikembalikan!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Livewire 3 dispatch - send id directly as parameter
-                    window.Livewire.dispatch('delete', [id]);
+                    window.Livewire.dispatch(eventName, [id]);
                 }
             });
         }
+
+        // Delete confirmation for Orders
+        function confirmDelete(id) {
+            showDeleteConfirmation(id, 'Yakin hapus data ini?', 'delete');
+        }
+
+        // Delete confirmation for Transactions
+        function confirmDeleteTransaction(id) {
+            showDeleteConfirmation(id, 'Yakin hapus transaksi ini?', 'deleteTransaction');
+        }
+
+        // Expose functions globally
         window.confirmDelete = confirmDelete;
+        window.confirmDeleteTransaction = confirmDeleteTransaction;
         </script>
         <style>
         .swal-compact {

@@ -11,7 +11,7 @@
             <?php if($shopLogo): ?>
                 <img src="<?php echo e(Storage::url($shopLogo)); ?>" alt="<?php echo e($shopName); ?>" class="h-8 w-8 lg:h-9 lg:w-9 rounded-2xl object-cover shadow-lg">
             <?php else: ?>
-                <div class="h-8 w-8 lg:h-9 lg:w-9 rounded-2xl bg-indigo-600 text-white font-bold flex items-center justify-center"><?php echo e(strtoupper(substr($shopName, 0, 1))); ?></div>
+                <div class="h-8 w-8 lg:h-9 lg:w-9 rounded-2xl bg-blue-600 text-white font-bold flex items-center justify-center"><?php echo e(strtoupper(substr($shopName, 0, 1))); ?></div>
             <?php endif; ?>
             <div class="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight">
                 <?php echo e($shopName); ?>
@@ -22,7 +22,7 @@
 
         <nav class="hidden lg:flex items-center gap-5 text-[13px] font-medium text-gray-600 dark:text-gray-300">
             <a href="#tentang" class="smooth-scroll hover:text-gray-900 dark:hover:text-gray-100">Home</a>
-            <a href="<?php echo e(route('landing.products.index')); ?>" class="hover:text-gray-900 dark:hover:text-gray-100">Product</a>
+            <a href="<?php echo e(route('landing.products.index')); ?>" class="hover:text-gray-900 dark:hover:text-gray-100">Catalog</a>
             <div class="relative group">
                 <button type="button" class="inline-flex items-center gap-1 hover:text-gray-900 dark:hover:text-gray-100">
                     Categories
@@ -45,9 +45,9 @@
                     <?php endif; ?>
                 </div>
             </div>
-            <a href="#produk" class="smooth-scroll hover:text-gray-900 dark:hover:text-gray-100">New Arrivals</a>
-            <a href="#produk" class="smooth-scroll hover:text-gray-900 dark:hover:text-gray-100">Best Seller</a>
-            <a href="#produk" class="smooth-scroll hover:text-gray-900 dark:hover:text-gray-100">Promo</a>
+            
+
+            <a href="<?php echo e(route('landing.products.index')); ?>" class="smooth-scroll hover:text-gray-900 dark:hover:text-gray-100">Promo</a>
         </nav>
 
         <div class="flex items-center gap-2 lg:gap-3">
@@ -132,7 +132,7 @@
         <div class="px-4 py-4 space-y-4 text-sm text-gray-700 dark:text-gray-200">
             <div class="grid gap-3">
                 <a href="#tentang">Home</a>
-                <a href="<?php echo e(route('landing.products.index')); ?>">Product</a>
+                <a href="<?php echo e(route('landing.products.index')); ?>">Catalog</a>
                 
                 <!-- Categories Collapsible -->
                 <button type="button" id="mobile-categories-toggle" class="flex items-center justify-between text-left hover:text-emerald-600 dark:hover:text-emerald-400 transition py-0.5">
@@ -142,8 +142,8 @@
                     </svg>
                 </button>
                 
-                <a href="#produk">New Arrivals</a>
-                <a href="#produk">Best Seller</a>
+             
+
                 <a href="#produk">Promo</a>
                 
                 <!-- Theme Toggle -->
@@ -216,7 +216,7 @@
     <div id="search-modal" class="hidden absolute top-full left-4 right-4 md:left-auto md:right-0 mt-2 md:w-[400px] md:mr-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-2xl z-50">
         <div class="p-2.5">
             <div class="relative">
-                <input type="text" id="search-input" placeholder="Search products..." class="w-full px-3 py-2 pl-9 pr-8 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent" autofocus>
+                <input type="text" id="search-input" placeholder="Search products..." class="w-full px-4 py-3 pl-9 pr-8 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500" autofocus>
                 <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="11" cy="11" r="8" />
                     <path d="M21 21l-4.35-4.35" stroke-linecap="round" stroke-linejoin="round" />

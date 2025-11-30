@@ -23,7 +23,7 @@
                     <?php if($shopLogo): ?>
                         <img src="<?php echo e(Storage::url($shopLogo)); ?>" alt="<?php echo e($shopName); ?>" class="h-10 w-10 rounded-2xl object-cover shadow-lg flex-shrink-0">
                     <?php else: ?>
-                        <div class="h-10 w-10 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white font-bold flex items-center justify-center shadow-lg flex-shrink-0">
+                        <div class="h-10 w-10 rounded-2xl bg-blue-600 text-white font-bold flex items-center justify-center shadow-lg flex-shrink-0">
                             <?php echo e(strtoupper(substr($shopName, 0, 1))); ?>
 
                         </div>
@@ -79,7 +79,7 @@
                 <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100">Navigasi</h4>
                 <ul class="space-y-2 text-xs text-gray-600 dark:text-gray-400">
                     <li><a href="#tentang" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block">Home</a></li>
-                    <li><a href="<?php echo e(route('landing.products.index')); ?>" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block">Product</a></li>
+                    <li><a href="<?php echo e(route('landing.products.index')); ?>" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block">Catalog</a></li>
                     <li><a href="#tentang-kami" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block">Tentang Kami</a></li>
                     <?php if(auth()->guard()->check()): ?>
                         <?php if(auth()->user()->isCustomer()): ?>

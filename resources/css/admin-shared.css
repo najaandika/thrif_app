@@ -1,0 +1,254 @@
+/* Admin Shared Styles */
+
+/* Layout */
+.admin-wrapper {
+    @apply py-12;
+}
+
+.admin-layout {
+    @apply flex flex-col lg:flex-row gap-6;
+}
+
+.admin-content {
+    @apply flex-1 min-w-0 px-4 sm:px-6 lg:px-8;
+}
+
+/* Cards */
+.admin-card {
+    @apply bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 overflow-hidden shadow-xl sm:rounded-2xl border border-gray-100 dark:border-gray-700;
+}
+
+.admin-card-body {
+    @apply p-8;
+}
+
+/* Headers & Actions */
+.admin-header {
+    @apply mb-6 flex flex-col lg:flex-row gap-4 lg:items-center justify-between;
+}
+
+.admin-header-simple {
+    @apply mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4;
+}
+
+.admin-filters {
+    @apply flex flex-col sm:flex-row gap-4 flex-1;
+}
+
+/* Search Components */
+.search-container {
+    @apply relative flex-1 w-full sm:w-auto;
+}
+
+.search-icon-wrapper {
+    @apply absolute left-0 pl-6 flex items-center pointer-events-none;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.search-icon {
+    @apply h-5 w-5 text-gray-600 dark:text-gray-400;
+}
+
+.admin-search-input {
+    @apply w-full pr-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md;
+    padding-left: 3.5rem !important;
+}
+
+/* Tables */
+.admin-table-container {
+    @apply overflow-x-auto;
+}
+
+.admin-table {
+    @apply min-w-full divide-y divide-gray-200 dark:divide-gray-700;
+}
+
+.admin-thead {
+    @apply bg-gray-50 dark:bg-gray-700;
+}
+
+.admin-th {
+    @apply px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider;
+}
+
+.admin-th-right {
+    @apply px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider;
+}
+
+.admin-tbody {
+    @apply bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700;
+}
+
+.admin-tr {
+    @apply hover:bg-indigo-50 dark:hover:bg-gray-700/50 transition-colors duration-150;
+}
+
+.admin-td {
+    @apply px-6 py-4 whitespace-nowrap;
+}
+
+/* Text Styles */
+.text-primary {
+    @apply text-sm font-medium text-gray-900 dark:text-gray-100;
+}
+
+.text-secondary {
+    @apply text-sm text-gray-700 dark:text-gray-300;
+}
+
+.text-muted {
+    @apply text-xs text-gray-500 dark:text-gray-400;
+}
+
+/* Badges */
+.status-badge {
+    @apply px-3 py-1 inline-flex text-xs font-semibold rounded-full;
+}
+
+.status-badge-success {
+    @apply bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-200;
+}
+
+.status-badge-warning {
+    @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200;
+}
+
+.status-badge-danger {
+    @apply bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200;
+}
+
+.status-badge-info {
+    @apply bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200;
+}
+
+.status-badge-purple {
+    @apply bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200;
+}
+
+/* Buttons */
+
+.btn-primary {
+    @apply inline-flex items-center px-6 py-3 bg-gradient-to-r from-slate-700 to-indigo-500 border border-transparent rounded-xl font-semibold text-sm text-white uppercase tracking-wider hover:from-slate-800 hover:to-indigo-600 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap;
+}
+
+.btn-action-edit {
+    @apply inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-slate-600 to-indigo-400 text-white text-xs font-semibold rounded-lg hover:from-slate-700 hover:to-indigo-500 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105;
+}
+
+.btn-action-delete {
+    @apply inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-semibold rounded-lg hover:from-red-600 hover:to-pink-600 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 relative z-10;
+}
+
+/* Utilities */
+.empty-state {
+    @apply px-6 py-4 text-center text-gray-500 dark:text-gray-400;
+}
+
+.pagination-wrapper {
+    @apply mt-4;
+}
+
+.alert-message {
+    @apply mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900 dark:to-emerald-900 text-green-700 dark:text-green-200 rounded-xl border-l-4 border-green-500 shadow-lg animate-pulse;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.modal-container {
+    @apply bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden;
+    animation: slideUp 0.3s ease-out;
+}
+
+.modal-header {
+    @apply flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800;
+}
+
+.modal-title {
+    @apply text-xl font-bold text-gray-900 dark:text-gray-100;
+}
+
+.modal-close {
+    @apply p-2 rounded-lg hover:bg-white dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100;
+}
+
+.modal-body {
+    @apply p-6 overflow-y-auto max-h-[calc(90vh-180px)];
+}
+
+.modal-footer {
+    @apply p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end bg-gray-50 dark:bg-gray-900;
+}
+
+/* Receipt Styles */
+.receipt-section {
+    @apply mb-6 pb-6 border-b border-gray-200 dark:border-gray-700 last:border-0;
+}
+
+.receipt-section-title {
+    @apply text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4;
+}
+
+.receipt-row {
+    @apply flex justify-between items-center py-2;
+}
+
+.receipt-label {
+    @apply text-sm font-medium text-gray-600 dark:text-gray-400;
+}
+
+.receipt-value {
+    @apply text-sm text-gray-900 dark:text-gray-100;
+}
+
+.receipt-items {
+    @apply space-y-3;
+}
+
+.receipt-item {
+    @apply flex justify-between items-start p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl;
+}
+
+.receipt-item-info {
+    @apply flex-1;
+}
+
+.receipt-summary {
+    @apply bg-gradient-to-r from-emerald-50 to-green-50 dark:from-gray-700 dark:to-gray-800 rounded-xl p-4;
+}
+
+.receipt-total {
+    @apply pt-2 border-t-2 border-emerald-200 dark:border-emerald-800 mt-2;
+}
+
+.receipt-total .receipt-label,
+.receipt-total .receipt-value {
+    @apply text-lg font-bold text-emerald-600 dark:text-emerald-400;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

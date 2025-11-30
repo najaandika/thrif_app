@@ -20,19 +20,35 @@ class Create extends Component
     public $price;
     public $condition = 'good';
     public $category;
-    public $stock = 0;
     public $image;
     public $imagePreviewUrl = null;
+    
+    public $variants = [
+        ['size' => '', 'stock' => 0]
+    ];
 
     protected $rules = [
         'name' => 'required|string|max:255',
         'description' => 'nullable|string',
         'price' => 'required|numeric|min:0',
-        'stock' => 'required|integer|min:0',
         'condition' => 'required|in:new,like-new,good,fair,poor',
         'category' => 'nullable|string|max:255',
         'image' => 'nullable|image|max:2048',
+        'variants' => 'required|array|min:1',
+        'variants.*.size' => 'required|string|max:100|distinct',
+        'variants.*.stock' => 'required|integer|min:0',
     ];
+
+    public function addVariant()
+    {
+        $this->variants[] = ['size' => '', 'stock' => 0];
+    }
+
+    public function removeVariant($index)
+    {
+        unset($this->variants[$index]);
+        $this->variants = array_values($this->variants);
+    }
 
     public function updatedImage($value)
     {
@@ -59,16 +75,22 @@ class Create extends Component
             $imagePath = $this->image->store('products', 'public');
         }
 
-        Product::create([
+        $totalStock = collect($this->variants)->sum('stock');
+
+        $product = Product::create([
             'user_id' => Auth::id(),
             'name' => $this->name,
             'description' => $this->description,
             'price' => $this->price,
-            'stock' => $this->stock,
+            'stock' => $totalStock,
             'condition' => $this->condition,
             'category' => $this->category,
             'image' => $imagePath,
         ]);
+
+        foreach ($this->variants as $variant) {
+            $product->sizes()->create($variant);
+        }
 
         session()->flash('message', 'Product created successfully.');
         return redirect()->route('products.index');

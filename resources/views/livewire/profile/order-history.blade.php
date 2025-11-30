@@ -1,4 +1,4 @@
-<div class="space-y-6">
+<div class="profile-section" wire:poll.5s>
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <p class="text-xs font-semibold tracking-[0.2em] text-gray-500 uppercase">Riwayat Pembelian</p>

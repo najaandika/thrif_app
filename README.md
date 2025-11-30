@@ -1,68 +1,77 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Thrif - Sistem Manajemen Thrift Shop
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Thrif** adalah aplikasi manajemen toko thrift berbasis web yang dibangun menggunakan **Laravel**. Aplikasi ini menyediakan platform bagi pemilik toko untuk mengelola produk, kategori, dan pesanan, serta antarmuka publik bagi pelanggan untuk melihat katalog produk.
 
-## Thrif Dashboard
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Livewire](https://img.shields.io/badge/Livewire-4E56A6?style=for-the-badge&logo=livewire&logoColor=white)
+![Alpine.js](https://img.shields.io/badge/Alpine.js-8BC0D0?style=for-the-badge&logo=alpine.js&logoColor=black)
 
-Proyek ini menambahkan modul produk, kategori, order, serta landing publik untuk brand thrift shop. Mulai sekarang user terbagi menjadi dua role:
+## 🚀 Fitur Utama
 
-- **Admin** – mengakses dashboard, CRUD produk/kategori/order. Seeder menambahkan akun demo `admin@thrif.test` dengan password `password`.
-- **Customer** – dapat registrasi/login untuk melihat stok publik serta mengelola profil, tetapi tidak memiliki akses ke dashboard admin.
+### 👥 Role & Akses
+Sistem ini membagi pengguna menjadi dua peran utama:
+*   **Admin**: Memiliki akses penuh ke dashboard untuk mengelola data master (produk, kategori) dan memantau pesanan.
+*   **Customer**: Pengguna umum yang dapat mendaftar, login, melihat katalog produk, dan mengelola profil mereka.
 
-Customer baru otomatis dibuat dengan role `customer` dan akan diarahkan kembali ke landing setelah login/verifikasi, sementara admin tetap diarahkan ke `/dashboard`.
+### 🛠️ Fungsionalitas
+*   **Dashboard Admin**: Statistik ringkas, manajemen produk (CRUD), manajemen kategori, dan daftar pesanan.
+*   **Katalog Publik**: Tampilan produk yang menarik untuk pelanggan dengan fitur pencarian dan filter.
+*   **Dark Mode**: Dukungan tema gelap yang nyaman di mata, otomatis menyesuaikan atau dapat diatur manual.
+*   **Desain Responsif**: Tampilan yang optimal baik di perangkat desktop maupun mobile.
 
-## About Laravel
+## ⚙️ Teknologi yang Digunakan
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+*   **Framework**: [Laravel 10/11](https://laravel.com)
+*   **Full-stack Framework**: [Livewire](https://livewire.laravel.com) untuk interaktivitas dinamis tanpa meninggalkan PHP.
+*   **Styling**: [Tailwind CSS](https://tailwindcss.com) untuk desain antarmuka yang modern dan kustom.
+*   **JavaScript**: [Alpine.js](https://alpinejs.dev) untuk interaksi ringan di sisi klien.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 💻 Panduan Instalasi
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Ikuti langkah-langkah berikut untuk menjalankan proyek ini di komputer lokal Anda:
 
-## Learning Laravel
+1.  **Clone Repository**
+    ```bash
+    git clone https://github.com/username/thrif.git
+    cd thrif
+    ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+2.  **Install Dependensi**
+    Pastikan Anda telah menginstal PHP dan Composer, serta Node.js.
+    ```bash
+    composer install
+    npm install
+    ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3.  **Setup Environment**
+    Salin file `.env.example` menjadi `.env` dan sesuaikan konfigurasi database Anda.
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
 
-## Laravel Sponsors
+4.  **Database Migration & Seeding**
+    Jalankan migrasi untuk membuat tabel database dan seeder untuk data awal (termasuk akun admin default).
+    ```bash
+    php artisan migrate --seed
+    ```
+    > **Catatan**: Seeder akan membuat akun admin default:
+    > *   Email: `admin@thrif.test`
+    > *   Password: `password`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+5.  **Jalankan Server**
+    Anda perlu menjalankan server PHP dan build asset (Vite) secara bersamaan (di terminal terpisah).
+    ```bash
+    php artisan serve
+    ```
+    ```bash
+    npm run dev
+    ```
 
-### Premium Partners
+6.  **Akses Aplikasi**
+    Buka browser dan kunjungi `http://localhost:8000`.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 📝 Lisensi
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Proyek ini adalah perangkat lunak open-source di bawah lisensi [MIT license](https://opensource.org/licenses/MIT).

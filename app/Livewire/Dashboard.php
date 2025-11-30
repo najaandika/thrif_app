@@ -24,8 +24,16 @@ class Dashboard extends Component
             ->take(5)
             ->get();
 
-        // Weekly Sales Data
-        $weekly_sales = \App\Models\Order::where('user_id', Auth::id())
+        // Weekly Sales Data from Orders
+        $weekly_sales_orders = \App\Models\Order::where('user_id', Auth::id())
+            ->where('created_at', '>=', now()->subDays(6)->startOfDay())
+            ->selectRaw('DATE(created_at) as date, SUM(total_price) as total')
+            ->groupBy('date')
+            ->get()
+            ->pluck('total', 'date');
+
+        // Weekly Sales Data from Transactions
+        $weekly_sales_transactions = \App\Models\Transaction::where('user_id', Auth::id())
             ->where('created_at', '>=', now()->subDays(6)->startOfDay())
             ->selectRaw('DATE(created_at) as date, SUM(total_price) as total')
             ->groupBy('date')
@@ -35,7 +43,9 @@ class Dashboard extends Component
         $chart_data = collect();
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i)->format('Y-m-d');
-            $chart_data->push($weekly_sales->get($date, 0));
+            $orders_total = $weekly_sales_orders->get($date, 0);
+            $transactions_total = $weekly_sales_transactions->get($date, 0);
+            $chart_data->push($orders_total + $transactions_total);
         }
 
         return view('livewire.dashboard', [
