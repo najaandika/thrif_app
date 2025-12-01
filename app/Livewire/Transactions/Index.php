@@ -11,10 +11,17 @@ use App\Models\Transaction;
 class Index extends Component
 {
     public $search = '';
+    public $paymentMethod = 'all';
     public $showModal = false;
     public $selectedTransaction = null;
     
     protected $listeners = ['deleteTransaction' => 'delete'];
+
+    public function updatingPaymentMethod(): void
+    {
+        // Reset pencarian saat metode pembayaran diubah
+        $this->search = '';
+    }
 
     public function getTransactionsProperty()
     {
@@ -23,6 +30,9 @@ class Index extends Component
                 $q->where('id', 'like', "%{$this->search}%")
                   ->orWhere('payment_method', 'like', "%{$this->search}%")
                   ->orWhere('payment_status', 'like', "%{$this->search}%");
+            })
+            ->when($this->paymentMethod !== 'all', function ($q) {
+                $q->where('payment_method', $this->paymentMethod);
             })
             ->orderByDesc('id')
             ->with('items.product')

@@ -62,9 +62,6 @@ class OrderHistory extends Component
             'all' => 'Semua',
             'pending' => 'Pending',
             'paid' => 'Paid',
-            'shipped' => 'Shipped',
-            'completed' => 'Completed',
-            'cancelled' => 'Cancelled',
         ];
     }
 }

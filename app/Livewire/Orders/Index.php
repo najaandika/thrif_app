@@ -15,7 +15,8 @@ class Index extends Component
 {
     use WithPagination;
     public $search = '';
-    public $status = 'all';
+    public $status = 'all'; // status order (pending, paid, ...)
+    public $paymentMethod = 'all'; // filter metode pembayaran
     protected $listeners = ['delete'];
     public $selectedOrder;
     public $showModal = false;
@@ -35,6 +36,7 @@ class Index extends Component
     protected $queryString = [
         'search' => ['except' => ''],
         'status' => ['except' => 'all'],
+        'paymentMethod' => ['except' => 'all'],
     ];
 
     public function updatingSearch(): void
@@ -43,6 +45,11 @@ class Index extends Component
     }
 
     public function updatingStatus(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingPaymentMethod(): void
     {
         $this->resetPage();
     }
@@ -97,23 +104,12 @@ class Index extends Component
                 });
             })
             ->when($this->status !== 'all', fn ($query) => $query->where('status', $this->status))
+            ->when($this->paymentMethod !== 'all', fn ($query) => $query->where('payment_method', $this->paymentMethod))
             ->latest()
             ->paginate(10);
 
         return view('livewire.orders.index', [
             'orders' => $orders,
-            'statusOptions' => $this->statusOptions(),
         ]);
-    }
-
-    public function statusOptions(): array
-    {
-        return [
-            'pending' => 'Pending',
-            'paid' => 'Paid',
-            'shipped' => 'Shipped',
-            'completed' => 'Completed',
-            'cancelled' => 'Cancelled',
-        ];
     }
 }

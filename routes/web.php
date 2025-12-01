@@ -24,6 +24,7 @@ use App\Http\Controllers\LandingProductCheckoutController;
 use App\Http\Controllers\LandingProductOrderController;
 use App\Http\Controllers\CustomerOrderHistoryController;
 use App\Http\Controllers\OrderExportController;
+use App\Http\Controllers\TransactionExportController;
 
 // Livewire (alias sesuai kebutuhan)
 use App\Livewire\Dashboard;
@@ -112,6 +113,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     // Export Routes (Moved to top to avoid conflicts)
     Route::get('/admin/export/orders/excel', [OrderExportController::class, 'excel'])->name('orders.export.excel');
     Route::get('/admin/export/orders/pdf', [OrderExportController::class, 'pdf'])->name('orders.export.pdf');
+    Route::get('/admin/export/transactions/excel', [TransactionExportController::class, 'excel'])->name('transactions.export.excel');
+    Route::get('/admin/export/transactions/pdf', [TransactionExportController::class, 'pdf'])->name('transactions.export.pdf');
 
     // Products (Livewire)
     Route::get('/products', ProductsIndex::class)->name('products.index');

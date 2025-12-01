@@ -28,11 +28,11 @@
                                     <input wire:model.live="search" id="order_search" name="order_search" type="text" placeholder="Cari order..." class="w-full pl-12 pr-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500 transition-all duration-200 shadow-sm hover:shadow-md">
                                 </div>
                                 <div class="w-auto">
-                                    <select wire:model.live="status" id="order_status" name="order_status" class="pl-4 pr-11 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none bg-no-repeat bg-[length:0.75em] bg-[right_1rem_center]" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 24 24%27 stroke=%27%236b7280%27%3E%3Cpath stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%272%27 d=%27M19 9l-7 7-7-7%27/%3E%3C/svg%3E');">
-                                        <option value="all">Semua Status</option>
-                                        @foreach ($statusOptions as $value => $label)
-                                            <option value="{{ $value }}">{{ $label }}</option>
-                                        @endforeach
+                                    <select wire:model.live="paymentMethod" id="order_payment" name="order_payment" class="pl-4 pr-11 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none bg-no-repeat bg-[length:0.75em] bg-[right_1rem_center]" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 24 24%27 stroke=%27%236b7280%27%3E%3Cpath stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%272%27 d=%27M19 9l-7 7-7-7%27/%3E%3C/svg%3E');">
+                                        <option value="all">Semua</option>
+                                        <option value="cash">Cash On Delivery</option>
+                                        <option value="transfer">Transfer</option>
+                                        <option value="midtrans">Midtrans</option>
                                     </select>
                                 </div>
                             </div>
@@ -200,9 +200,11 @@
                             <span class="receipt-label">Kontak:</span>
                             <span class="receipt-value">{{ $selectedOrder->buyer_contact ?: '-' }}</span>
                         </div>
-                        <div class="receipt-row">
-                            <span class="receipt-label">Alamat:</span>
-                            <span class="receipt-value text-right max-w-[200px]">{{ $selectedOrder->shipping_address ?: '-' }}</span>
+                        <div class="receipt-row items-start">
+                            <span class="receipt-label pr-4">Alamat:</span>
+                            <p class="receipt-value max-w-sm text-left leading-relaxed">
+                                {{ $selectedOrder->shipping_address ?: '-' }}
+                            </p>
                         </div>
                         <div class="receipt-row">
                             <span class="receipt-label">Pembayaran:</span>

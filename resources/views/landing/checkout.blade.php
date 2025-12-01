@@ -41,13 +41,9 @@
 ">
     <div class="min-h-screen">
         <header class="bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800 backdrop-blur">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                <a href="/" class="flex items-center gap-2">
-                    <div class="h-8 w-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-semibold">T</div>
-                    <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">Thrif Studio</span>
-                </a>
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-end">
                 <nav class="text-xs font-medium text-gray-600 dark:text-gray-300 flex items-center gap-3">
-                    <a href="/" class="hover:text-indigo-600 inline-flex items-center gap-1">
+                    <a href="/" class="hover:text-slate-900 dark:hover:text-slate-100 inline-flex items-center gap-1">
                         <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
@@ -62,7 +58,7 @@
         <main class="py-10">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 @php
-                    $inputClass = 'w-full rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-sm text-gray-900 dark:text-gray-100 transition-all duration-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 hover:border-gray-300 dark:hover:border-gray-600';
+                    $inputClass = 'w-full rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-sm text-gray-900 dark:text-gray-100 transition-all duration-300 focus:border-slate-900 focus:ring-4 focus:ring-slate-900/20 hover:border-gray-300 dark:hover:border-gray-600';
                     $labelClass = 'text-[11px] font-semibold tracking-[0.2em] text-gray-500 dark:text-gray-400 uppercase';
                     $prefilledQuantity = max(1, (int) ($prefill['quantity'] ?? 1));
                     $subtotal = $prefilledQuantity * $product->price;
@@ -162,7 +158,7 @@
 
                             <div class="space-y-3">
                                 <div class="flex items-center gap-2">
-                                    <div class="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white">
+                                    <div class="h-8 w-8 rounded-xl bg-slate-900 text-slate-100 dark:bg-slate-800 dark:text-slate-100 flex items-center justify-center">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                         </svg>
