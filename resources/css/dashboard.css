@@ -231,7 +231,7 @@
 }
 
 .weekly-sales-icon-wrapper {
-    @apply h-10 w-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-900 dark:text-gray-100;
+    @apply h-12 w-12 rounded-xl bg-gray-900 flex items-center justify-center text-white shadow-lg transition-transform duration-200;
 }
 
 .weekly-sales-title {

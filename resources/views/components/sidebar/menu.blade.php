@@ -1,8 +1,7 @@
-@props(['mobile' => false])
+@props(['mobile' => false, 'pendingOrdersCount' => 0])
 
 @php
     $activeClasses = 'bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900 shadow-md';
-        
     $inactiveClasses = 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700';
 @endphp
 
@@ -46,7 +45,13 @@
             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18M3 8h18M3 13h18M3 18h18"></path>
             </svg>
-            Pesanan
+            <span class="flex-1">Pesanan</span>
+
+            @if($pendingOrdersCount > 0)
+                <span class="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-semibold rounded-full bg-red-500 text-white">
+                    {{ $pendingOrdersCount }}
+                </span>
+            @endif
         </a>
 
         <a href="{{ route('products.index') }}" @if($mobile) wire:navigate.stop @click="$dispatch('close-drawer')" @endif class="group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 {{ request()->routeIs('products.*') ? $activeClasses : $inactiveClasses }}">
