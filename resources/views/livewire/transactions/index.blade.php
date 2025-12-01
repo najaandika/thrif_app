@@ -3,14 +3,7 @@
 <div class="py-12">
     <div>
         @if (session()->has('message'))
-            <div class="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900 dark:to-emerald-900 text-green-700 dark:text-green-200 rounded-xl border-l-4 border-green-500 shadow-lg">
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="font-semibold">{{ session('message') }}</span>
-                </div>
-            </div>
+            <x-alert :message="session('message')" type="success" />
         @endif
 
         <div class="flex flex-row gap-6">
@@ -27,7 +20,12 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                         </svg>
                                     </div>
-                                    <input wire:model.live="search" type="text" placeholder="Cari ID / metode / status" class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md">
+                                    <input
+                                        wire:model.live="search"
+                                        type="text"
+                                        placeholder="Cari ID / metode / status"
+                                        class="w-full pl-12 pr-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500 transition-all duration-200 shadow-sm hover:shadow-md"
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -102,7 +100,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="8" class="empty-transactions">Belum ada transaksi.</td>
+                                            <td colspan="9" class="empty-transactions">Belum ada transaksi.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

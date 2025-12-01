@@ -106,19 +106,6 @@
                     <a href="<?php echo e(route('register')); ?>" class="hidden lg:inline-flex px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-semibold transition ml-2">Register</a>
                 <?php endif; ?>
             <?php endif; ?>
-            <a href="#cart" class="relative inline-flex h-9 w-9 lg:h-10 lg:w-10 items-center justify-center rounded-2xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" aria-label="Keranjang">
-                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M6 6h15l-1.5 9h-12z" stroke-linecap="round" stroke-linejoin="round" />
-                    <circle cx="9" cy="20" r="1" />
-                    <circle cx="18" cy="20" r="1" />
-                </svg>
-                <?php if($cartCount > 0): ?>
-                    <span class="absolute -top-1 -right-1 inline-flex h-5 min-w-[20px] px-1.5 items-center justify-center rounded-full bg-rose-500 text-[10px] font-semibold text-white leading-none">
-                        <?php echo e($cartCount); ?>
-
-                    </span>
-                <?php endif; ?>
-            </a>
 
             <button type="button" class="lg:hidden h-9 w-9 inline-flex items-center justify-center rounded-2xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200" data-toggle-mobile-nav aria-label="Menu">
                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

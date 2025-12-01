@@ -11,7 +11,7 @@
 
         <div class="flex flex-wrap items-center gap-4">
             <?php if(auth()->guard()->check()): ?>
-                <a href="#produk" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/40 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:ring-indigo-500">
+                <a href="#produk" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-slate-800/40 transition-all duration-300 hover:shadow-xl hover:shadow-slate-900/50 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:ring-slate-500">
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                         <path d="M15 11l-3-3m0 0l-3 3m3-3v8" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M3 12h18M3 6h18M3 18h18" stroke-linecap="round"/>
@@ -19,7 +19,7 @@
                     Lihat etalase terbaru
                 </a>
             <?php else: ?>
-                <a href="<?php echo e(route('login')); ?>" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/40 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:ring-indigo-500">
+                <a href="<?php echo e(route('login')); ?>" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-slate-800/40 transition-all duration-300 hover:shadow-xl hover:shadow-slate-900/50 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:ring-slate-500">
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                         <path d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -31,7 +31,7 @@
 
         <div class="grid gap-4 sm:grid-cols-2 pt-6 sm:pt-8 border-t border-gray-100 dark:border-gray-800/60">
             <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/70 p-4 space-y-3">
-                <div class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-200">
+                <div class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-white dark:bg-slate-700 dark:text-slate-100">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M4 7h16M4 12h10M4 17h6" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>

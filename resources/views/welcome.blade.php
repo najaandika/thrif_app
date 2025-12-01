@@ -34,7 +34,13 @@
 
             <main class="flex-1">
                 <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                    @include('landing.sections.status-alert')
+                    @if (session('status'))
+                        <x-alert :message="session('status')" type="success" />
+                    @endif
+
+                    @if (session('error'))
+                        <x-alert :message="session('error')" type="error" />
+                    @endif
 
                     @include('landing.sections.hero', [
                         'featuredProducts' => $featuredProducts,

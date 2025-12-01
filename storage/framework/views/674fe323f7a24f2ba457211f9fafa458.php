@@ -1,23 +1,56 @@
 <div class="landing-container">
 
-    <form action="<?php echo e(route('landing.products.index')); ?>" method="get" class="search-form">
+    <div class="search-form">
         <a href="<?php echo e(route('landing.home')); ?>" class="back-btn" aria-label="Kembali">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
             </svg>
         </a>
         <div class="search-wrapper">
-            <input type="text" name="search" value="<?php echo e(request('search')); ?>" placeholder="Cari produk..." class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500 text-left" aria-label="Cari produk" style="text-align:left;">
+            <input
+                type="text"
+                wire:model.debounce.400ms="search"
+                placeholder="Cari produk..."
+                class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500 text-left"
+                aria-label="Cari produk"
+                style="text-align:left;"
+            >
         </div>
-        <button type="submit" class="ml-2 px-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition-all" aria-label="Cari">
+        <button type="button" class="ml-2 px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold shadow-md shadow-slate-900/40 transition-all" aria-label="Cari">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8"/>
                 <path d="M21 21l-4.35-4.35" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </button>
-    </form>
+    </div>
+
+    
+    <div class="mt-5 sm:mt-6 flex flex-wrap gap-2">
+        <button
+            type="button"
+            wire:click="$set('category', '')"
+            class="px-3 py-1.5 rounded-full text-xs font-semibold border transition-all
+                <?php echo e($category === ''
+                    ? 'bg-slate-800 dark:bg-slate-700 border-slate-600 text-white shadow-sm shadow-slate-900/40'
+                    : 'bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-200 hover:border-slate-500'); ?>">
+            Semua
+        </button>
+
+        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slug => $name): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <button
+                type="button"
+                wire:click="$set('category', '<?php echo e($slug); ?>')"
+                class="px-3 py-1.5 rounded-full text-xs font-semibold border transition-all
+                    <?php echo e($category === $slug
+                        ? 'bg-slate-800 dark:bg-slate-700 border-slate-600 text-white shadow-sm shadow-slate-900/40'
+                        : 'bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-200 hover:border-slate-500'); ?>">
+                <?php echo e($name); ?>
+
+            </button>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+    </div>
     <!--[if BLOCK]><![endif]--><?php if($products->count()): ?>
-        <div class="product-grid">
+        <div class="mt-5 sm:mt-6 product-grid">
             <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="product-card">
                     <a href="<?php echo e(route('landing.products.checkout', $product)); ?>" class="block">

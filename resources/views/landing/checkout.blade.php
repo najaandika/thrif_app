@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Checkout Produk · Thrif Studio</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script>
         (function() {
             try {
@@ -17,6 +18,10 @@
     </script>
     @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/checkout.js'])
+        <script type="text/javascript"
+            src="https://app.sandbox.midtrans.com/snap/snap.js"
+            data-client-key="{{ config('services.midtrans.client_key') }}">
+        </script>
     <style>
         html, body { touch-action: pan-x pan-y; overscroll-behavior: none; overflow-x: hidden; }
     </style>
@@ -64,7 +69,7 @@
                     $user = \App\Models\User::with('address')->find(auth()->id());
                 @endphp
                 @if (session('status'))
-                    <div class="mb-6 rounded-2xl border-2 border-emerald-300 dark:border-emerald-700 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/40 dark:to-green-950/40 px-5 py-4 flex items-start gap-4 shadow-lg shadow-emerald-500/20">
+                    <div x-data x-init="setTimeout(() => $el.remove(), 4000)" class="mb-6 rounded-2xl border-2 border-emerald-300 dark:border-emerald-700 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/40 dark:to-green-950/40 px-5 py-4 flex items-start gap-4 shadow-lg shadow-emerald-500/20">
                         <div class="flex-shrink-0 mt-0.5">
                             <div class="h-8 w-8 rounded-xl bg-gradient-to-br from-emerald-600 to-green-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/50">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -80,7 +85,7 @@
                 @endif
 
                 @if ($errors->order->any())
-                    <div class="mb-6 rounded-2xl border-2 border-red-300 dark:border-red-700 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-950/40 dark:to-pink-950/40 px-5 py-4 flex items-start gap-4 shadow-lg shadow-red-500/20">
+                    <div x-data x-init="setTimeout(() => $el.remove(), 4000)" class="mb-6 rounded-2xl border-2 border-red-300 dark:border-red-700 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-950/40 dark:to-pink-950/40 px-5 py-4 flex items-start gap-4 shadow-lg shadow-red-500/20">
                         <div class="flex-shrink-0 mt-0.5">
                             <div class="h-8 w-8 rounded-xl bg-gradient-to-br from-red-600 to-pink-600 flex items-center justify-center text-white shadow-lg shadow-red-500/50">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,7 +133,7 @@
                         </div>
 
                         <div class="rounded-2xl bg-gray-50 dark:bg-gray-800/70 p-4 text-xs text-gray-600 dark:text-gray-300 space-y-1">
-                            <p>Stok tersedia: <span class="font-semibold">{{ $product->stock }}</span></p>
+                            <p>Stok tersedia: <span class="font-semibold">{{ $product->sizes->isNotEmpty() ? $product->total_stock : $product->stock }}</span></p>
                             <p>Status: <span class="font-semibold text-gray-900 dark:text-gray-100">{{ $product->is_available ? 'Ready to ship' : 'Sold Out' }}</span></p>
                         </div>
 
@@ -144,7 +149,7 @@
                             <p class="text-sm text-gray-500 dark:text-gray-400">Semua data akan dijaga kerahasiaannya</p>
                         </div>
 
-                        <form method="POST" action="{{ route('landing.products.order', $product) }}" class="space-y-6">
+                        <form method="POST" action="{{ route('landing.products.order', $product) }}" class="space-y-6" id="checkout-form">
                                                         <div class="space-y-1">
                                                             <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Metode Pembayaran</label>
                                                             <select name="payment_method" class="{{ $inputClass }}" required>
@@ -266,5 +271,61 @@
     {{-- JS sudah dipindah ke resources/js/checkout.js --}}
     <x-toast />
     @livewireScripts
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const form = document.getElementById('checkout-form');
+                const submitBtn = document.getElementById('submit-order-btn');
+                const paymentSelect = form.querySelector('select[name="payment_method"]');
+                const submitIcon = submitBtn?.querySelector('.submit-icon');
+                const loadingSpinner = submitBtn?.querySelector('.loading-spinner');
+                const submitText = submitBtn?.querySelector('.submit-text');
+
+                if (!form || !submitBtn || !paymentSelect || !window.snap) {
+                    return;
+                }
+
+                const resetButton = () => {
+                    submitBtn.disabled = false;
+                    if (submitIcon) submitIcon.classList.remove('hidden');
+                    if (loadingSpinner) loadingSpinner.classList.add('hidden');
+                    if (submitText) submitText.textContent = 'Kirim Order';
+                };
+
+                form.addEventListener('submit', function (e) {
+                    const method = paymentSelect.value;
+
+                    if (method !== 'midtrans') {
+                        return; // submit normal for cash/transfer
+                    }
+
+                    e.preventDefault();
+
+                    // Optional: disable button while processing
+                    submitBtn.disabled = true;
+
+                    window.snap.pay(@json($snapToken), {
+                        onSuccess: function (result) {
+                            console.log('Midtrans success', result);
+                            // Untuk sementara, setelah sukses kita submit form biasa supaya order tercatat
+                            resetButton();
+                            form.submit();
+                        },
+                        onPending: function (result) {
+                            console.log('Midtrans pending', result);
+                            resetButton();
+                        },
+                        onError: function (result) {
+                            console.error('Midtrans error', result);
+                            alert('Pembayaran gagal, silakan coba lagi.');
+                            resetButton();
+                        },
+                        onClose: function () {
+                            console.log('Midtrans popup closed');
+                            resetButton();
+                        }
+                    });
+                });
+            });
+        </script>
 </body>
 </html>

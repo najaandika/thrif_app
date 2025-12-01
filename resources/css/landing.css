@@ -1,16 +1,16 @@
 /* Landing Page Styles */
 
 .landing-container {
-    @apply max-w-7xl mx-auto px-6 py-8;
+    @apply max-w-6xl mx-auto px-4 sm:px-6 py-8;
 }
 
 /* Search Section */
 .search-form {
-    @apply mb-8 flex items-center justify-center gap-2;
+    @apply mb-6 sm:mb-8 flex items-center justify-center gap-2;
 }
 
 .back-btn {
-    @apply p-2.5 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-gray-800 rounded-lg transition-colors;
+    @apply p-2.5 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-gray-800 rounded-lg transition-colors;
 }
 
 .search-wrapper {
@@ -28,12 +28,12 @@
 }
 
 .search-input {
-    @apply w-full pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500;
+    @apply w-full pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-500;
     padding-left: 1rem !important;
 }
 
 .search-submit-btn {
-    @apply inline-flex items-center justify-center px-4 py-2.5 rounded-lg bg-emerald-600 text-white font-semibold shadow-sm hover:bg-emerald-700 transition;
+    @apply inline-flex items-center justify-center px-4 py-2.5 rounded-lg bg-slate-900 text-white font-semibold shadow-sm hover:bg-slate-800 transition;
 }
 
 /* Product Card */
@@ -42,7 +42,7 @@
 }
 
 .product-card:hover .product-title {
-    @apply text-emerald-600;
+    @apply text-slate-900 dark:text-slate-100;
 }
 
 .product-image {
@@ -66,7 +66,7 @@
 }
 
 .product-price {
-    @apply text-emerald-600 dark:text-emerald-400 font-bold text-sm;
+    @apply text-slate-900 dark:text-slate-100 font-bold text-sm;
 }
 
 /* Utilities */

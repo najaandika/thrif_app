@@ -37,9 +37,8 @@ $register = function () {
 
     event(new Registered($user = User::create($validated)));
 
-    Auth::login($user);
-
-    $this->redirect($user->homePath(), navigate: true);
+    // Setelah registrasi, arahkan ke halaman login tanpa auto-login
+    $this->redirectRoute('login', navigate: true);
 };
 
 ?>

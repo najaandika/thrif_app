@@ -6,7 +6,7 @@
 }
 
 .auth-icon-wrapper {
-    @apply inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white mb-3 shadow-lg shadow-indigo-500/40;
+    @apply inline-flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-500 text-white mb-3 shadow-lg shadow-emerald-500/40;
 }
 
 .auth-title {
@@ -28,7 +28,7 @@
 }
 
 .remember-checkbox {
-    @apply rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800;
+    @apply rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-slate-700 dark:text-slate-200 shadow-sm focus:ring-slate-500 dark:focus:ring-slate-500 dark:focus:ring-offset-gray-800;
 }
 
 .remember-text {
@@ -41,7 +41,7 @@
 }
 
 .forgot-password-link {
-    @apply text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium transition-colors;
+    @apply text-xs text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white font-medium transition-colors;
 }
 
 /* Divider */
@@ -72,7 +72,7 @@
 }
 
 .auth-register-link {
-    @apply font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors;
+    @apply font-semibold text-slate-800 dark:text-slate-100 hover:text-slate-900 dark:hover:text-white transition-colors;
 }
 
 /* Benefits Section */

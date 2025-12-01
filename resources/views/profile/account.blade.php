@@ -5,7 +5,7 @@
             <div class="mb-6">
                 <a
                     href="{{ auth()->user()?->homePath() ?? url('/') }}"
-                    class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/50 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500"
+                    class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-slate-800/50 transition-all duration-300 hover:shadow-xl hover:shadow-slate-900/60 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-500"
                 >
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -72,20 +72,6 @@
                         </div>
                     </a>
 
-                    <!-- Wishlist -->
-                    <a href="{{ route('profile.wishlist') }}" class="group block p-5 bg-white dark:bg-gray-800 shadow-lg rounded-2xl border-2 border-transparent hover:border-purple-300 dark:hover:border-purple-600 transition-all duration-300 hover:scale-105">
-                        <div class="flex items-start gap-3">
-                            <div class="flex-shrink-0 h-10 w-10 rounded-xl bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform">
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                </svg>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">Favorit / Wishlist</h4>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Produk yang kamu simpan</p>
-                            </div>
-                        </div>
-                    </a>
                 @endif
 
                 <!-- Keluar -->

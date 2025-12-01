@@ -15,6 +15,7 @@ if ((isset($_GET['email']) && $_GET['email'] !== '') || (isset($_GET['password']
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Services\MidtransService;
 
 // Controllers
 use App\Http\Controllers\LandingController;
@@ -39,6 +40,24 @@ use App\Livewire\Transactions\Index as TransactionsIndex;
 // --------------------------------------------------
 Route::get('/', LandingController::class)->name('landing.home');
 Route::get('/landing/products', LandingProductsIndex::class)->name('landing.products.index');
+
+// Midtrans Sandbox test route
+Route::get('/midtrans-test', function (MidtransService $midtrans) {
+    $params = [
+        'transaction_details' => [
+            'order_id'     => 'TEST-' . time(),
+            'gross_amount' => 10000,
+        ],
+        'customer_details' => [
+            'first_name' => 'Tester',
+            'email'      => 'tester@example.com',
+        ],
+    ];
+
+    $snapToken = $midtrans->createSnapToken($params);
+
+    return view('midtrans.test', compact('snapToken'));
+})->name('midtrans.test');
 
 // --------------------------------------------------
 // Authenticated (general) routes

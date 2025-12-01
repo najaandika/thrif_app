@@ -132,21 +132,9 @@
                         <?php if(auth()->guard()->check()): ?>
                             <?php if(auth()->user()->isCustomer()): ?>
                                 <?php if($product->stock > 0 && $product->is_available): ?>
-                                    <div class="mt-3 flex items-center justify-end gap-3 pr-1">
-                                        <form action="<?php echo e(route('landing.cart.store')); ?>" method="POST">
-                                            <?php echo csrf_field(); ?>
-                                            <input type="hidden" name="product_id" value="<?php echo e($product->id); ?>">
-                                            <button type="submit"
-                                                class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-emerald-500 bg-white text-emerald-600 shadow-sm transition hover:bg-emerald-50 dark:border-emerald-400 dark:bg-slate-900 dark:text-emerald-300">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                                                          d="M3 3h2l.4 2M7 13h10l3-8H6.4M7 13L5.4 5M7 13l-2 7h14l-2-7M9 21a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z" />
-                                                </svg>
-                                            </button>
-                                        </form>
-
-                                                     <a href="<?php echo e(route('landing.products.checkout', $product)); ?>"
-                                                         class="inline-flex flex-1 max-w-[140px] items-center justify-center rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:bg-emerald-500 dark:hover:bg-emerald-400 dark:focus-visible:ring-emerald-400">
+                                    <div class="mt-4 flex items-center justify-center">
+                                        <a href="<?php echo e(route('landing.products.checkout', $product)); ?>"
+                                           class="inline-flex w-full max-w-[220px] items-center justify-center rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-500/40 transition hover:bg-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2">
                                             Buy Now
                                         </a>
                                     </div>

@@ -1,15 +1,25 @@
 <div class="settings-wrapper">
     <!--[if BLOCK]><![endif]--><?php if(session()->has('message')): ?>
-        <div class="alert-container">
-            <div class="alert-message">
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="font-semibold"><?php echo e(session('message')); ?></span>
-                </div>
-            </div>
-        </div>
+        <?php if (isset($component)) { $__componentOriginal5194778a3a7b899dcee5619d0610f5cf = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal5194778a3a7b899dcee5619d0610f5cf = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.alert','data' => ['message' => session('message'),'type' => 'success']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('alert'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['message' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(session('message')),'type' => 'success']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal5194778a3a7b899dcee5619d0610f5cf)): ?>
+<?php $attributes = $__attributesOriginal5194778a3a7b899dcee5619d0610f5cf; ?>
+<?php unset($__attributesOriginal5194778a3a7b899dcee5619d0610f5cf); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal5194778a3a7b899dcee5619d0610f5cf)): ?>
+<?php $component = $__componentOriginal5194778a3a7b899dcee5619d0610f5cf; ?>
+<?php unset($__componentOriginal5194778a3a7b899dcee5619d0610f5cf); ?>
+<?php endif; ?>
     <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
     <div class="settings-layout">
         <?php if (isset($component)) { $__componentOriginal2880b66d47486b4bfeaf519598a469d6 = $component; } ?>

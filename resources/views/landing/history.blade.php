@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Riwayat Pembelian · Thrif Studio</title>
+    <title>Riwayat Pembelian</title>
     <script>
         (function() {
             try {
@@ -25,10 +25,6 @@
     <div class="min-h-screen">
         <header class="bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800 backdrop-blur">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                <a href="/" class="flex items-center gap-2">
-                    <div class="h-8 w-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-semibold">T</div>
-                    <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">Thrif Studio</span>
-                </a>
                 <nav class="text-xs font-medium text-gray-600 dark:text-gray-300 flex items-center gap-3">
                     <a href="/" class="hover:text-indigo-600 inline-flex items-center gap-1">
                         <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -50,7 +46,7 @@
                 </div>
 
                 @if (session('status'))
-                    <div class="rounded-2xl border-2 border-emerald-300 dark:border-emerald-700 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/40 dark:to-green-950/40 px-5 py-4 flex items-start gap-4 shadow-lg shadow-emerald-500/20">
+                    <div x-data x-init="setTimeout(() => $el.remove(), 4000)" class="rounded-2xl border-2 border-emerald-300 dark:border-emerald-700 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/40 dark:to-green-950/40 px-5 py-4 flex items-start gap-4 shadow-lg shadow-emerald-500/20">
                         <div class="flex-shrink-0 mt-0.5">
                             <div class="h-8 w-8 rounded-xl bg-gradient-to-br from-emerald-600 to-green-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/50">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
