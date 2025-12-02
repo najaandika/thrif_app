@@ -1,7 +1,7 @@
 <?php $attributes ??= new \Illuminate\View\ComponentAttributeBag;
 
 $__newAttributes = [];
-$__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames((['mobile' => false]));
+$__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames((['mobile' => false, 'pendingOrdersCount' => 0]));
 
 foreach ($attributes->all() as $__key => $__value) {
     if (in_array($__key, $__propNames)) {
@@ -16,7 +16,7 @@ $attributes = new \Illuminate\View\ComponentAttributeBag($__newAttributes);
 unset($__propNames);
 unset($__newAttributes);
 
-foreach (array_filter((['mobile' => false]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
+foreach (array_filter((['mobile' => false, 'pendingOrdersCount' => 0]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 }
 
@@ -30,7 +30,6 @@ unset($__defined_vars, $__key, $__value); ?>
 
 <?php
     $activeClasses = 'bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900 shadow-md';
-        
     $inactiveClasses = 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700';
 ?>
 
@@ -74,7 +73,14 @@ unset($__defined_vars, $__key, $__value); ?>
             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18M3 8h18M3 13h18M3 18h18"></path>
             </svg>
-            Pesanan
+            <span class="flex-1">Pesanan</span>
+
+            <!--[if BLOCK]><![endif]--><?php if($pendingOrdersCount > 0): ?>
+                <span class="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-semibold rounded-full bg-red-500 text-white">
+                    <?php echo e($pendingOrdersCount); ?>
+
+                </span>
+            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
         </a>
 
         <a href="<?php echo e(route('products.index')); ?>" <?php if($mobile): ?> wire:navigate.stop @click="$dispatch('close-drawer')" <?php endif; ?> class="group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 <?php echo e(request()->routeIs('products.*') ? $activeClasses : $inactiveClasses); ?>">

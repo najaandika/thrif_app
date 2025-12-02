@@ -13,20 +13,40 @@ class Index extends Component
 {
     use WithPagination;
     public $search = '';
-    protected $listeners = ['delete'];
+
+    public bool $showDeleteModal = false;
+
+    public ?int $categoryIdToDelete = null;
+
+    protected $listeners = [
+        'deleteCategory' => 'confirmDelete',
+    ];
 
     public function updatingSearch()
     {
         $this->resetPage();
     }
 
-    public function delete($id)
+    public function confirmDelete(int $id): void
     {
-        $category = Category::find($id);
+        $this->categoryIdToDelete = $id;
+        $this->showDeleteModal = true;
+    }
+
+    public function deleteConfirmed(): void
+    {
+        if (!$this->categoryIdToDelete) {
+            return;
+        }
+
+        $category = Category::find($this->categoryIdToDelete);
         if ($category) {
             $category->delete();
             session()->flash('message', 'Category deleted successfully.');
         }
+
+        $this->showDeleteModal = false;
+        $this->categoryIdToDelete = null;
     }
 
     public function render()

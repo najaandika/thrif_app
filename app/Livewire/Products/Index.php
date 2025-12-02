@@ -13,19 +13,24 @@ use Livewire\Attributes\Layout;
 class Index extends Component
 {
     use WithPagination;
+
     public $search = '';
+
     protected $queryString = ['search'];
-    protected $listeners = ['delete'];
+
+    protected $listeners = [
+        'delete' => 'deleteProduct',
+    ];
 
     public function updatingSearch()
     {
         $this->resetPage();
     }
 
-    public function delete($id)
+    public function deleteProduct(int $id): void
     {
         $product = Product::find($id);
-        
+
         if ($product && $product->user_id === Auth::id()) {
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);

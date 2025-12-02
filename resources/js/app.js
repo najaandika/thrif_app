@@ -2,6 +2,8 @@
 import './bootstrap';           // Axios setup and basic configurations
 import './scroll-animations';   // Custom scroll animation utilities
 import './ripple-effect';       // Material Design ripple effects
+import './pos';                 // POS page input formatting & Livewire helpers
+import './products';            // Admin products delete helper (SweetAlert wrapper)
 import Chart from 'chart.js/auto';  // Chart.js for data visualization
 
 /**
