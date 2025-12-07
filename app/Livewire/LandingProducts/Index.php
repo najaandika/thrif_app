@@ -34,7 +34,7 @@ class Index extends Component
     {
         $this->categories = Category::query()
             ->orderBy('name')
-            ->pluck('name', 'slug')
+            ->pluck('name', 'id')
             ->toArray();
     }
 

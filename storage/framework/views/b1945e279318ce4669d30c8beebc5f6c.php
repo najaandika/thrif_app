@@ -1,19 +1,3 @@
-<?php
-    $shopLogo = \App\Models\Setting::get('shop_logo');
-    $shopName = \App\Models\Setting::get('shop_name', 'Thrif');
-    $shopTagline = \App\Models\Setting::get('shop_tagline', 'Your trusted thrift store');
-    $shopEmail = \App\Models\Setting::get('shop_email', 'contact@thrif.com');
-    $shopPhone = \App\Models\Setting::get('shop_phone');
-    $shopAddress = \App\Models\Setting::get('shop_address');
-    
-    $socialInstagram = \App\Models\Setting::get('social_instagram');
-    $socialFacebook = \App\Models\Setting::get('social_facebook');
-    $socialTiktok = \App\Models\Setting::get('social_tiktok');
-    
-    $operatingHours = \App\Models\Setting::get('operating_hours', 'Setiap Hari, 09:00 - 21:00');
-    $paymentMethods = \App\Models\Setting::get('payment_methods', 'Transfer Bank & E-Wallet');
-?>
-
 <footer class="border-t border-gray-200 dark:border-gray-800 bg-gradient-to-b from-transparent to-gray-50 dark:to-gray-900/50 mt-20">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">

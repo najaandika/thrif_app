@@ -66,7 +66,7 @@
 }
 
 .product-price {
-    @apply text-slate-900 dark:text-slate-100 font-bold text-sm;
+    @apply text-green-600 font-bold text-sm;
 }
 
 /* Utilities */
@@ -76,4 +76,50 @@
 
 .empty-state {
     @apply text-gray-500 dark:text-gray-400 py-8 text-center;
+}
+
+/* Responsive Grid */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+@media (min-width: 640px) {
+    .product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .product-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .product-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+
+/* Override default focus styles to use sleek slate colors */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none !important;
+    border-color: rgb(15 23 42) !important;
+    /* slate-900 */
+    box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.2) !important;
+    /* slate-900/20 */
+}
+
+.dark input:focus,
+.dark select:focus,
+.dark textarea:focus {
+    border-color: rgb(100 116 139) !important;
+    /* slate-500 */
+    box-shadow: 0 0 0 4px rgba(100, 116, 139, 0.2) !important;
+    /* slate-500/20 */
 }

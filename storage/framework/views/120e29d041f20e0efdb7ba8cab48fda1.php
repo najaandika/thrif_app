@@ -27,7 +27,7 @@
 
                 <div class="product-details">
                     <p class="product-name"><?php echo e($product->name); ?></p>
-                    <p class="product-price-sm">Rp <?php echo e(number_format($product->price, 0, ',', '.')); ?></p>
+                    <p class="product-price-sm"><?php echo e(rupiah($product->price)); ?></p>
                 </div>
 
                 <div>

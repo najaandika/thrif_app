@@ -9,15 +9,20 @@
             <input
                 wire:model.live="search"
                 type="text"
+                id="transaction-search"
+                name="search"
                 placeholder="Cari ID / metode / status"
+                aria-label="Cari transaksi berdasarkan ID, metode, atau status"
                 class="w-full pl-12 pr-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500 transition-all duration-200 shadow-sm hover:shadow-md"
             >
         </div>
         <div class="w-auto">
             <select
                 wire:model.live="paymentMethod"
-                class="pl-4 pr-11 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none bg-no-repeat bg-[length:0.75em] bg-[right_1rem_center]"
-                style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 24 24%27 stroke=%27%236b7280%27%3E%3Cpath stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%272%27 d=%27M19 9l-7 7-7-7%27/%3E%3C/svg%3E');"
+                id="payment-method-filter"
+                name="paymentMethod"
+                aria-label="Filter berdasarkan metode pembayaran"
+                class="pl-4 pr-11 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none bg-no-repeat bg-[length:0.75em] bg-[right_1rem_center] custom-select-arrow"
             >
                 <option value="all">Semua</option>
                 <option value="cash">Cash</option>

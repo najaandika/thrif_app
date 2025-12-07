@@ -17,7 +17,7 @@
                         <img src="{{ $product->image ? Storage::url($product->image) : 'https://via.placeholder.com/200x150?text=No+Image' }}" alt="{{ $product->name }}" class="w-full h-36 object-cover rounded mb-2">
                         <div class="font-bold text-lg text-gray-900 dark:text-gray-100">{{ $product->name }}</div>
                         <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Kategori: {{ $product->category }}</div>
-                        <div class="text-emerald-600 dark:text-emerald-400 font-semibold">Rp {{ number_format($product->price, 0, ',', '.') }}</div>
+                        <div class="text-emerald-600 dark:text-emerald-400 font-semibold">{{ rupiah($product->price) }}</div>
                     </a>
                 </div>
             @endforeach

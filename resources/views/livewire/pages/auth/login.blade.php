@@ -43,14 +43,28 @@ $login = function () {
         <!-- Email Address -->
         <div>
             <x-input-label for="email" value="Email" class="mb-1" />
-            <x-text-input wire:model="form.email" id="email" class="block w-full" type="email" name="email" required autofocus autocomplete="username" />
-                <x-input-error :messages="$errors->get('form.email')" class="mt-1" />
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <x-text-input wire:model="form.email" id="email" class="block w-full pl-10" type="email" name="email" required autofocus autocomplete="username" />
+            </div>
+            <x-input-error :messages="$errors->get('form.email')" class="mt-1" />
         </div>
 
         <!-- Password -->
         <div>
             <x-input-label for="password" value="Password" class="mb-1" />
-            <x-text-input wire:model="form.password" id="password" class="block w-full" type="password" name="password" required autocomplete="current-password" />
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                </div>
+                <x-text-input wire:model="form.password" id="password" class="block w-full pl-10" type="password" name="password" required autocomplete="current-password" />
+            </div>
             <x-input-error :messages="$errors->get('form.password')" class="mt-1" />
         </div>
 
@@ -70,12 +84,12 @@ $login = function () {
                 </a>
             @endif
 
-            <x-primary-button class="ml-auto">
-                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button type="submit" class="login-btn-compact ml-auto">
+                <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
                 </svg>
                 Log in
-            </x-primary-button>
+            </button>
         </div>
 
         <!-- Divider -->
@@ -107,36 +121,5 @@ $login = function () {
             </p>
         </div>
     </form>
-    
-    <!-- Benefits Section -->
-    <div class="benefits-section">
-        <p class="benefits-title">Keuntungan Login</p>
-        <div class="benefits-list">
-            <div class="benefit-item">
-                <svg class="benefit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span>Checkout lebih cepat dengan data tersimpan</span>
-            </div>
-            <div class="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300">
-                <svg class="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span>Pantau riwayat pembelian real-time</span>
-            </div>
-            <div class="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300">
-                <svg class="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span>Update stok & promo eksklusif</span>
-            </div>
-        </div>
-        
-        <a href="/" wire:navigate class="back-home-btn">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-            </svg>
-            Kembali ke halaman utama
-        </a>
-    </div>
+
 </div>

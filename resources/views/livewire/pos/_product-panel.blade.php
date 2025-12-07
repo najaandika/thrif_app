@@ -2,7 +2,7 @@
 <div class="flex-1 space-y-6">
     <!-- Pencarian Produk -->
     <div class="bg-white dark:bg-gray-800/50 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Cari Produk</label>
+        <label for="product_selector_search" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Cari Produk</label>
         <div class="flex gap-3 items-center">
             <div class="flex-1">
                 <livewire:product-selector />
@@ -52,7 +52,7 @@
                             <!-- Price -->
                             <div class="mt-auto">
                                 <p class="text-sm font-bold text-gray-900 dark:text-white whitespace-nowrap">
-                                    Rp {{ number_format($product->price, 0, ',', '.') }}
+                                    {{ rupiah($product->price) }}
                                 </p>
                             </div>
                         </div>

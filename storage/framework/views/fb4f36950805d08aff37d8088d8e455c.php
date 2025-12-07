@@ -11,17 +11,13 @@
                     <!-- Product Name & Qty -->
                     <div class="flex-1 min-w-0">
                         <p class="text-sm font-medium text-gray-900 dark:text-white truncate"><?php echo e($item['name']); ?></p>
-                        <div class="flex items-center gap-2 mt-1">
-                            <input type="number" min="1" wire:model.lazy="cartQty.<?php echo e($item['id']); ?>" class="w-16 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-1 focus:ring-gray-900 dark:focus:ring-gray-100">
-                            <span class="text-xs text-gray-500">×</span>
-                            <span class="text-xs text-gray-600 dark:text-gray-400">Rp <?php echo e(number_format($item['price'], 0, ',', '.')); ?></span>
-                        </div>
+                        <!-- Hapus input quantity dan harga, hanya tampilkan nama produk -->
                     </div>
                     
                     <!-- Subtotal & Delete -->
                     <div class="flex flex-col items-end gap-1">
                         <p class="text-sm font-bold text-gray-900 dark:text-white whitespace-nowrap">
-                            Rp <?php echo e(number_format($item['price'] * $item['qty'], 0, ',', '.')); ?>
+                            <?php echo e(rupiah($item['price'] * $item['qty'])); ?>
 
                         </p>
                         <button type="button" wire:click="removeFromCart(<?php echo e($item['id']); ?>)" class="text-red-500 hover:text-red-700 p-1">
@@ -49,7 +45,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
                 <label for="payment_method" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metode Pembayaran</label>
-                <select id="payment_method" wire:model="payment_method" class="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:border-transparent transition-all shadow-sm">
+                <select id="payment_method" name="payment_method" wire:model="payment_method" class="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:border-transparent transition-all shadow-sm">
                     <option value="cash">Cash</option>
                     <option value="transfer">Transfer</option>
                     <option value="ewallet">Qris</option>
@@ -58,35 +54,45 @@
             <div>
                 <label for="amount_received" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Uang Diterima</label>
                 <div wire:ignore>
-                    <input type="text" id="amount_received" class="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:border-transparent transition-all shadow-sm" placeholder="0">
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <label for="discount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Diskon</label>
-            <div class="flex rounded-xl shadow-sm">
-                <div class="relative flex-none">
-                    <select wire:model.live="discountType" class="h-full py-0 pl-4 pr-8 border-2 border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-300 rounded-l-xl focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:border-gray-900 dark:focus:border-gray-100 sm:text-sm">
-                        <option value="fixed">Rp</option>
-                        <option value="percent">%</option>
-                    </select>
-                </div>
-                <div wire:ignore class="flex-1 min-w-0">
-                    <input type="text" id="discount" class="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-r-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:border-transparent transition-all" placeholder="0">
+                    <input type="text" id="amount_received" name="amount_received" class="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:border-transparent transition-all shadow-sm" placeholder="0">
                 </div>
             </div>
         </div>
 
         <!-- Total Section -->
         <div class="pt-6 border-t-2 border-gray-200 dark:border-gray-700 space-y-3">
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+                <span class="font-medium">Subtotal</span>
+                <span class="font-bold text-gray-900 dark:text-white"><?php echo e(rupiah($this->subtotal)); ?></span>
+            </div>
+
+            <!-- Diskon Inline -->
+            <div class="flex justify-between items-center text-sm">
+                <label for="discount" class="font-medium text-gray-600 dark:text-gray-400">Diskon</label>
+                <div class="flex items-center gap-2">
+                    <select wire:model.live="discountType" class="py-1 pl-2 pr-6 border-gray-200 dark:border-gray-600 rounded-lg text-xs focus:ring-gray-900 focus:border-gray-900 dark:bg-gray-800 dark:text-gray-200">
+                        <option value="fixed">Rp</option>
+                        <option value="percent">%</option>
+                    </select>
+                    <input type="number" wire:model.live.debounce.500ms="discount" class="w-24 py-1 px-2 border-gray-200 dark:border-gray-600 rounded-lg text-xs text-right focus:ring-gray-900 focus:border-gray-900 dark:bg-gray-800 dark:text-gray-200" placeholder="0">
+                </div>
+            </div>
+
+            <!-- Discount Amount Display -->
+            <!--[if BLOCK]><![endif]--><?php if($this->discountAmount > 0): ?>
+                <div class="flex justify-between items-center text-sm text-red-500">
+                    <span class="font-medium">Potongan Diskon</span>
+                    <span class="font-bold">- <?php echo e(rupiah($this->discountAmount)); ?></span>
+                </div>
+            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+
+            <div class="flex justify-between items-center pt-3 border-t border-dashed border-gray-200 dark:border-gray-700">
                 <span class="text-2xl font-bold text-gray-900 dark:text-white">Total:</span>
-                <span class="text-2xl font-bold text-gray-900 dark:text-white">Rp <?php echo e(number_format($this->total(), 0, ',', '.')); ?></span>
+                <span class="text-2xl font-bold text-gray-900 dark:text-white"><?php echo e(rupiah($this->total())); ?></span>
             </div>
             <div class="flex justify-between items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl">
                 <span class="text-base font-semibold text-gray-700 dark:text-gray-300">Kembalian:</span>
-                <span class="text-lg font-bold text-green-600 dark:text-green-400">Rp <?php echo e(number_format($this->change(), 0, ',', '.')); ?></span>
+                <span class="text-lg font-bold text-green-600 dark:text-green-400"><?php echo e(rupiah($this->change())); ?></span>
             </div>
         </div>
     </div>

@@ -18,27 +18,17 @@
     </script>
     <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::styles(); ?>
 
-    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js', 'resources/js/checkout.js']); ?>
-        <script type="text/javascript"
-            src="https://app.sandbox.midtrans.com/snap/snap.js"
-            data-client-key="<?php echo e(config('services.midtrans.client_key')); ?>">
-        </script>
-    <style>
-        html, body { touch-action: pan-x pan-y; overscroll-behavior: none; overflow-x: hidden; }
-    </style>
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/css/landing.css', 'resources/js/app.js', 'resources/js/landing-checkout.js']); ?>
+    <script type="text/javascript"
+        src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="<?php echo e(config('services.midtrans.client_key')); ?>">
+    </script>
+    <script>
+        window.snapToken = <?php echo json_encode($snapToken, 15, 512) ?>;
+    </script>
 </head>
 <body class="antialiased bg-gray-50 dark:bg-gray-900 font-sans" x-data="{ 
-    selectedSize: '<?php echo e(old('size')); ?>', 
-    maxStock: 0, 
-    variants: <?php echo e($product->sizes->map(fn($s) => ['size' => $s->size, 'stock' => $s->stock])->toJson()); ?> 
-}" x-init="
-    if (variants.length === 1) { 
-        selectedSize = variants[0].size; 
-        maxStock = variants[0].stock; 
-    } else if (selectedSize) { 
-        let v = variants.find(x => x.size == selectedSize); 
-        if (v) maxStock = v.stock; 
-    }
+}" 
 ">
     <div class="min-h-screen">
         <header class="bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800 backdrop-blur">
@@ -58,13 +48,6 @@
 
         <main class="py-10">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <?php
-                    $inputClass = 'w-full rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-sm text-gray-900 dark:text-gray-100 transition-all duration-300 focus:border-slate-900 focus:ring-4 focus:ring-slate-900/20 hover:border-gray-300 dark:hover:border-gray-600';
-                    $labelClass = 'text-[11px] font-semibold tracking-[0.2em] text-gray-500 dark:text-gray-400 uppercase';
-                    $prefilledQuantity = max(1, (int) ($prefill['quantity'] ?? 1));
-                    $subtotal = $prefilledQuantity * $product->price;
-                    $user = \App\Models\User::with('address')->find(auth()->id());
-                ?>
                 <?php if(session('status')): ?>
                     <div x-data x-init="setTimeout(() => $el.remove(), 4000)" class="mb-6 rounded-2xl border-2 border-emerald-300 dark:border-emerald-700 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/40 dark:to-green-950/40 px-5 py-4 flex items-start gap-4 shadow-lg shadow-emerald-500/20">
                         <div class="flex-shrink-0 mt-0.5">
@@ -116,21 +99,19 @@
                                 <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 leading-tight"><?php echo e($product->name); ?></h1>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">Kategori: <?php echo e($product->category ?? 'Tanpa kategori'); ?></p>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">Kondisi: <?php echo e($product->condition_label); ?></p>
-                                <?php if($product->sizes->count() === 1): ?>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Ukuran: <span class="font-semibold text-gray-700 dark:text-gray-200"><?php echo e($product->sizes->first()->size); ?></span></p>
-                                <?php endif; ?>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Ukuran: <span class="font-semibold text-gray-700 dark:text-gray-200"><?php echo e($product->size ?? '-'); ?></span></p>
                                 <?php if($product->description): ?>
                                     <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
                                         <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Deskripsi:</p>
                                         <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-line"><?php echo e(strip_tags($product->description)); ?></p>
                                     </div>
                                 <?php endif; ?>
-                                <p class="text-3xl font-bold text-green-600 pt-2">Rp <?php echo e(number_format($product->price, 0, ',', '.')); ?></p>
+                                <p class="text-3xl font-bold text-green-600 pt-2"><?php echo e(rupiah($product->price)); ?></p>
                             </div>
                         </div>
 
                         <div class="rounded-2xl bg-gray-50 dark:bg-gray-800/70 p-4 text-xs text-gray-600 dark:text-gray-300 space-y-1">
-                            <p>Stok tersedia: <span class="font-semibold"><?php echo e($product->sizes->isNotEmpty() ? $product->total_stock : $product->stock); ?></span></p>
+                            <!-- Stok dihapus, hanya tampil status -->
                             <p>Status: <span class="font-semibold text-gray-900 dark:text-gray-100"><?php echo e($product->is_available ? 'Ready to ship' : 'Sold Out'); ?></span></p>
                         </div>
 
@@ -168,7 +149,7 @@
                                 </div>
                                 <div class="space-y-1">
                                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Nama penerima</label>
-                                    <input type="text" name="buyer_name" value="<?php echo e(old('buyer_name', $user->address?->recipient_name ?? $user->name)); ?>" class="<?php echo e($inputClass); ?>" required>
+                                    <input type="text" name="buyer_name" value="<?php echo e($prefill['buyer_name']); ?>" class="<?php echo e($inputClass); ?>" required>
                                     <?php $__errorArgs = ['buyer_name', 'order'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -183,7 +164,7 @@ unset($__errorArgs, $__bag); ?>
 
                                 <div class="space-y-1">
                                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Kontak (WA / IG)</label>
-                                    <input type="text" name="buyer_contact" value="<?php echo e(old('buyer_contact', $user->address?->phone ?? $user->email)); ?>" class="<?php echo e($inputClass); ?>">
+                                    <input type="text" name="buyer_contact" value="<?php echo e($prefill['buyer_contact']); ?>" class="<?php echo e($inputClass); ?>">
                                     <?php $__errorArgs = ['buyer_contact', 'order'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -209,7 +190,7 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                                 <div class="space-y-1">
                                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Alamat pengiriman</label>
-                                    <textarea name="shipping_address" rows="3" class="<?php echo e($inputClass); ?>" placeholder="Kota, detail alamat, atau info COD"><?php echo e(old('shipping_address', $prefill['shipping_address'] ?? ($user->address?->asTextarea() ?? ''))); ?></textarea>
+                                    <textarea name="shipping_address" rows="3" class="<?php echo e($inputClass); ?>" placeholder="Kota, detail alamat, atau info COD"><?php echo e($prefill['shipping_address']); ?></textarea>
                                     <?php $__errorArgs = ['shipping_address', 'order'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -222,23 +203,10 @@ endif;
 unset($__errorArgs, $__bag); ?>
                                 </div>
 
-                                <!-- Size Selector -->
-                                <div class="space-y-2" x-show="variants.length > 1">
-                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Pilih Ukuran <span class="text-red-500">*</span></label>
-                                    <div class="flex flex-wrap gap-2">
-                                        <template x-for="variant in variants" :key="variant.size">
-                                            <button type="button" 
-                                                @click="selectedSize = variant.size; maxStock = variant.stock"
-                                                :class="selectedSize == variant.size ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:border-indigo-500'"
-                                                :disabled="variant.stock == 0"
-                                                class="px-4 py-2 border rounded-lg text-sm font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1">
-                                                <span x-text="variant.size"></span>
-                                                <span x-show="variant.stock == 0" class="text-[10px] uppercase">(Habis)</span>
-                                            </button>
-                                        </template>
-                                    </div>
-                                    <input type="hidden" name="size" x-model="selectedSize" required>
-                                    <?php $__errorArgs = ['size', 'order'];
+                                <div class="space-y-1">
+                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Catatan (Opsional)</label>
+                                    <textarea name="notes" rows="2" class="<?php echo e($inputClass); ?>" placeholder="Tambahkan catatan untuk pesanan ini..."><?php echo e($prefill['notes']); ?></textarea>
+                                    <?php $__errorArgs = ['notes', 'order'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -248,25 +216,22 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                    <p x-show="selectedSize" class="text-xs text-gray-500 dark:text-gray-400" x-transition>Stok tersedia: <span x-text="maxStock" class="font-semibold"></span></p>
                                 </div>
 
-                                <div class="grid gap-4 sm:grid-cols-2">
-                                    <div class="space-y-1">
-                                        <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Jumlah beli</label>
-                                        <input type="number" name="quantity" min="1" :max="maxStock" value="<?php echo e($prefilledQuantity); ?>" class="<?php echo e($inputClass); ?>" required x-bind:disabled="!selectedSize || maxStock === 0">
-                                        <p class="text-[11px] text-gray-500 dark:text-gray-400" x-text="selectedSize ? 'Maksimum ' + maxStock + ' item tersedia.' : 'Pilih ukuran terlebih dahulu.'"></p>
-                                        <?php $__errorArgs = ['quantity', 'order'];
+                                <!-- Size Selector -->
+                                <input type="hidden" name="size" value="<?php echo e($product->size); ?>" required>
+                                <?php $__errorArgs = ['size', 'order'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                                            <p class="text-xs text-red-500"><?php echo e($message); ?></p>
-                                        <?php unset($message);
+                                    <p class="text-xs text-red-500"><?php echo e($message); ?></p>
+                                <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                    </div>
+
+                                <div class="grid gap-4 sm:grid-cols-2">
 
                                 </div>
                             </div>
@@ -300,7 +265,6 @@ unset($__errorArgs, $__bag); ?>
         </main>
     </div>
 
-    
     <?php if (isset($component)) { $__componentOriginal7cfab914afdd05940201ca0b2cbc009b = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal7cfab914afdd05940201ca0b2cbc009b = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.toast','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -323,62 +287,6 @@ unset($__errorArgs, $__bag); ?>
 <?php endif; ?>
     <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::scripts(); ?>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const form = document.getElementById('checkout-form');
-                const submitBtn = document.getElementById('submit-order-btn');
-                const paymentSelect = form.querySelector('select[name="payment_method"]');
-                const submitIcon = submitBtn?.querySelector('.submit-icon');
-                const loadingSpinner = submitBtn?.querySelector('.loading-spinner');
-                const submitText = submitBtn?.querySelector('.submit-text');
-
-                if (!form || !submitBtn || !paymentSelect || !window.snap) {
-                    return;
-                }
-
-                const resetButton = () => {
-                    submitBtn.disabled = false;
-                    if (submitIcon) submitIcon.classList.remove('hidden');
-                    if (loadingSpinner) loadingSpinner.classList.add('hidden');
-                    if (submitText) submitText.textContent = 'Kirim Order';
-                };
-
-                form.addEventListener('submit', function (e) {
-                    const method = paymentSelect.value;
-
-                    if (method !== 'midtrans') {
-                        return; // submit normal for cash/transfer
-                    }
-
-                    e.preventDefault();
-
-                    // Optional: disable button while processing
-                    submitBtn.disabled = true;
-
-                    window.snap.pay(<?php echo json_encode($snapToken, 15, 512) ?>, {
-                        onSuccess: function (result) {
-                            console.log('Midtrans success', result);
-                            // Untuk sementara, setelah sukses kita submit form biasa supaya order tercatat
-                            resetButton();
-                            form.submit();
-                        },
-                        onPending: function (result) {
-                            console.log('Midtrans pending', result);
-                            resetButton();
-                        },
-                        onError: function (result) {
-                            console.error('Midtrans error', result);
-                            alert('Pembayaran gagal, silakan coba lagi.');
-                            resetButton();
-                        },
-                        onClose: function () {
-                            console.log('Midtrans popup closed');
-                            resetButton();
-                        }
-                    });
-                });
-            });
-        </script>
 </body>
 </html>
 <?php /**PATH C:\laragon\www\thrif\resources\views/landing/checkout.blade.php ENDPATH**/ ?>

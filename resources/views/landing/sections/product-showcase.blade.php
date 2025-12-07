@@ -1,4 +1,4 @@
-<div class="space-y-5 max-w-5xl mx-auto" id="produk" data-carousel="product-highlight" data-animate data-section="products">
+<div class="space-y-5 max-w-5xl mx-auto opacity-0 translate-y-8" id="produk" data-carousel="product-highlight" data-animate data-section="products">
     <div class="flex flex-wrap items-center gap-3 justify-between">
         <div>
             <p class="text-xs font-semibold tracking-[0.12em] text-gray-500 dark:text-gray-400 uppercase">Etalase produk terbaru</p>
@@ -68,12 +68,7 @@
             </template>
             
             @forelse ($featuredProducts as $product)
-                @php
-                    $productLink = auth()->check() && auth()->user()->isAdmin()
-                        ? route('products.edit', $product)
-                        : route('landing.products.checkout', $product);
-                @endphp
-                <div data-product-card data-product-category="{{ $product->category }}" data-product-link="{{ $productLink }}" class="group rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden flex flex-col min-w-[240px] max-w-[240px] snap-center transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/20 hover:scale-[1.02] hover:border-indigo-300 dark:hover:border-indigo-600" data-carousel-item>
+                <div data-product-card data-product-category="{{ $product->category }}" data-product-link="{{ $product->getActionLink() }}" class="group rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden flex flex-col min-w-[240px] max-w-[240px] snap-center transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/20 hover:scale-[1.02] hover:border-indigo-300 dark:hover:border-indigo-600" data-carousel-item>
                     <div class="relative w-full aspect-[4/3] overflow-hidden flex-shrink-0">
                         @if ($product->image)
                             <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
@@ -98,10 +93,15 @@
                                     <span class="truncate">{{ $product->category ? \Illuminate\Support\Str::title($product->category) : 'Umum' }}</span>
                                 </span>
                             </div>
-                            <p class="text-[11px] text-gray-600 dark:text-gray-400 flex items-center gap-1">
-                                <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500 flex-shrink-0"></span>
-                                Kondisi: <span class="font-semibold">{{ \Illuminate\Support\Str::title($product->condition_label) }}</span>
-                            </p>
+                            <div class="flex items-center gap-2 text-[11px]">
+                                <span class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-white font-bold shadow-sm
+                                    {{ $product->condition === 'new' ? 'bg-blue-500' : 
+                                      ($product->condition === 'like-new' ? 'bg-indigo-500' : 
+                                      ($product->condition === 'good' ? 'bg-emerald-500' : 
+                                      ($product->condition === 'fair' ? 'bg-yellow-500' : 'bg-orange-500'))) }}">
+                                    {{ $product->condition_label }}
+                                </span>
+                            </div>
                             @if ($product->description)
                                 <p class="text-[11px] text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-2 min-h-[2.5rem]">
                                     {{ strip_tags($product->description) }}
@@ -113,40 +113,19 @@
                         <div class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100 dark:border-gray-700">
                             <div>
                                 <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-0.5">Harga</p>
-                                <span data-product-price class="text-base font-bold text-green-600">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                                <span data-product-price class="text-base font-bold text-green-600">{{ rupiah($product->price) }}</span>
                             </div>
-                            @php
-                                $badgeClass = $product->stock > 0 && $product->is_available
-                                    ? 'bg-emerald-500 dark:bg-emerald-600 text-white shadow-lg shadow-emerald-500/40 dark:shadow-emerald-600/30'
-                                    : 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400';
-                                $badgeLabel = $product->stock > 0 && $product->is_available ? 'Ready' : 'Sold';
-                            @endphp
-                            <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold {{ $badgeClass }}">
-                                <span class="inline-block h-1.5 w-1.5 rounded-full {{ $product->stock > 0 && $product->is_available ? 'bg-white animate-pulse' : 'bg-gray-400 dark:bg-gray-500' }}"></span>
-                                {{ $badgeLabel }}
-                            </span>
+                            <!-- Stock badge removed -->
                         </div>
 
-                        @auth
-                            @if (auth()->user()->isCustomer())
-                                @if ($product->stock > 0 && $product->is_available)
-                                    <div class="mt-4 flex items-center justify-center">
-                                        <a href="{{ route('landing.products.checkout', $product) }}"
-                                           class="inline-flex w-full max-w-[220px] items-center justify-center rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-500/40 transition hover:bg-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2">
-                                            Buy Now
-                                        </a>
-                                    </div>
-                                @else
-                                    <div class="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 px-4 py-2.5 text-xs text-gray-500 dark:text-gray-400">
-                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="12" cy="12" r="10"/>
-                                            <path d="M12 6v6l4 2" stroke-linecap="round"/>
-                                        </svg>
-                                        Tunggu restock
-                                    </div>
-                                @endif
-                            @endif
-                        @endauth
+                        @if ($product->is_available)
+                            <div class="mt-4 flex items-center justify-center">
+                                <a href="{{ route('landing.products.checkout', $product) }}"
+                                   class="inline-flex w-full max-w-[220px] items-center justify-center rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-500/40 transition hover:bg-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2">
+                                    Buy Now
+                                </a>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @empty
@@ -193,204 +172,4 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Category filter functionality
-        const filterButtons = document.querySelectorAll('.filter-category');
-        const resetButton = document.getElementById('reset-filter');
-        const filterLabel = document.getElementById('filter-label');
-        const productCards = document.querySelectorAll('[data-product-card]');
-        
-        let activeCategory = null;
 
-        const filterProducts = (category) => {
-            activeCategory = category;
-            let visibleCount = 0;
-            
-            productCards.forEach(card => {
-                const cardCategory = card.getAttribute('data-product-category');
-                if (!category || !cardCategory || cardCategory.toLowerCase().includes(category.toLowerCase())) {
-                    card.style.display = '';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-
-            // Update UI
-            if (category) {
-                filterLabel.textContent = `Kategori: ${category}`;
-                resetButton.classList.remove('hidden');
-            } else {
-                filterLabel.textContent = 'Produk highlight hari ini';
-                resetButton.classList.add('hidden');
-            }
-
-            // Scroll to products section
-            const productsSection = document.getElementById('produk');
-            if (productsSection) {
-                const headerHeight = 64;
-                const targetPosition = productsSection.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-                window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-            }
-        };
-
-        filterButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const category = btn.getAttribute('data-category');
-                filterProducts(category);
-            });
-        });
-
-        resetButton?.addEventListener('click', () => {
-            filterProducts(null);
-        });
-
-        // Original carousel code
-        const carousel = document.querySelector('[data-carousel="product-highlight"]');
-        if (!carousel || carousel.dataset.carouselInit === 'true') {
-            return;
-        }
-        carousel.dataset.carouselInit = 'true';
-
-        const container = carousel.querySelector('[data-carousel-container]');
-        const prevBtn = carousel.querySelector('[data-carousel-prev]');
-        const nextBtn = carousel.querySelector('[data-carousel-next]');
-
-        if (!container) {
-            return;
-        }
-
-        const getScrollAmount = () => {
-            const item = container.querySelector('[data-carousel-item]');
-            return item ? item.getBoundingClientRect().width + 12 : 260;
-        };
-
-        const scrollToNext = (fromAuto = false) => {
-            const amount = getScrollAmount();
-            const maxScroll = container.scrollWidth - container.clientWidth;
-            if (fromAuto && container.scrollLeft + amount >= maxScroll) {
-                container.scrollTo({ left: 0, behavior: 'smooth' });
-            } else {
-                container.scrollBy({ left: amount, behavior: 'smooth' });
-            }
-        };
-
-        const scrollToPrev = () => {
-            container.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
-        };
-
-        prevBtn?.addEventListener('click', () => {
-            scrollToPrev();
-        });
-
-        nextBtn?.addEventListener('click', () => {
-            scrollToNext();
-        });
-
-        // Skeleton loading simulation
-        const containerEl = carousel.querySelector('[data-carousel-container]');
-        const skeletonTemplate = document.getElementById('skeleton-template');
-        
-        function showSkeletons(count = 4) {
-            if (!skeletonTemplate || !containerEl) return;
-            containerEl.innerHTML = '';
-            for (let i = 0; i < count; i++) {
-                const skeleton = skeletonTemplate.content.cloneNode(true);
-                containerEl.appendChild(skeleton);
-            }
-        }
-        
-        // Show skeletons if no products initially (for demonstration)
-        const productCards = containerEl?.querySelectorAll('[data-product-card]');
-        if (productCards && productCards.length === 0) {
-            showSkeletons(4);
-        }
-
-        let autoScroll;
-        const startAutoScroll = () => {
-            if (autoScroll) {
-                return;
-            }
-            autoScroll = setInterval(() => {
-                scrollToNext(true);
-            }, 5000);
-        };
-
-        const stopAutoScroll = () => {
-            if (!autoScroll) {
-                return;
-            }
-            clearInterval(autoScroll);
-            autoScroll = null;
-        };
-
-        startAutoScroll();
-
-        const pauseTargets = [carousel, container, prevBtn, nextBtn].filter(Boolean);
-        pauseTargets.forEach((el) => {
-            el.addEventListener('mouseenter', stopAutoScroll);
-            el.addEventListener('focusin', stopAutoScroll);
-            el.addEventListener('mouseleave', startAutoScroll);
-            el.addEventListener('focusout', startAutoScroll);
-            el.addEventListener('touchstart', stopAutoScroll, { passive: true });
-            el.addEventListener('touchend', startAutoScroll, { passive: true });
-        });
-
-        // Product action modal logic
-        const modal = document.getElementById('product-action-modal');
-        const actionForm = document.getElementById('product-action-form');
-        const qtyInput = document.getElementById('modal-quantity');
-        const nameEl = modal?.querySelector('[data-modal-product-name]');
-        const stockEl = modal?.querySelector('[data-modal-product-stock]');
-        const priceEl = modal?.querySelector('[data-modal-product-price]');
-        const closeButtons = modal?.querySelectorAll('[data-modal-close]') || [];
-
-        const formatRupiah = (value) => new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-            minimumFractionDigits: 0,
-        }).format(value).replace('Rp', 'Rp ');
-
-        const openModalForProduct = (button) => {
-            if (!modal || !actionForm || !qtyInput) return;
-
-            const id = button.getAttribute('data-product-id');
-            const name = button.getAttribute('data-product-name') || '';
-            const price = Number(button.getAttribute('data-product-price') || 0);
-            const stock = Number(button.getAttribute('data-product-stock') || 0);
-
-            actionForm.querySelector('input[name="product_id"]').value = id || '';
-            qtyInput.value = '1';
-            qtyInput.max = stock > 0 ? String(stock) : '';
-
-            if (nameEl) nameEl.textContent = name;
-            if (stockEl) stockEl.textContent = stock > 0 ? stock : '-';
-            if (priceEl) priceEl.textContent = price ? formatRupiah(price) : '-';
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            qtyInput.focus();
-        };
-
-        const closeModal = () => {
-            if (!modal) return;
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        };
-
-        document.querySelectorAll('[data-product-action]').forEach((btn) => {
-            btn.addEventListener('click', () => openModalForProduct(btn));
-        });
-
-        closeButtons.forEach((btn) => {
-            btn.addEventListener('click', closeModal);
-        });
-
-        modal?.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModal();
-            }
-        });
-    });
-</script>

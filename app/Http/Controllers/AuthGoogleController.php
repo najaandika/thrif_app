@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\LoginNotification;
 
 class AuthGoogleController extends Controller
 {
@@ -16,7 +16,13 @@ class AuthGoogleController extends Controller
 
     public function callback()
     {
-        $googleUser = Socialite::driver('google')->stateless()->user();
+        try {
+            // Use stateless() to avoid session state issues with php artisan serve
+            $googleUser = Socialite::driver('google')->stateless()->user();
+        } catch (\Exception $e) {
+            // If stateless fails, redirect back to login with error
+            return redirect()->route('login')->with('error', 'Google login failed. Please try again.');
+        }
 
         $user = User::firstOrCreate(
             ['email' => $googleUser->getEmail()],
@@ -28,6 +34,9 @@ class AuthGoogleController extends Controller
         );
 
         Auth::login($user, true);
+
+        // Kirim email notifikasi login
+        Mail::to($user->email)->send(new LoginNotification($user));
 
         return redirect('/');
     }

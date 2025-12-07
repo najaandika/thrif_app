@@ -1,23 +1,79 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+/* Shared Components (modals, receipts, animations, etc.) */
+@import './shared-components.css';
 
+/* Page-specific styles */
 @import './admin-shared.css';
 @import './dashboard.css';
 @import './pos.css';
 @import './products.css';
-@import './categories.css';
+
 @import './orders.css';
 @import './transactions.css';
 @import './profile.css';
 @import './settings.css';
 @import './auth.css';
 @import './landing.css';
-@import './responsive.css';
+
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html,
+body {
+    touch-action: pan-x pan-y;
+    overscroll-behavior: none;
+    overflow-x: hidden;
+}
+
+
+
+.swal-compact {
+    padding: 1rem !important;
+    border-radius: 0.75rem !important;
+}
+
+.swal-title-compact {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    padding: 0.25rem 0 !important;
+    margin: 0 !important;
+}
+
+.swal-text-compact {
+    font-size: 0.75rem !important;
+    padding: 0.25rem 0 0.75rem 0 !important;
+    margin: 0 !important;
+}
+
+.swal2-icon {
+    width: 3rem !important;
+    height: 3rem !important;
+    margin: 0.5rem auto 0.5rem !important;
+    border-width: 3px !important;
+}
+
+.swal2-icon .swal2-icon-content {
+    font-size: 2rem !important;
+}
+
+.swal2-actions {
+    margin: 0.75rem 0 0 0 !important;
+    gap: 0.5rem !important;
+}
+
+.swal-btn-compact {
+    font-size: 0.813rem !important;
+    padding: 0.5rem 1rem !important;
+    min-width: auto !important;
+}
+
+@media (max-width: 640px) {
+    .swal-compact {
+        width: 90% !important;
+        max-width: 300px !important;
+    }
+}
 
 [x-cloak] {
     display: none !important;

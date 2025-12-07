@@ -25,4 +25,44 @@ new class extends Component implements Livewire\Volt\Contracts\FunctionalCompone
         return (new Actions\CallMethod('logout'))->execute(...$arguments);
     }
 
+    #[\Livewire\Attributes\Computed()]
+    public function isAdmin()
+    {
+        $arguments = [static::$__context, $this, func_get_args()];
+
+        return (new Actions\CallMethod('isAdmin'))->execute(...$arguments);
+    }
+
+    #[\Livewire\Attributes\Computed()]
+    public function homeUrl()
+    {
+        $arguments = [static::$__context, $this, func_get_args()];
+
+        return (new Actions\CallMethod('homeUrl'))->execute(...$arguments);
+    }
+
+    #[\Livewire\Attributes\Computed()]
+    public function hideBrand()
+    {
+        $arguments = [static::$__context, $this, func_get_args()];
+
+        return (new Actions\CallMethod('hideBrand'))->execute(...$arguments);
+    }
+
+    #[\Livewire\Attributes\Computed()]
+    public function shopLogo()
+    {
+        $arguments = [static::$__context, $this, func_get_args()];
+
+        return (new Actions\CallMethod('shopLogo'))->execute(...$arguments);
+    }
+
+    #[\Livewire\Attributes\Computed()]
+    public function shopName()
+    {
+        $arguments = [static::$__context, $this, func_get_args()];
+
+        return (new Actions\CallMethod('shopName'))->execute(...$arguments);
+    }
+
 };

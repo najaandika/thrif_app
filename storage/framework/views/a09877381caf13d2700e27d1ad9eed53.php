@@ -63,6 +63,9 @@
                     <div class="flex items-center gap-3">
                         <select
                             wire:model.live="salesRange"
+                            id="sales_range"
+                            name="sales_range"
+                            aria-label="Pilih rentang waktu penjualan"
                             class="text-xs border border-gray-200 dark:border-gray-700 rounded-lg px-2 py-1 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-1 focus:ring-gray-400"
                         >
                             <option value="weekly">Mingguan</option>
@@ -70,20 +73,19 @@
                             <option value="yearly">Tahunan</option>
                         </select>
                         <div class="text-right">
-                            <p class="weekly-sales-amount text-lg font-semibold tracking-tight">Rp <?php echo e(number_format($chart_data->sum(), 0, ',', '.')); ?></p>
+                            <p class="weekly-sales-amount text-lg font-semibold tracking-tight"><?php echo e(rupiah($chart_data->sum())); ?></p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Mini Bar Chart -->
                 <div class="chart-bars-container mt-1">
-                    <?php $max = $chart_data->max() ?: 1; ?>
                     <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $chart_data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="chart-bar-wrapper">
-                            <div style="height: <?php echo e(($value / $max) * 100); ?>%" class="chart-bar-fill"></div>
+                            <div style="height: <?php echo e(($value / $chart_max) * 100); ?>%" class="chart-bar-fill"></div>
                             <div class="chart-tooltip">
                                 <div class="chart-tooltip-text">
-                                    Rp <?php echo e(number_format($value, 0, ',', '.')); ?>
+                                    <?php echo e(rupiah($value)); ?>
 
                                 </div>
                             </div>

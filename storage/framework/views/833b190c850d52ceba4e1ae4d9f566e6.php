@@ -10,17 +10,8 @@
     </div>
     <div class="rounded-2xl border-2 border-gray-200 dark:border-gray-700 p-5 bg-gradient-to-br from-gray-50 to-gray-100/50 dark:from-gray-800/40 dark:to-gray-800/20 space-y-3 text-sm text-gray-700 dark:text-gray-200">
         <div class="flex items-center justify-between">
-            <span>Harga satuan</span>
-            <span class="font-semibold text-gray-900 dark:text-gray-100">Rp <?php echo e(number_format($product->price, 0, ',', '.')); ?></span>
-        </div>
-        <div class="flex items-center justify-between">
-            <span>Jumlah awal</span>
-            <span class="font-semibold"><?php echo e($prefilledQuantity); ?> pcs</span>
-        </div>
-        <hr class="border-dashed border-gray-200 dark:border-gray-700">
-        <div class="flex items-center justify-between text-base font-semibold">
-            <span>Subtotal</span>
-            <span x-text="'Rp ' + subtotal.toLocaleString('id-ID')"></span>
+            <span>Harga</span>
+            <span class="font-semibold text-gray-900 dark:text-gray-100"><?php echo e(rupiah($product->price)); ?></span>
         </div>
     </div>
 </div>

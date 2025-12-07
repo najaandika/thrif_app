@@ -2,22 +2,17 @@
 
 use App\Livewire\Actions\Logout;
 use Illuminate\Support\Str;
+use App\Models\Setting;
 
 ?>
 
-<nav x-data="{ open: false, sidebarOpen: false }" class="bg-white dark:bg-gray-800 sticky top-0 z-30">
-
-    <?php
-        $isAdmin = auth()->user()->isAdmin();
-        $homeUrl = $isAdmin ? route('dashboard') : url('/');
-        $hideBrand = Str::startsWith(request()->path(), 'profile');
-    ?>
+<nav wire:key="main-navigation" x-data="{ open: false, sidebarOpen: false }" class="bg-white dark:bg-gray-800 sticky top-0 z-30">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex items-center gap-2">
                 <!-- Hamburger Button (Mobile) - di header samping logo -->
-                <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
+                <button @click="sidebarOpen = !sidebarOpen" aria-label="Toggle sidebar menu" class="lg:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': sidebarOpen, 'inline-flex': ! sidebarOpen }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! sidebarOpen, 'inline-flex': sidebarOpen }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -25,22 +20,18 @@ use Illuminate\Support\Str;
                 </button>
                 
                 <!-- Logo/Brand or Account name on profile pages -->
-                <!--[if BLOCK]><![endif]--><?php if (! ($hideBrand)): ?>
+                <!--[if BLOCK]><![endif]--><?php if (! ($this->hideBrand)): ?>
                 <div class="shrink-0 hidden sm:flex items-center">
-                    <a href="<?php echo e($homeUrl); ?>" class="flex items-center gap-2 text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-                        <?php
-                            $shopLogo = \App\Models\Setting::get('shop_logo');
-                            $shopName = \App\Models\Setting::get('shop_name', 'Thrif');
-                        ?>
-                        <!--[if BLOCK]><![endif]--><?php if($shopLogo): ?>
-                            <img src="<?php echo e(Storage::url($shopLogo)); ?>" alt="<?php echo e($shopName); ?>" class="w-8 h-8 rounded-lg object-cover shadow-lg">
+                    <a href="<?php echo e($this->homeUrl); ?>" class="flex items-center gap-2 text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                        <!--[if BLOCK]><![endif]--><?php if($this->shopLogo): ?>
+                            <img src="<?php echo e(Storage::url($this->shopLogo)); ?>" alt="<?php echo e($this->shopName); ?>" class="w-8 h-8 rounded-lg object-cover shadow-lg">
                         <?php else: ?>
                             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
-                                <?php echo e(strtoupper(substr($shopName, 0, 1))); ?>
+                                <?php echo e(strtoupper(substr($this->shopName, 0, 1))); ?>
 
                             </div>
                         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                        <span class="text-lg font-semibold hidden sm:block"><?php echo e($shopName); ?></span>
+                        <span class="text-lg font-semibold hidden sm:block"><?php echo e($this->shopName); ?></span>
                     </a>
                 </div>
                 <?php else: ?>
@@ -57,7 +48,7 @@ use Illuminate\Support\Str;
             <!-- User + Theme + Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6 gap-3">
                 <!-- Theme Toggle -->
-                <button @click="$store.darkMode.toggle()" aria-label="Toggle theme" class="inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200">
+                <button @click="$store.darkMode.toggle(); document.activeElement.blur();" aria-label="Toggle theme" tabindex="-1" class="inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200">
                     <svg x-show="!$store.darkMode.on" x-cloak class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
                     </svg>
@@ -67,7 +58,7 @@ use Illuminate\Support\Str;
                 </button>
 
                 <!-- Lihat Website (admin shortcut to public site) -->
-                <!--[if BLOCK]><![endif]--><?php if($isAdmin): ?>
+                <!--[if BLOCK]><![endif]--><?php if($this->isAdmin): ?>
                 <a href="<?php echo e(url('/')); ?>" target="_blank" rel="noopener" aria-label="Lihat Website (buka di tab baru)" class="inline-flex items-center gap-2 h-9 sm:h-10 px-3 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-medium transition">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z" stroke-linecap="round" stroke-linejoin="round" />
@@ -272,7 +263,7 @@ use Illuminate\Support\Str;
 <?php endif; ?>
 
                 
-                <!--[if BLOCK]><![endif]--><?php if($isAdmin): ?>
+                <!--[if BLOCK]><![endif]--><?php if($this->isAdmin): ?>
                 <?php if (isset($component)) { $__componentOriginald69b52d99510f1e7cd3d80070b28ca18 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginald69b52d99510f1e7cd3d80070b28ca18 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.responsive-nav-link','data' => ['href' => url('/'),'target' => '_blank','rel' => 'noopener','ariaLabel' => 'Lihat Website (buka di tab baru)']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>

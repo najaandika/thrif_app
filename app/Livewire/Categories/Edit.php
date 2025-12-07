@@ -19,10 +19,6 @@ class Edit extends Component
 
     public function mount(Category $category)
     {
-        if ($category->user_id !== Auth::id()) {
-            abort(403);
-        }
-
         $this->category = $category;
         $this->name = $category->name;
     }

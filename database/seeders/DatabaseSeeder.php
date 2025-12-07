@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'Customer Demo',
+            'password' => 'password',
             'email' => 'customer@thrif.test',
         ]);
     }

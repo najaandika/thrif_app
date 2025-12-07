@@ -3,6 +3,7 @@
 namespace App\Livewire\Profile;
 
 use App\Models\User;
+use App\Models\CustomerAddress;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -18,18 +19,6 @@ class AddressForm extends Component
     #[Validate('required|string|max:500')]
     public string $address_line = '';
 
-    #[Validate('nullable|string|max:120')]
-    public ?string $city = '';
-
-    #[Validate('nullable|string|max:120')]
-    public ?string $province = '';
-
-    #[Validate('nullable|string|max:20')]
-    public ?string $postal_code = '';
-
-    #[Validate('nullable|string|max:1000')]
-    public ?string $notes = '';
-
     public bool $hasAddress = false;
     public ?string $lastUpdatedHuman = null;
 
@@ -37,17 +26,14 @@ class AddressForm extends Component
     {
         $user = $this->user();
 
-        $address = $user->address;
+        // Get first address (since there's no user_id relationship)
+        $address = CustomerAddress::first();
 
         if ($address) {
             $this->fill($address->only([
                 'recipient_name',
                 'phone',
                 'address_line',
-                'city',
-                'province',
-                'postal_code',
-                'notes',
             ]));
 
             $this->hasAddress = true;
@@ -60,12 +46,15 @@ class AddressForm extends Component
     public function save(): void
     {
         $data = $this->validate();
-        $user = $this->user();
 
-        $address = $user->address()->updateOrCreate(
-            ['user_id' => $user->getAuthIdentifier()],
-            $data
-        );
+        // Update or create first address
+        $address = CustomerAddress::first();
+        
+        if ($address) {
+            $address->update($data);
+        } else {
+            $address = CustomerAddress::create($data);
+        }
 
         $this->hasAddress = true;
         $this->lastUpdatedHuman = optional($address->fresh())->updated_at?->diffForHumans();

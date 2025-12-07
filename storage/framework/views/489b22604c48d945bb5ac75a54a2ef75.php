@@ -1,1 +1,0 @@
-<?php /**PATH C:\laragon\www\thrif\resources\views\livewire/sidebar/menu.blade.php ENDPATH**/ ?>

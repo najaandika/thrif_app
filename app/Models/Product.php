@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Product extends Model
 {
     public const CONDITION_LABELS = [
-        'new' => 'Baru (with tag)',
-        'like-new' => 'Seperti baru',
-        'good' => 'Bagus (dipakai ringan)',
-        'fair' => 'Cukup (ada wear kecil)',
-        'poor' => 'Banyak wear',
+        'new' => 'New',
+        'like-new' => 'Like New',
+        'good' => 'Good',
+        'fair' => 'Fair',
+        'poor' => 'Poor',
     ];
 
     protected $fillable = [
@@ -24,14 +24,13 @@ class Product extends Model
         'condition',
         'category',
         'size',
-        'stock',
         'image',
         'is_available',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
-        'stock' => 'integer',
+
         'is_available' => 'boolean',
     ];
 
@@ -45,14 +44,18 @@ class Product extends Model
         return $this->hasMany(Order::class);
     }
 
-    public function sizes(): HasMany
-    {
-        return $this->hasMany(ProductSize::class);
-    }
 
-    public function getTotalStockAttribute(): int
+    /**
+     * Get the appropriate action link for this product based on user role.
+     * Admin users get edit link, customers get checkout link.
+     */
+    public function getActionLink(): string
     {
-        return $this->sizes()->sum('stock');
+        if (auth()->check() && auth()->user()->isAdmin()) {
+            return route('products.edit', $this);
+        }
+        
+        return route('landing.products.checkout', $this);
     }
 
     public function getConditionLabelAttribute(): string

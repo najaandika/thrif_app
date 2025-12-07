@@ -2,6 +2,8 @@
 
 use App\Livewire\Actions\Logout;
 use Illuminate\Support\Str;
+use App\Models\Setting;
+use function Livewire\Volt\{computed};
 
 $logout = function (Logout $logout) {
     $logout();
@@ -9,21 +11,21 @@ $logout = function (Logout $logout) {
     $this->redirect('/', navigate: true);
 };
 
+$isAdmin = computed(fn() => auth()->user()->isAdmin());
+$homeUrl = computed(fn() => auth()->user()->isAdmin() ? route('dashboard') : url('/'));
+$hideBrand = computed(fn() => Str::startsWith(request()->path(), 'profile'));
+$shopLogo = computed(fn() => cache()->remember('shop_logo', 3600, fn() => Setting::get('shop_logo')));
+$shopName = computed(fn() => cache()->remember('shop_name', 3600, fn() => Setting::get('shop_name', 'Thrif')));
+
 ?>
 
-<nav x-data="{ open: false, sidebarOpen: false }" class="bg-white dark:bg-gray-800 sticky top-0 z-30">
-
-    @php
-        $isAdmin = auth()->user()->isAdmin();
-        $homeUrl = $isAdmin ? route('dashboard') : url('/');
-        $hideBrand = Str::startsWith(request()->path(), 'profile');
-    @endphp
+<nav wire:key="main-navigation" x-data="{ open: false, sidebarOpen: false }" class="bg-white dark:bg-gray-800 sticky top-0 z-30">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex items-center gap-2">
                 <!-- Hamburger Button (Mobile) - di header samping logo -->
-                <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
+                <button @click="sidebarOpen = !sidebarOpen" aria-label="Toggle sidebar menu" class="lg:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': sidebarOpen, 'inline-flex': ! sidebarOpen }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! sidebarOpen, 'inline-flex': sidebarOpen }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -31,21 +33,17 @@ $logout = function (Logout $logout) {
                 </button>
                 
                 <!-- Logo/Brand or Account name on profile pages -->
-                @unless($hideBrand)
+                @unless($this->hideBrand)
                 <div class="shrink-0 hidden sm:flex items-center">
-                    <a href="{{ $homeUrl }}" class="flex items-center gap-2 text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-                        @php
-                            $shopLogo = \App\Models\Setting::get('shop_logo');
-                            $shopName = \App\Models\Setting::get('shop_name', 'Thrif');
-                        @endphp
-                        @if($shopLogo)
-                            <img src="{{ Storage::url($shopLogo) }}" alt="{{ $shopName }}" class="w-8 h-8 rounded-lg object-cover shadow-lg">
+                    <a href="{{ $this->homeUrl }}" class="flex items-center gap-2 text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                        @if($this->shopLogo)
+                            <img src="{{ Storage::url($this->shopLogo) }}" alt="{{ $this->shopName }}" class="w-8 h-8 rounded-lg object-cover shadow-lg">
                         @else
                             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
-                                {{ strtoupper(substr($shopName, 0, 1)) }}
+                                {{ strtoupper(substr($this->shopName, 0, 1)) }}
                             </div>
                         @endif
-                        <span class="text-lg font-semibold hidden sm:block">{{ $shopName }}</span>
+                        <span class="text-lg font-semibold hidden sm:block">{{ $this->shopName }}</span>
                     </a>
                 </div>
                 @else
@@ -61,7 +59,7 @@ $logout = function (Logout $logout) {
             <!-- User + Theme + Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6 gap-3">
                 <!-- Theme Toggle -->
-                <button @click="$store.darkMode.toggle()" aria-label="Toggle theme" class="inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200">
+                <button @click="$store.darkMode.toggle(); document.activeElement.blur();" aria-label="Toggle theme" tabindex="-1" class="inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200">
                     <svg x-show="!$store.darkMode.on" x-cloak class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
                     </svg>
@@ -71,7 +69,7 @@ $logout = function (Logout $logout) {
                 </button>
 
                 <!-- Lihat Website (admin shortcut to public site) -->
-                @if($isAdmin)
+                @if($this->isAdmin)
                 <a href="{{ url('/') }}" target="_blank" rel="noopener" aria-label="Lihat Website (buka di tab baru)" class="inline-flex items-center gap-2 h-9 sm:h-10 px-3 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-medium transition">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z" stroke-linecap="round" stroke-linejoin="round" />
@@ -180,7 +178,7 @@ $logout = function (Logout $logout) {
                 </x-responsive-nav-link>
 
                 {{-- Top: Lihat Website shortcut --}}
-                @if($isAdmin)
+                @if($this->isAdmin)
                 <x-responsive-nav-link :href="url('/')" target="_blank" rel="noopener" aria-label="Lihat Website (buka di tab baru)">
                     {{ __('Lihat Website') }}
                 </x-responsive-nav-link>

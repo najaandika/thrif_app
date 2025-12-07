@@ -27,6 +27,7 @@ class Index extends Component
         }
 
         return \App\Models\Product::query()
+            ->where('is_available', true)
             ->when($this->search, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
@@ -41,20 +42,37 @@ class Index extends Component
     }
 
     #[Computed]
-    public function total()
+    public function subtotal()
+    {
+        $subtotal = 0;
+        foreach ($this->cart as $item) {
+            $subtotal += $item['price'] * $item['qty'];
+        }
+        return $subtotal;
+    }
+
+    #[Computed]
+    public function discountAmount()
     {
         $total = 0;
         foreach ($this->cart as $item) {
             $total += $item['price'] * $item['qty'];
         }
 
+        $discountValue = $this->discount === null || $this->discount === '' ? 0 : $this->discount;
+        
         if ($this->discountType === 'percent') {
-            $discountAmount = $total * ((float) $this->discount / 100);
-        } else {
-            $discountAmount = (float) $this->discount;
+            return $total * ((float) $discountValue / 100);
         }
+        
+        return (float) $discountValue;
+    }
 
-        return max($total - $discountAmount, 0);
+    #[Computed]
+    public function total()
+    {
+        $subtotal = $this->subtotal();
+        return max($subtotal - $this->discountAmount(), 0);
     }
 
     #[Computed]
@@ -68,11 +86,10 @@ class Index extends Component
         $product = \App\Models\Product::find($productId);
         if (!$product) return;
 
-        foreach ($this->cart as $i => $item) {
+        // Cek apakah produk sudah ada di keranjang, jika sudah jangan tambahkan lagi
+        foreach ($this->cart as $item) {
             if ($item['id'] == $product->id) {
-                $this->cart[$i]['qty']++;
-                $this->cartQty[$product->id] = $this->cart[$i]['qty'];
-                return;
+                return; // Sudah ada, tidak perlu tambah lagi
             }
         }
 
@@ -124,45 +141,45 @@ class Index extends Component
             DB::beginTransaction();
             try {
                 // hitung total quantity dan subtotal dari cart
-            $totalQty = 0;
             $subtotal = 0;
             foreach ($this->cart as $item) {
-                $totalQty += (int) ($item['qty'] ?? 0);
                 $subtotal += $item['price'] * $item['qty'];
             }
 
             // Hitung nilai diskon
+            $discountValue = $this->discount === null || $this->discount === '' ? 0 : $this->discount;
             if ($this->discountType === 'percent') {
-                $discountAmount = $subtotal * ((float) $this->discount / 100);
+                $discountAmount = $subtotal * ((float) $discountValue / 100);
             } else {
-                $discountAmount = (float) $this->discount;
+                $discountAmount = (float) $discountValue;
             }
 
             // Simpan ke tabel transactions (terpisah dari orders)
             $transaction = \App\Models\Transaction::create([
                 'user_id' => Auth::id(),
-                'total_qty' => $totalQty,
                 'total_price' => $this->total, // Ini sudah harga setelah diskon
                 'discount' => $discountAmount,
                 'payment_method' => $this->payment_method,
                 'payment_status' => 'paid',
                 'paid_at' => now(),
-                'notes' => null,
+                'amount_received' => (float) $this->amount_received,
             ]);
 
             foreach ($this->cart as $item) {
                 \App\Models\TransactionItem::create([
                     'transaction_id' => $transaction->id,
                     'product_id' => $item['id'],
+                    'product_name' => $item['name'],
                     'price' => $item['price'],
                     'qty' => $item['qty'],
                     'subtotal' => $item['price'] * $item['qty'],
                 ]);
 
-                // Kurangi stok produk
+                // Set produk sold (is_available = false) setelah transaksi
                 $product = \App\Models\Product::find($item['id']);
                 if ($product) {
-                    $product->decrement('stock', $item['qty']);
+                    $product->is_available = false;
+                    $product->save();
                 }
             }
 

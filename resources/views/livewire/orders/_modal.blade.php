@@ -40,6 +40,12 @@
                             {{ $selectedOrder->shipping_address ?: '-' }}
                         </p>
                     </div>
+                    <div class="receipt-row items-start">
+                        <span class="receipt-label pr-4">Catatan:</span>
+                        <p class="receipt-value max-w-sm text-left leading-relaxed italic text-gray-500">
+                            {{ $selectedOrder->notes ?: '-' }}
+                        </p>
+                    </div>
                     <div class="receipt-row">
                         <span class="receipt-label">Pembayaran:</span>
                         <span class="receipt-value">{{ $selectedOrder->payment_method === 'cash' ? 'Cash On Delivery' : ucfirst($selectedOrder->payment_method ?? '-') }}</span>
@@ -52,21 +58,16 @@
                         <div class="receipt-item">
                             <div class="receipt-item-info">
                                 <div class="receipt-item-name">{{ $selectedOrder->product->name ?? 'Produk tidak tersedia' }}</div>
-                                <div class="receipt-item-detail">{{ $selectedOrder->quantity }} x Rp {{ number_format($selectedOrder->product->price ?? 0, 0, ',', '.') }}</div>
                             </div>
-                            <div class="receipt-item-subtotal">Rp {{ number_format($selectedOrder->total_price, 0, ',', '.') }}</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="receipt-section receipt-summary">
-                    <div class="receipt-row">
-                        <span class="receipt-label">Total Qty:</span>
-                        <span class="receipt-value font-semibold">{{ $selectedOrder->quantity }}</span>
-                    </div>
+                    <!-- Total Qty dihapus -->
                     <div class="receipt-row receipt-total">
                         <span class="receipt-label">Total Harga:</span>
-                        <span class="receipt-value">Rp {{ number_format($selectedOrder->total_price, 0, ',', '.') }}</span>
+                        <span class="receipt-value">{{ rupiah($selectedOrder->total_price) }}</span>
                     </div>
                 </div>
             </div>

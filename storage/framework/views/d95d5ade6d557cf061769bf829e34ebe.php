@@ -38,30 +38,38 @@
                         <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $selectedTransaction->items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="receipt-item">
                                 <div class="receipt-item-info">
-                                    <div class="receipt-item-name"><?php echo e($item->product->name ?? 'Produk tidak tersedia'); ?></div>
-                                    <div class="receipt-item-detail"><?php echo e($item->qty); ?> x Rp <?php echo e(number_format($item->price, 0, ',', '.')); ?></div>
+                                    <div class="receipt-item-name"><?php echo e($item->product_name ?? $item->product?->name ?? 'Produk dihapus'); ?></div>
+                                    <div class="receipt-item-detail"><?php echo e($item->qty); ?> x <?php echo e(rupiah($item->price)); ?></div>
                                 </div>
-                                <div class="receipt-item-subtotal">Rp <?php echo e(number_format($item->subtotal, 0, ',', '.')); ?></div>
+                                <div class="receipt-item-subtotal"><?php echo e(rupiah($item->subtotal)); ?></div>
                             </div>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                     </div>
                 </div>
 
                 <div class="receipt-section receipt-summary">
-                    <div class="receipt-row">
-                        <span class="receipt-label">Total Qty:</span>
-                        <span class="receipt-value font-semibold"><?php echo e($selectedTransaction->total_qty); ?></span>
-                    </div>
+
                     <!--[if BLOCK]><![endif]--><?php if($selectedTransaction->discount > 0): ?>
                         <div class="receipt-row">
                             <span class="receipt-label">Diskon:</span>
-                            <span class="receipt-value text-red-500 font-medium">- Rp <?php echo e(number_format($selectedTransaction->discount, 0, ',', '.')); ?></span>
+                            <span class="receipt-value text-red-500 font-medium">- <?php echo e(rupiah($selectedTransaction->discount)); ?></span>
                         </div>
                     <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                     <div class="receipt-row receipt-total">
                         <span class="receipt-label">Total Harga:</span>
-                        <span class="receipt-value">Rp <?php echo e(number_format($selectedTransaction->total_price, 0, ',', '.')); ?></span>
+                        <span class="receipt-value"><?php echo e(rupiah($selectedTransaction->total_price)); ?></span>
                     </div>
+                    
+                    <!--[if BLOCK]><![endif]--><?php if($selectedTransaction->amount_received > 0): ?>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Uang Diterima:</span>
+                            <span class="receipt-value"><?php echo e(rupiah($selectedTransaction->amount_received)); ?></span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Kembalian:</span>
+                            <span class="receipt-value text-green-600 font-medium"><?php echo e(rupiah($selectedTransaction->change)); ?></span>
+                        </div>
+                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                 </div>
 
                 <!--[if BLOCK]><![endif]--><?php if($selectedTransaction->notes): ?>

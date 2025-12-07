@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->string('size');
-            $table->integer('stock')->default(0);
+            // Kolom stock dihapus, tidak perlu ditambahkan lagi
             $table->timestamps();
         });
 
@@ -26,7 +26,6 @@ return new class extends Migration
             DB::table('product_sizes')->insert([
                 'product_id' => $product->id,
                 'size' => $product->size ?? 'All Size',
-                'stock' => $product->stock,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

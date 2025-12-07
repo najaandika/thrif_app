@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->unsignedInteger('stock')->default(0)->after('category');
+            // Kolom stock dihapus, tidak perlu ditambahkan lagi
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('stock');
+            // Kolom stock sudah dihapus
         });
     }
 };

@@ -57,13 +57,19 @@
                             <img src="{{ $product->image ? Storage::url($product->image) : 'https://via.placeholder.com/200x150?text=No+Image' }}" alt="{{ $product->name }}" class="product-image">
                             @if($product->stock === 0)
                                 <span class="badge-out-of-stock">Out of Stock</span>
-                            @elseif($product->created_at && $product->created_at->gt(now()->subDays(7)))
-                                <span class="badge-new">New</span>
+                            @else
+                                <span class="absolute top-1.5 left-1.5 px-2 py-0.5 rounded text-[10px] font-bold text-white shadow-sm
+                                    {{ $product->condition === 'new' ? 'bg-blue-500' : 
+                                      ($product->condition === 'like-new' ? 'bg-indigo-500' : 
+                                      ($product->condition === 'good' ? 'bg-emerald-500' : 
+                                      ($product->condition === 'fair' ? 'bg-yellow-500' : 'bg-orange-500'))) }}">
+                                    {{ $product->condition_label }}
+                                </span>
                             @endif
                         </div>
                         <div class="product-info">
                             <div class="product-title">{{ $product->name }}</div>
-                            <div class="product-price">Rp {{ number_format($product->price, 0, ',', '.') }}</div>
+                            <div class="text-green-600 font-bold text-sm">{{ rupiah($product->price) }}</div>
                         </div>
                     </a>
                 </div>

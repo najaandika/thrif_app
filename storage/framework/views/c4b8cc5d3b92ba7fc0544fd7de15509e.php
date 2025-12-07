@@ -105,7 +105,23 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
                                 <!-- Price -->
                                 <div>
                                     <label for="price" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Price (Rp) <span class="text-red-500">*</span></label>
-                                    <input wire:model="price" name="price" autocomplete="off" type="number" step="0.01" id="price" class="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all" placeholder="0">
+                                    <div x-data="{
+                                        displayPrice: '<?php echo e(number_format((float) ($price ?? 0), 0, ',', '.')); ?>',
+                                        updatePrice(e) {
+                                            let value = e.target.value.replace(/\D/g, '');
+                                            $wire.set('price', value);
+                                            this.displayPrice = value ? new Intl.NumberFormat('id-ID').format(value) : '';
+                                        }
+                                    }">
+                                        <input 
+                                            type="text" 
+                                            id="price" 
+                                            :value="displayPrice" 
+                                            @input="updatePrice"
+                                            class="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all"
+                                            placeholder="0"
+                                        >
+                                    </div>
                                     <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['price'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -156,22 +172,12 @@ endif;
 unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
                             </div>
 
-                            <!-- Variants (Size & Stock) -->
+                            <!-- Size & Stock (Single) -->
                             <div class="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-xl border border-gray-200 dark:border-gray-600">
-                                <div class="flex items-center justify-between mb-3">
-                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Product Variants (Size & Stock)</label>
-                                    <button wire:click.prevent="addVariant" class="text-sm text-gray-900 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100 font-medium flex items-center">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                        Add Variant
-                                    </button>
-                                </div>
-                                
-                                <div class="space-y-3">
-                                    <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $variants; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $variant): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <div class="flex gap-4 items-start">
-                                            <div class="flex-1">
-                                                <input wire:model="variants.<?php echo e($index); ?>.size" type="text" placeholder="Input Size" class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500">
-                                                <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['variants.'.$index.'.size'];
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Size</label>
+                                <div>
+                                    <input wire:model="size" type="text" placeholder="Input Size" class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500">
+                                    <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['size'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -179,25 +185,6 @@ $message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
-                                            </div>
-                                            <div class="w-32">
-                                                <input wire:model="variants.<?php echo e($index); ?>.stock" type="number" min="0" placeholder="Stock" class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500">
-                                                <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['variants.'.$index.'.stock'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 dark:text-red-400 mt-1"><?php echo e($message); ?></span> <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
-                                            </div>
-                                            <!--[if BLOCK]><![endif]--><?php if(count($variants) > 1): ?>
-                                                <button wire:click.prevent="removeVariant(<?php echo e($index); ?>)" class="mt-2 text-gray-400 hover:text-red-500 transition-colors">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                                </button>
-                                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                                        </div>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                                 </div>
                             </div>
 

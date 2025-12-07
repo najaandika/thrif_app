@@ -33,11 +33,13 @@ class Dashboard extends Component
 
         // Sales data for chart based on selected range
         $chart_data = $this->metrics->buildSalesChartData($userId, $this->salesRange);
+        $chart_max = $chart_data->max() ?: 1; // Prevent division by zero
 
         return view('livewire.dashboard', [
             'stats' => $stats,
             'recent_products' => $recent_products,
             'chart_data' => $chart_data,
+            'chart_max' => $chart_max,
             'salesRange' => $this->salesRange,
         ]);
     }

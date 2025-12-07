@@ -1,4 +1,4 @@
-<section class="grid gap-12 pt-4 sm:pt-6 lg:pt-10" id="tentang" data-animate data-section="hero">
+<section class="grid gap-12 pt-4 sm:pt-6 lg:pt-10 opacity-0 translate-y-8" id="tentang" data-animate data-section="hero">
     <div class="space-y-8 md:space-y-10">
         <div class="space-y-5 sm:space-y-6 max-w-3xl">
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100 leading-[1.2] sm:leading-[1.25]">

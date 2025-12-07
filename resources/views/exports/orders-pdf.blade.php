@@ -35,7 +35,7 @@
             <td>{{ $order->buyer_name }}</td>
             <td>{{ $order->buyer_contact ?: '-' }}</td>
             <td>{{ $order->quantity }}</td>
-            <td>Rp {{ number_format($order->total_price, 0, ',', '.') }}</td>
+            <td>{{ rupiah($order->total_price) }}</td>
             <td>{{ ucfirst($order->status) }}</td>
             <td>{{ $order->updated_at?->format('d/m/Y H:i') }}</td>
         </tr>

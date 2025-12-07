@@ -59,13 +59,14 @@ class Index extends Component
         $order = Order::findOrFail($id);
 
         DB::transaction(function () use ($order) {
-            if ($this->shouldAffectStock($order->status) && $order->product) {
+            // Only restore product availability if order was confirmed (paid/shipped/completed)
+            // Pending orders never marked the product as sold, so no need to restore
+            if (in_array($order->status, ['paid', 'shipped', 'completed']) && $order->product) {
                 $product = $order->product;
-                $product->increment('stock', $order->quantity);
-                if ($product->stock > 0 && ! $product->is_available) {
+                if (!$product->is_available) {
                     $product->is_available = true;
+                    $product->save();
                 }
-                $product->save();
             }
 
             $order->delete();
@@ -81,10 +82,21 @@ class Index extends Component
 
     public function confirmOrder($id)
     {
-        $order = Order::findOrFail($id);
+        $order = Order::with('product')->findOrFail($id);
         if ($order->status === 'pending') {
-            $order->status = 'paid';
-            $order->save();
+            DB::transaction(function () use ($order) {
+                $order->status = 'paid';
+                $order->payment_status = 'paid';
+                $order->paid_at = now();
+                $order->save();
+                
+                // Mark product as sold when order is confirmed
+                if ($order->product && $order->product->is_available) {
+                    $order->product->is_available = false;
+                    $order->product->save();
+                }
+            });
+            
             session()->flash('message', 'Order berhasil dikonfirmasi!');
         }
     }

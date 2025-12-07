@@ -2,24 +2,29 @@
 
 /* Login & Register Header */
 .auth-header {
-    @apply mb-6 text-center;
+    @apply mb-2.5 text-center;
 }
 
 .auth-icon-wrapper {
-    @apply inline-flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-500 text-white mb-3 shadow-lg shadow-emerald-500/40;
+    @apply inline-flex items-center justify-center w-9 h-9 rounded-xl bg-emerald-500 text-white mb-1.5 shadow-lg shadow-emerald-500/40;
 }
 
 .auth-title {
-    @apply text-xl font-bold text-gray-900 dark:text-white;
+    @apply text-base font-bold text-gray-900 dark:text-white;
 }
 
 .auth-subtitle {
-    @apply text-xs text-gray-600 dark:text-gray-400 mt-1;
+    @apply text-[11px] text-gray-600 dark:text-gray-400 mt-0.5;
 }
 
 /* Form */
 .auth-form {
-    @apply space-y-3.5;
+    @apply space-y-1.5;
+}
+
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+    @apply py-1.5 pr-2.5 pl-9 text-sm;
 }
 
 /* Remember Me */
@@ -28,20 +33,25 @@
 }
 
 .remember-checkbox {
-    @apply rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-slate-700 dark:text-slate-200 shadow-sm focus:ring-slate-500 dark:focus:ring-slate-500 dark:focus:ring-offset-gray-800;
+    @apply !w-3 !h-3 rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-slate-700 dark:text-slate-200 shadow-sm focus:ring-slate-500 dark:focus:ring-slate-500 dark:focus:ring-offset-gray-800;
 }
 
 .remember-text {
-    @apply ms-2 text-xs text-gray-600 dark:text-gray-400;
+    @apply ms-2 text-[11px] text-gray-600 dark:text-gray-400;
 }
 
 /* Actions */
 .auth-actions {
-    @apply flex items-center justify-between gap-3 pt-2;
+    @apply flex items-center justify-between gap-2 pt-0.5;
 }
 
 .forgot-password-link {
-    @apply text-xs text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white font-medium transition-colors;
+    @apply text-[11px] text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white font-medium transition-colors;
+}
+
+/* Login Button Compact */
+.login-btn-compact {
+    @apply inline-flex items-center justify-center px-4 py-1.5 bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-600 border border-transparent rounded-lg font-semibold text-xs text-white shadow-md shadow-slate-900/30 hover:shadow-lg hover:shadow-slate-900/50 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-slate-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-200;
 }
 
 /* Divider */
@@ -54,12 +64,12 @@
 }
 
 .auth-divider-text {
-    @apply relative flex justify-center text-xs;
+    @apply relative flex justify-center text-[11px];
 }
 
 /* Google Login */
 .google-login-btn {
-    @apply w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white border border-gray-300 dark:bg-gray-900 dark:border-gray-700 shadow hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 text-sm font-semibold transition-all duration-200;
+    @apply w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-gray-300 dark:bg-gray-900 dark:border-gray-700 shadow hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 text-xs font-semibold transition-all duration-200;
 }
 
 /* Register Link */
@@ -68,7 +78,7 @@
 }
 
 .auth-register-text {
-    @apply text-xs text-gray-600 dark:text-gray-400;
+    @apply text-[11px] text-gray-600 dark:text-gray-400;
 }
 
 .auth-register-link {

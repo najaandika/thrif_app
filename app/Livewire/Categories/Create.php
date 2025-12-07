@@ -21,7 +21,6 @@ class Create extends Component
         $this->validate();
 
         Category::create([
-            'user_id' => Auth::id(),
             'name' => $this->name,
         ]);
 

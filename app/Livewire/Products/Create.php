@@ -23,9 +23,7 @@ class Create extends Component
     public $image;
     public $imagePreviewUrl = null;
     
-    public $variants = [
-        ['size' => '', 'stock' => 0]
-    ];
+    public $size;
 
     protected $rules = [
         'name' => 'required|string|max:255',
@@ -34,21 +32,10 @@ class Create extends Component
         'condition' => 'required|in:new,like-new,good,fair,poor',
         'category' => 'nullable|string|max:255',
         'image' => 'nullable|image|max:2048',
-        'variants' => 'required|array|min:1',
-        'variants.*.size' => 'required|string|max:100|distinct',
-        'variants.*.stock' => 'required|integer|min:0',
+        'size' => 'required|string|max:100',
     ];
 
-    public function addVariant()
-    {
-        $this->variants[] = ['size' => '', 'stock' => 0];
-    }
 
-    public function removeVariant($index)
-    {
-        unset($this->variants[$index]);
-        $this->variants = array_values($this->variants);
-    }
 
     public function updatedImage($value)
     {
@@ -66,6 +53,7 @@ class Create extends Component
         }
     }
 
+
     public function save()
     {
         $this->validate();
@@ -75,22 +63,16 @@ class Create extends Component
             $imagePath = $this->image->store('products', 'public');
         }
 
-        $totalStock = collect($this->variants)->sum('stock');
-
         $product = Product::create([
             'user_id' => Auth::id(),
             'name' => $this->name,
             'description' => $this->description,
             'price' => $this->price,
-            'stock' => $totalStock,
             'condition' => $this->condition,
             'category' => $this->category,
             'image' => $imagePath,
+            'size' => $this->size,
         ]);
-
-        foreach ($this->variants as $variant) {
-            $product->sizes()->create($variant);
-        }
 
         session()->flash('message', 'Product created successfully.');
         return redirect()->route('products.index');
@@ -98,7 +80,7 @@ class Create extends Component
 
     public function render()
     {
-        $categories = Category::where('user_id', Auth::id())
+        $categories = Category::query()
             ->orderBy('name')
             ->get();
 

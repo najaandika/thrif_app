@@ -59,77 +59,77 @@ $register = function () {
         <!-- Name -->
         <div>
             <x-input-label for="name" value="Name" class="mb-1" />
-            <x-text-input wire:model="name" id="name" class="block w-full" type="text" name="name" required autofocus autocomplete="name" />
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                </div>
+                <x-text-input wire:model="name" id="name" class="block w-full pl-10" type="text" name="name" required autofocus autocomplete="name" />
+            </div>
             <x-input-error :messages="$errors->get('name')" class="mt-1" />
         </div>
 
         <!-- Email Address -->
         <div>
             <x-input-label for="email" value="Email" class="mb-1" />
-            <x-text-input wire:model="email" id="email" class="block w-full" type="email" name="email" required autocomplete="username" />
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <x-text-input wire:model="email" id="email" class="block w-full pl-10" type="email" name="email" required autocomplete="username" />
+            </div>
             <x-input-error :messages="$errors->get('email')" class="mt-1" />
         </div>
 
         <!-- Password -->
         <div>
             <x-input-label for="password" value="Password" class="mb-1" />
-            <x-text-input wire:model="password" id="password" class="block w-full" type="password" name="password" required autocomplete="new-password" />
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                </div>
+                <x-text-input wire:model="password" id="password" class="block w-full pl-10" type="password" name="password" required autocomplete="new-password" />
+            </div>
             <x-input-error :messages="$errors->get('password')" class="mt-1" />
         </div>
 
         <!-- Confirm Password -->
         <div>
             <x-input-label for="password_confirmation" value="Confirm Password" class="mb-1" />
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                </div>
+                <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block w-full pl-10" type="password" name="password_confirmation" required autocomplete="new-password" />
+            </div>
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-1" />
         </div>
 
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <p class="text-xs text-gray-600 dark:text-gray-400">
-                Sudah punya akun?
-                <a href="{{ route('login') }}" wire:navigate class="auth-register-link">
-                    Login di sini
-                </a>
-            </p>
+        <div class="flex items-center justify-between gap-2 pt-2">
+            <div class="auth-register-section text-left">
+                <p class="auth-register-text">
+                    Sudah punya akun?
+                    <a href="{{ route('login') }}" wire:navigate class="auth-register-link">
+                        Login
+                    </a>
+                </p>
+            </div>
 
-            <x-primary-button class="w-full sm:w-auto">
-                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button type="submit" class="login-btn-compact">
+                <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                 </svg>
                 Register
-            </x-primary-button>
+            </button>
         </div>
     </form>
     
-    <!-- Benefits Section -->
-    <div class="benefits-section">
-        <p class="benefits-title">Keuntungan Bergabung</p>
-        <div class="benefits-list">
-            <div class="benefit-item">
-                <svg class="benefit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span>Checkout lebih cepat dengan data tersimpan</span>
-            </div>
-            <div class="benefit-item">
-                <svg class="benefit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span>Pantau riwayat pembelian real-time</span>
-            </div>
-            <div class="benefit-item">
-                <svg class="benefit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span>Update stok & promo eksklusif</span>
-            </div>
-        </div>
-        
-        <a href="/" wire:navigate class="back-home-btn">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-            </svg>
-            Kembali ke halaman utama
-        </a>
-    </div>
+
 </div>

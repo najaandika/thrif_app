@@ -13,7 +13,6 @@ class LandingController extends Controller
 
         $baseQuery = Product::query()
             ->where('is_available', true)
-            ->where('stock', '>', 0)
             ->latest('updated_at');
 
         $featuredProducts = (clone $baseQuery)
@@ -26,7 +25,6 @@ class LandingController extends Controller
         // Since products.category is a string field, we need to count manually
         $categories = Category::all()->map(function ($category) {
             $category->products_count = Product::where('is_available', true)
-                ->where('stock', '>', 0)
                 ->where('category', 'LIKE', '%' . $category->name . '%')
                 ->count();
             return $category;

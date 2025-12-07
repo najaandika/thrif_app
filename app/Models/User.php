@@ -66,9 +66,4 @@ class User extends Authenticatable
     {
         return $this->isAdmin() ? route('dashboard', absolute: false) : '/';
     }
-
-    public function address(): HasOne
-    {
-        return $this->hasOne(CustomerAddress::class);
-    }
 }

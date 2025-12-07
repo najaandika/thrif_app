@@ -20,5 +20,18 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         \Illuminate\Support\Facades\Blade::include('components.test', 'test');
+        
+        // Force HTTPS for Ngrok
+        if (str_contains(config('app.url'), 'ngrok')) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
+        // Register View Composer for Landing Pages
+        \Illuminate\Support\Facades\View::composer([
+            'landing.sections.header',
+            'landing.sections.footer',
+            'landing.sections.about',
+            'landing.sections.contact',
+        ], \App\View\Composers\LandingComposer::class);
     }
 }

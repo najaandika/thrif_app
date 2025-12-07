@@ -1,4 +1,4 @@
-<div class="h-full rounded-3xl border border-slate-300/80 dark:border-slate-700 bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800/95 dark:from-slate-900/95 dark:via-slate-800/95 dark:to-slate-800/90 p-5 sm:p-6 space-y-4 relative overflow-hidden" id="kontak" data-animate data-section="contact">
+<div class="h-full rounded-3xl border border-slate-300/80 dark:border-slate-700 bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800/95 dark:from-slate-900/95 dark:via-slate-800/95 dark:to-slate-800/90 p-5 sm:p-6 space-y-4 relative overflow-hidden opacity-0 translate-y-8" id="kontak" data-animate data-section="contact">
     <!-- Decorative element -->
     <div class="absolute -left-8 -bottom-8 h-32 w-32 rounded-full bg-gradient-to-tr from-slate-700/20 via-slate-800/10 to-slate-500/10 blur-2xl"></div>
     
@@ -16,12 +16,6 @@
     </div>
     
     <p class="text-[13px] text-slate-200/90 relative z-10">Order atau tanya stok terbaru bisa langsung via channel berikut:</p>
-    
-    <?php
-        $shopPhone = \App\Models\Setting::get('shop_phone');
-        $socialInstagram = \App\Models\Setting::get('social_instagram');
-        $socialTiktok = \App\Models\Setting::get('social_tiktok');
-    ?>
     
     <div class="flex flex-col gap-2.5 text-[13px] relative z-10">
           <?php if($shopPhone): ?>

@@ -71,11 +71,9 @@
                                     <span><?php echo e($order->created_at->translatedFormat('d M Y H:i')); ?></span>
                                 </div>
                                 <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><?php echo e($order->product->name ?? 'Produk terhapus'); ?></h2>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Qty <?php echo e($order->quantity); ?> · Rp <?php echo e(number_format($order->total_price, 0, ',', '.')); ?></p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Qty <?php echo e($order->quantity); ?> · <?php echo e(rupiah($order->total_price)); ?></p>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">Status: <span class="font-semibold text-gray-900 dark:text-gray-100"><?php echo e(ucfirst($order->status)); ?></span></p>
-                                <?php if($order->notes): ?>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Catatan: <?php echo e($order->notes); ?></p>
-                                <?php endif; ?>
+
                             </div>
                             <div class="md:w-64 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/60 p-4 text-sm text-gray-600 dark:text-gray-300">
                                 <p class="font-semibold text-gray-900 dark:text-gray-100 mb-3">Detail Pengiriman</p>
@@ -96,6 +94,12 @@
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Metode Pembayaran</p>
                                         <p class="font-medium text-gray-900 dark:text-gray-200"><?php echo e($order->payment_method === 'cash' ? 'Cash On Delivery' : ucfirst($order->payment_method)); ?></p>
                                     </div>
+                                    <?php if($order->notes): ?>
+                                        <div>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">Catatan</p>
+                                            <p class="font-medium text-gray-900 dark:text-gray-200 italic"><?php echo e($order->notes); ?></p>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </article>

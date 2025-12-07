@@ -121,61 +121,14 @@
                                 @error('category') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
                             </div>
 
-                            <!-- Variants (Size & Stock) -->
+                            <!-- Size & Stock (Single) -->
                             <div class="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-xl border border-gray-200 dark:border-gray-600">
-                                <div class="flex items-center justify-between mb-3">
-                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Product Variants (Size & Stock)</label>
-                                    <button wire:click.prevent="addVariant" class="text-sm text-gray-900 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100 font-medium flex items-center">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                        Add Variant
-                                    </button>
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Size</label>
+                                <div>
+                                    <input wire:model="size" type="text" placeholder="Size (e.g. S, M, 42)" class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500">
+                                    @error('size') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
                                 </div>
-                                
-                                <div class="space-y-3">
-                                    @foreach ($variants as $index => $variant)
-                                        <div class="flex gap-4 items-start">
-                                            <div class="flex-1">
-                                                <input wire:model="variants.{{ $index }}.size" type="text" placeholder="Size (e.g. S, M, 42)" class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500">
-                                                @error('variants.'.$index.'.size') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
-                                            </div>
-                                            <div class="w-32">
-                                                <input wire:model="variants.{{ $index }}.stock" type="number" min="0" placeholder="Stock" class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500">
-                                                @error('variants.'.$index.'.stock') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
-                                            </div>
-                                            @if(count($variants) > 1)
-                                                <button wire:click.prevent="removeVariant({{ $index }})" class="mt-2 text-gray-400 hover:text-red-500 transition-colors">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                                </button>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                </div>
-                                
-                                <datalist id="size-options">
-                                    <option value="XS">Extra Small</option>
-                                    <option value="S">Small</option>
-                                    <option value="M">Medium</option>
-                                    <option value="L">Large</option>
-                                    <option value="XL">Extra Large</option>
-                                    <option value="XXL">Double XL</option>
-                                    <option value="36">36</option>
-                                    <option value="37">37</option>
-                                    <option value="38">38</option>
-                                    <option value="39">39</option>
-                                    <option value="40">40</option>
-                                    <option value="41">41</option>
-                                    <option value="42">42</option>
-                                    <option value="43">43</option>
-                                    <option value="44">44</option>
-                                    <option value="27">27</option>
-                                    <option value="28">28</option>
-                                    <option value="29">29</option>
-                                    <option value="30">30</option>
-                                    <option value="31">31</option>
-                                    <option value="32">32</option>
-                                    <option value="33">33</option>
-                                    <option value="34">34</option>
-                                </datalist>
+                            </div>
                             </div>
 
                             <!-- Current Image -->

@@ -17,7 +17,8 @@ class DashboardMetrics
             ->count();
 
         $soldFromOrders = Order::where('user_id', $userId)->sum('quantity');
-        $soldFromTransactions = Transaction::where('user_id', $userId)->sum('total_qty');
+        // Hitung jumlah produk terjual dari transaksi (jumlah transaksi)
+        $soldFromTransactions = Transaction::where('user_id', $userId)->count();
         $soldProducts = $soldFromOrders + $soldFromTransactions;
 
         $totalValue = Product::where('user_id', $userId)

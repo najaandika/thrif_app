@@ -38,8 +38,8 @@
                 @endforeach
             </td>
             <td>{{ $t->total_qty }}</td>
-            <td>{{ $t->discount > 0 ? 'Rp ' . number_format($t->discount, 0, ',', '.') : '-' }}</td>
-            <td>Rp {{ number_format($t->total_price, 0, ',', '.') }}</td>
+            <td>{{ $t->discount > 0 ? rupiah($t->discount) : '-' }}</td>
+            <td>{{ rupiah($t->total_price) }}</td>
             <td>{{ $t->payment_method === 'ewallet' ? 'Qris' : ucfirst($t->payment_method) }}</td>
             <td>{{ $t->payment_status }}</td>
         </tr>

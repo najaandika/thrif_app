@@ -44,4 +44,17 @@ class Order extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    /**
+     * Get the CSS classes for status badge based on order status.
+     * Only 'pending' and 'paid' statuses are currently used in the system.
+     */
+    public function getStatusBadgeClass(): string
+    {
+        return match ($this->status) {
+            'pending' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200',
+            'paid' => 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-200',
+            default => 'bg-gray-100 text-gray-800 dark:bg-gray-900/40 dark:text-gray-200',
+        };
+    }
 }

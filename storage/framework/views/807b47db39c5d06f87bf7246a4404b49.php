@@ -5,7 +5,6 @@
                 <th class="transactions-th">ID</th>
                 <th class="transactions-th">Tanggal</th>
                 <th class="transactions-th">Produk</th>
-                <th class="transactions-th-right">Qty</th>
                 <th class="transactions-th-right">Diskon</th>
                 <th class="transactions-th-right">Total</th>
                 <th class="transactions-th">Metode</th>
@@ -25,21 +24,18 @@
                     <td class="transactions-td">
                         <div class="transaction-products">
                             <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $t->items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <div class="product-name"><?php echo e($item->product->name ?? 'N/A'); ?></div>
+                                <div class="product-name"><?php echo e($item->product_name ?? $item->product?->name ?? 'Produk dihapus'); ?></div>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                         </div>
                     </td>
                     <td class="transactions-td text-right">
-                        <span class="transaction-qty"><?php echo e($t->total_qty ?? '-'); ?></span>
-                    </td>
-                    <td class="transactions-td text-right">
                         <div class="transaction-discount text-red-500 font-medium">
-                            <?php echo e($t->discount > 0 ? '- Rp ' . number_format($t->discount, 0, ',', '.') : '-'); ?>
+                            <?php echo e($t->discount > 0 ? '- ' . rupiah($t->discount) : '-'); ?>
 
                         </div>
                     </td>
                     <td class="transactions-td text-right">
-                        <div class="transaction-total">Rp <?php echo e(number_format($t->total_price, 0, ',', '.')); ?></div>
+                        <div class="transaction-total"><?php echo e(rupiah($t->total_price)); ?></div>
                     </td>
                     <td class="transactions-td">
                         <div class="transaction-method">

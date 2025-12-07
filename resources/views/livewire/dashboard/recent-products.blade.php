@@ -27,7 +27,7 @@
 
                 <div class="product-details">
                     <p class="product-name">{{ $product->name }}</p>
-                    <p class="product-price-sm">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                    <p class="product-price-sm">{{ rupiah($product->price) }}</p>
                 </div>
 
                 <div>

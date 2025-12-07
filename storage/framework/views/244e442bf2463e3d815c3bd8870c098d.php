@@ -48,7 +48,7 @@
                 <p class="total-value-label">Total Nilai</p>
                 <div class="total-value-amount-wrapper">
                     <p class="total-value-currency">Rp</p>
-                    <p class="total-value-amount"><?php echo e(number_format($stats['total_value'], 0, ',', '.')); ?></p>
+                    <p class="total-value-amount"><?php echo e(rupiah($stats['total_value'], false)); ?></p>
                 </div>
             </div>
             <div class="total-value-footer">

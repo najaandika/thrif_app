@@ -1,12 +1,4 @@
-<?php
-    $aboutTitle = \App\Models\Setting::get('about_title', 'Tentang Kami');
-    $aboutDescription = \App\Models\Setting::get('about_description', 'Tempat terbaik untuk menemukan koleksi pre-loved berkualitas dengan harga terjangkau.');
-    $aboutFeature1 = \App\Models\Setting::get('about_feature_1', 'Pre-loved Quality');
-    $aboutFeature2 = \App\Models\Setting::get('about_feature_2', 'Stok Real-time');
-    $aboutFeature3 = \App\Models\Setting::get('about_feature_3', 'Terpercaya');
-?>
-
-<div class="h-full rounded-3xl border border-slate-300/80 dark:border-slate-700 bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800/95 dark:from-slate-900/95 dark:via-slate-800/95 dark:to-slate-800/90 p-5 sm:p-6 space-y-4 relative overflow-hidden" id="tentang-kami" data-animate data-section="about">
+<div class="h-full rounded-3xl border border-slate-300/80 dark:border-slate-700 bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800/95 dark:from-slate-900/95 dark:via-slate-800/95 dark:to-slate-800/90 p-5 sm:p-6 space-y-4 relative overflow-hidden opacity-0 translate-y-8" id="tentang-kami" data-animate data-section="about">
     <!-- Decorative element -->
     <div class="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br from-indigo-500/10 to-purple-500/10 blur-2xl"></div>
     

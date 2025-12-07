@@ -32,7 +32,7 @@
                                 {{ $order->product->name ?? 'Produk terhapus' }}
                             </h4>
                             <p class="text-sm text-gray-500 dark:text-gray-400">
-                                Qty {{ $order->quantity }} · Rp {{ number_format($order->total_price, 0, ',', '.') }}
+                                Qty {{ $order->quantity }} · {{ rupiah($order->total_price) }}
                             </p>
                             <p class="text-sm text-gray-500 dark:text-gray-400">
                                 Status: <span class="font-semibold text-gray-900 dark:text-gray-100">{{ ucfirst($order->status) }}</span>

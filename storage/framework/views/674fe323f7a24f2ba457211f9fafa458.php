@@ -58,13 +58,20 @@
                             <img src="<?php echo e($product->image ? Storage::url($product->image) : 'https://via.placeholder.com/200x150?text=No+Image'); ?>" alt="<?php echo e($product->name); ?>" class="product-image">
                             <!--[if BLOCK]><![endif]--><?php if($product->stock === 0): ?>
                                 <span class="badge-out-of-stock">Out of Stock</span>
-                            <?php elseif($product->created_at && $product->created_at->gt(now()->subDays(7))): ?>
-                                <span class="badge-new">New</span>
+                            <?php else: ?>
+                                <span class="absolute top-1.5 left-1.5 px-2 py-0.5 rounded text-[10px] font-bold text-white shadow-sm
+                                    <?php echo e($product->condition === 'new' ? 'bg-blue-500' : 
+                                      ($product->condition === 'like-new' ? 'bg-indigo-500' : 
+                                      ($product->condition === 'good' ? 'bg-emerald-500' : 
+                                      ($product->condition === 'fair' ? 'bg-yellow-500' : 'bg-orange-500')))); ?>">
+                                    <?php echo e($product->condition_label); ?>
+
+                                </span>
                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                         </div>
                         <div class="product-info">
                             <div class="product-title"><?php echo e($product->name); ?></div>
-                            <div class="product-price">Rp <?php echo e(number_format($product->price, 0, ',', '.')); ?></div>
+                            <div class="text-green-600 font-bold text-sm"><?php echo e(rupiah($product->price)); ?></div>
                         </div>
                     </a>
                 </div>
