@@ -13,19 +13,20 @@ class OrderExportController extends Controller
     {
         $search = $request->input('search');
         $status = $request->input('status', 'all');
+        $orderType = $request->input('orderType', 'all');
 
-        $orders = $this->getOrders($search, $status);
+        $orders = $this->getOrders($search, $status, $orderType);
 
         $headers = [
-            'ID Order',
+            'No. Invoice',
             'Type', // New
             'Produk',
             'Nama Pembeli',
             'Kontak Pembeli',
             'Total Qty',
-            'Total Harga',
+            'Total Prices',
             'Status',
-            'Terakhir Diupdate',
+            'Tanggal',
         ];
 
         $output = fopen('php://temp', 'r+');
@@ -37,7 +38,7 @@ class OrderExportController extends Controller
             $totalQty = $order->items->sum('quantity');
 
             fputcsv($output, [
-                sprintf('#%04d', $order->id),
+                $order->invoice_number,
                 ucfirst($order->type),
                 $productNames,
                 $order->buyer_name,
@@ -45,7 +46,7 @@ class OrderExportController extends Controller
                 $totalQty,
                 $order->total_price,
                 $order->status,
-                optional($order->updated_at)->toDateTimeString(),
+                $order->created_at->format('Y-m-d H:i:s'),
             ]);
         }
 
@@ -68,8 +69,9 @@ class OrderExportController extends Controller
     {
         $search = $request->input('search');
         $status = $request->input('status', 'all');
+        $orderType = $request->input('orderType', 'all');
 
-        $orders = $this->getOrders($search, $status);
+        $orders = $this->getOrders($search, $status, $orderType);
 
         // Bersihkan output buffer
         if (ob_get_length()) ob_end_clean();
@@ -81,7 +83,7 @@ class OrderExportController extends Controller
         return $pdf->download('orders-' . date('Y-m-d-H-i') . '.pdf');
     }
 
-    private function getOrders($search, $status)
+    private function getOrders($search, $status, $orderType)
     {
         return Order::with('items.product')
             ->where('user_id', Auth::id())
@@ -96,6 +98,7 @@ class OrderExportController extends Controller
                 });
             })
             ->when($status !== 'all', fn ($query) => $query->where('status', $status))
+            ->when($orderType !== 'all', fn ($query) => $query->where('type', $orderType))
             ->latest()
             ->get();
     }

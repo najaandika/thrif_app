@@ -55,6 +55,31 @@ class LandingProductOrderController extends Controller
 
         try {
             $order = DB::transaction(function () use ($data, $product, $user, $buyerContact, $shippingAddress) {
+                // Update User Profile with new data (Persistence)
+                $updates = [];
+                
+                // Update Phone if provided and not an email
+                if ($buyerContact && $buyerContact !== $user->email && $buyerContact !== $user->phone) {
+                    // Simple check: if it doesn't contain '@', assume it's a phone/social handle
+                    if (!str_contains($buyerContact, '@')) {
+                        $updates['phone'] = $buyerContact;
+                    }
+                }
+
+                // Update Address if provided and valid (not pickup note)
+                if ($shippingAddress && $shippingAddress !== 'AMBIL DI TOKO' && $shippingAddress !== $user->address) {
+                    $updates['address'] = $shippingAddress;
+                }
+
+                // Update Name if changed (User wants full sync)
+                if (!empty($data['buyer_name']) && $data['buyer_name'] !== $user->name) {
+                    $updates['name'] = $data['buyer_name'];
+                }
+
+                if (!empty($updates)) {
+                    $user->update($updates);
+                }
+
                 // Mark product as unavailable (sold/pending)
                 // $product->update(['is_available' => false]); 
                 // Note: Depending on business logic, we might want to keep it available until paid, 

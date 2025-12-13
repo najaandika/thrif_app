@@ -3,7 +3,6 @@
 namespace App\Livewire\Profile;
 
 use App\Models\User;
-use App\Models\CustomerAddress;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -16,7 +15,7 @@ class AddressForm extends Component
     #[Validate('nullable|string|max:30')]
     public ?string $phone = '';
 
-    #[Validate('required|string|max:500')]
+    #[Validate('required|string|max:1000')]
     public string $address_line = '';
 
     public bool $hasAddress = false;
@@ -26,40 +25,36 @@ class AddressForm extends Component
     {
         $user = $this->user();
 
-        // Get first address (since there's no user_id relationship)
-        $address = CustomerAddress::first();
+        // Load directly from User model
+        $this->recipient_name = $user->name ?? '';
+        $this->phone = $user->phone ?? '';
+        $this->address_line = $user->address ?? '';
 
-        if ($address) {
-            $this->fill($address->only([
-                'recipient_name',
-                'phone',
-                'address_line',
-            ]));
-
-            $this->hasAddress = true;
-            $this->lastUpdatedHuman = optional($address->updated_at)->diffForHumans();
-        } else {
-            $this->recipient_name = $user->name ?? '';
-        }
+        $this->hasAddress = !empty($user->address);
+        $this->lastUpdatedHuman = optional($user->updated_at)->diffForHumans();
     }
 
     public function save(): void
     {
-        $data = $this->validate();
+        $this->validate();
 
-        // Update or create first address
-        $address = CustomerAddress::first();
-        
-        if ($address) {
-            $address->update($data);
-        } else {
-            $address = CustomerAddress::create($data);
-        }
+        $user = $this->user();
+
+        $user->update([
+            'name' => $this->recipient_name,
+            'phone' => $this->phone,
+            'address' => $this->address_line,
+        ]);
 
         $this->hasAddress = true;
-        $this->lastUpdatedHuman = optional($address->fresh())->updated_at?->diffForHumans();
+        // Since we updated the user, the updated_at touches
+        $this->lastUpdatedHuman = optional($user->fresh())->updated_at?->diffForHumans();
 
         session()->flash('addressSaved', 'Alamat berhasil disimpan.');
+        
+        // Optional question: Should we dispatch 'profile-updated'? 
+        // Yes, because we updated the name.
+        $this->dispatch('profile-updated', name: $user->name);
     }
 
     public function render()

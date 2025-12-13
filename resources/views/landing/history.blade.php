@@ -66,7 +66,7 @@
                                             <p>{{ $item->product->name ?? 'Deleted' }} (x{{ $item->quantity }})</p>
                                         @endforeach
                                     </div>
-                                    <div class="pt-2 font-bold text-sm sm:text-base text-gray-900 dark:text-gray-100">{{ rupiah($order->total_price) }}</div>
+                                    <div class="pt-2 font-bold text-sm sm:text-base text-emerald-600 dark:text-emerald-400">{{ rupiah($order->total_price) }}</div>
                                 </div>
                                 <div class="inline-flex items-center gap-2">
                                      <!-- Status Logic Same as Before -->
@@ -102,7 +102,7 @@
                                                 </span>
                                             </div>
                                         @else
-                                            <p class="text-xs font-medium text-gray-900 dark:text-gray-300 leading-snug">{{ Str::limit($order->shipping_address ?? 'Belum diisi', 50) }}</p>
+                                            <p class="text-xs font-medium text-gray-900 dark:text-gray-300 leading-snug break-words">{{ $order->shipping_address ?? 'Belum diisi' }}</p>
                                         @endif
                                     </div>
                                     

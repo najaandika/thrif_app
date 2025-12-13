@@ -68,7 +68,7 @@
                                             <p><?php echo e($item->product->name ?? 'Deleted'); ?> (x<?php echo e($item->quantity); ?>)</p>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </div>
-                                    <div class="pt-2 font-bold text-sm sm:text-base text-gray-900 dark:text-gray-100"><?php echo e(rupiah($order->total_price)); ?></div>
+                                    <div class="pt-2 font-bold text-sm sm:text-base text-emerald-600 dark:text-emerald-400"><?php echo e(rupiah($order->total_price)); ?></div>
                                 </div>
                                 <div class="inline-flex items-center gap-2">
                                      <!-- Status Logic Same as Before -->
@@ -105,7 +105,7 @@
                                                 </span>
                                             </div>
                                         <?php else: ?>
-                                            <p class="text-xs font-medium text-gray-900 dark:text-gray-300 leading-snug"><?php echo e(Str::limit($order->shipping_address ?? 'Belum diisi', 50)); ?></p>
+                                            <p class="text-xs font-medium text-gray-900 dark:text-gray-300 leading-snug break-words"><?php echo e($order->shipping_address ?? 'Belum diisi'); ?></p>
                                         <?php endif; ?>
                                     </div>
                                     

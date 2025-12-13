@@ -71,6 +71,33 @@ class LandingCartController extends Controller
 
         \Illuminate\Support\Facades\DB::beginTransaction();
         try {
+            // Persist User Changes
+            $updates = [];
+            $buyerContact = $validated['buyer_contact'];
+            $shippingAddress = $validated['shipping_address'];
+            $buyerName = $validated['buyer_name'];
+
+            // Update Phone
+            if ($buyerContact && $buyerContact !== $user->email && $buyerContact !== $user->phone) {
+                if (!str_contains($buyerContact, '@')) {
+                    $updates['phone'] = $buyerContact;
+                }
+            }
+
+            // Update Address
+            if ($shippingAddress && $shippingAddress !== 'Ambil di Toko' && $shippingAddress !== 'AMBIL DI TOKO' && $shippingAddress !== $user->address) {
+                $updates['address'] = $shippingAddress;
+            }
+
+            // Update Name
+            if ($buyerName && $buyerName !== $user->name) {
+                $updates['name'] = $buyerName;
+            }
+
+            if (!empty($updates)) {
+                $user->update($updates);
+            }
+
             // Create Order
             $order = \App\Models\Order::create([
                 'type' => 'online',

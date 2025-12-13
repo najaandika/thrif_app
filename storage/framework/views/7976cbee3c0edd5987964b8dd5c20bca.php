@@ -15,6 +15,8 @@ new class extends Component implements Livewire\Volt\Contracts\FunctionalCompone
 
     public $email;
 
+    public $phone;
+
     public function mount()
     {
         (new Actions\InitializeState)->execute(static::$__context, $this, get_defined_vars());

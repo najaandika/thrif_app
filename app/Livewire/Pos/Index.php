@@ -167,7 +167,7 @@ class Index extends Component
                 'type' => 'pos',
                 'user_id' => Auth::id(), // Cashier
                 // 'customer_id' => null, // Optional if we add customer selection later
-                'buyer_name' => 'Walk-in Customer', // Default for POS
+                'buyer_name' => 'Pelanggan Umum', // Default for POS
                 'total_price' => $this->total, // Total grand incl discount
                 'discount' => $discountAmount, // Store discount in dedicated field
                 'payment_method' => $this->payment_method,

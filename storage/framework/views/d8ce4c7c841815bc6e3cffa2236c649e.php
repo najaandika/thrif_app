@@ -34,6 +34,7 @@
             <form action="<?php echo e(route('orders.export.excel')); ?>" method="GET" class="inline-block">
                 <input type="hidden" name="search" value="<?php echo e($search); ?>">
                 <input type="hidden" name="status" value="<?php echo e($status); ?>">
+                <input type="hidden" name="orderType" value="<?php echo e($orderType); ?>">
                 <button type="submit"
                         class="inline-flex items-center px-4 py-2 border border-transparent text-xs font-semibold rounded-xl text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm hover:shadow-md transition-all">
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,6 +46,7 @@
             <form action="<?php echo e(route('orders.export.pdf')); ?>" method="GET" target="_blank" class="inline-block">
                 <input type="hidden" name="search" value="<?php echo e($search); ?>">
                 <input type="hidden" name="status" value="<?php echo e($status); ?>">
+                <input type="hidden" name="orderType" value="<?php echo e($orderType); ?>">
                 <button type="submit"
                         class="inline-flex items-center px-4 py-2 border border-transparent text-xs font-semibold rounded-xl text-white bg-rose-600 hover:bg-rose-700 shadow-sm hover:shadow-md transition-all">
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

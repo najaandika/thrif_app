@@ -1,40 +1,11 @@
 <div>
     @if($showModal && $order)
     <div 
-        x-data="{ 
-            downloading: false,
-            downloadReceipt() {
-                this.downloading = true;
-                const element = document.getElementById('receipt-content');
-                
-                // Use html2canvas to capture the receipt
-                // Assuming html2canvas is loaded globally
-                if (typeof html2canvas === 'undefined') {
-                    alert('Error: Library html2canvas not loaded.');
-                    this.downloading = false;
-                    return;
-                }
-
-                html2canvas(element, {
-                    scale: 2, // Higher quality
-                    backgroundColor: '#ffffff',
-                    useCORS: true // For images (like logo)
-                }).then(canvas => {
-                    const link = document.createElement('a');
-                    link.download = 'Receipt-' + '{{ $order->invoice_number }}' + '.jpg';
-                    link.href = canvas.toDataURL('image/jpeg', 0.9);
-                    link.click();
-                    this.downloading = false;
-                }).catch(err => {
-                    console.error(err);
-                    alert('Gagal mendownload struk.');
-                    this.downloading = false;
-                });
-            }
-        }"
+        x-data="receiptModal"
         class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto px-4 py-6 sm:px-0"
         style="display: flex;" 
     >
+        @include('livewire.orders._modal_scripts')
         <!-- Backdrop -->
         <div wire:click="closeModal" class="fixed inset-0 transform transition-all" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
             <div class="absolute inset-0 bg-gray-900/75 backdrop-blur-sm"></div>
@@ -45,7 +16,7 @@
              x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
             
             <!-- Close Button -->
-            <button wire:click="closeModal" class="absolute top-4 right-4 z-20 p-2 rounded-full bg-gray-100 dark:bg-gray-700/80 text-gray-500 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors focus:outline-none">
+            <button wire:click="closeModal" aria-label="Tutup" class="absolute top-4 right-4 z-20 p-2 rounded-full bg-gray-100 dark:bg-gray-700/80 text-gray-500 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors focus:outline-none">
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -99,17 +70,57 @@
                     <div class="space-y-1 mb-6">
                          <div class="flex justify-between text-sm font-bold text-gray-900 pt-1">
                             <span>TOTAL</span>
-                            <span>Rp {{ number_format($order->total_price, 0, ',', '.') }}</span>
+                            <span class="text-gray-900">Rp {{ number_format($order->total_price, 0, ',', '.') }}</span>
                         </div>
                         
-                         <div class="flex justify-between text-xs text-gray-500 pt-2">
-                            <span>Metode Bayar</span>
-                            <span>{{ $order->payment_method === 'cash' ? 'COD' : 'Non-Tunai (Midtrans)' }}</span>
+                        <div class="flex justify-between text-xs text-gray-500 pt-2">
+                            <span>Pengiriman</span>
+                            <span>{{ $order->shipping_address === 'AMBIL DI TOKO' ? 'Ambil di Toko' : 'Pesan Antar' }}</span>
                         </div>
+                        
+                        <div class="flex justify-between text-xs text-gray-500 pt-2">
+                            <span>Metode Bayar</span>
+                            <span>
+                                @if($order->payment_method === 'cash')
+                                    @if($order->shipping_address === 'AMBIL DI TOKO')
+                                        Bayar di Kasir
+                                    @else
+                                        COD
+                                    @endif
+                                @else
+                                    Non-Tunai (Midtrans)
+                                @endif
+                            </span>
+                        </div>
+                        
+                        <div class="flex justify-between text-xs text-gray-500 pt-1">
+                            <span>Kontak</span>
+                            <span class="font-medium text-gray-900">{{ $order->buyer_contact ?? '-' }}</span>
+                        </div>
+
+                        <div class="flex justify-between text-xs text-gray-500 pt-1 text-right">
+                            <span class="shrink-0">Alamat</span>
+                            <span class="font-medium text-gray-900 ml-4">
+                                @if($order->shipping_address === 'AMBIL DI TOKO')
+                                    {{ \App\Models\Setting::get('shop_address') ?? 'Alamat Toko' }}
+                                @else
+                                    {{ $order->shipping_address }}
+                                @endif
+                            </span>
+                        </div>
+
+                        @if($order->notes)
+                        <div class="flex justify-between text-xs text-gray-500 pt-1 text-right">
+                            <span class="shrink-0">Catatan</span>
+                            <span class="font-medium text-gray-900 ml-4 italic">"{{ $order->notes }}"</span>
+                        </div>
+                        @endif
 
                         <div class="flex justify-between text-xs text-gray-500 pt-1">
                             <span>Status</span>
-                            <span class="font-bold text-green-600">LUNAS</span>
+                            <span class="font-bold {{ $order->status === 'paid' ? 'text-emerald-600' : ($order->status === 'pending' ? 'text-amber-600' : 'text-gray-600') }}">
+                                {{ strtoupper($order->status_label) }}
+                            </span>
                         </div>
                     </div>
 
@@ -132,11 +143,11 @@
                     <svg x-show="!downloading" class="mr-2 -ml-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
-                     <svg x-show="downloading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                     <svg x-show="downloading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" style="display: none;">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <span x-text="downloading ? 'Memproses...' : 'Download Struk (JPG)'"></span>
+                    <span>Download Struk (JPG)</span>
                 </button>
             </div>
         </div>

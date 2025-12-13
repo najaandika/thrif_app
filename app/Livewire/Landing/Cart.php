@@ -31,7 +31,8 @@ class Cart extends Component
         $user = Auth::user();
         if ($user) {
             $this->buyerName = $user->name;
-            $this->buyerContact = $user->email;
+            $this->buyerContact = $user->phone ?? $user->email;
+            $this->shippingAddress = $user->address;
         }
     }
 
@@ -171,6 +172,34 @@ class Cart extends Component
 
     private function createOrder()
     {
+         $user = Auth::user();
+
+         // Persist User Changes
+         if ($user) {
+             $updates = [];
+             
+             // Update Phone
+             if ($this->buyerContact && $this->buyerContact !== $user->email && $this->buyerContact !== $user->phone) {
+                 if (!str_contains($this->buyerContact, '@')) {
+                     $updates['phone'] = $this->buyerContact;
+                 }
+             }
+
+             // Update Address
+             if ($this->shippingAddress && $this->shippingAddress !== 'Ambil di Toko' && $this->shippingAddress !== $user->address) {
+                 $updates['address'] = $this->shippingAddress;
+             }
+
+             // Update Name
+             if ($this->buyerName && $this->buyerName !== $user->name) {
+                 $updates['name'] = $this->buyerName;
+             }
+
+             if (!empty($updates)) {
+                 $user->update($updates);
+             }
+         }
+
          $order = Order::create([
             'type' => 'online',
             'user_id' => 1,

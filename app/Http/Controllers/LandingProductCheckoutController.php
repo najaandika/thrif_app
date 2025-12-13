@@ -51,8 +51,8 @@ class LandingProductCheckoutController extends Controller
             'shopAddress' => \App\Models\Setting::get('shop_address', 'Alamat belum diatur'),
             'prefill' => [
                 'buyer_name' => old('buyer_name', $user->name),
-                'buyer_contact' => old('buyer_contact', $user->email),
-                'shipping_address' => old('shipping_address'),
+                'buyer_contact' => old('buyer_contact', $user->phone ?? $user->email),
+                'shipping_address' => old('shipping_address', $user->address),
                 'quantity' => $quantity,
                 'notes' => old('notes'),
             ],

@@ -29,6 +29,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         @livewireStyles
         <!-- CSS swal dan body dipindah ke app.css -->
     </head>
