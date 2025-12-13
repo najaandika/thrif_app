@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Checkout Produk · Thrif Studio</title>
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <meta name="midtrans-snap-token" content="<?php echo e($snapToken); ?>">
     <script>
         (function() {
             try {
@@ -23,13 +24,8 @@
         src="https://app.sandbox.midtrans.com/snap/snap.js"
         data-client-key="<?php echo e(config('services.midtrans.client_key')); ?>">
     </script>
-    <script>
-        window.snapToken = <?php echo json_encode($snapToken, 15, 512) ?>;
-    </script>
 </head>
-<body class="antialiased bg-gray-50 dark:bg-gray-900 font-sans" x-data="{ 
-}" 
-">
+<body class="antialiased bg-gray-50 dark:bg-gray-900 font-sans">
     <div class="min-h-screen">
         <header class="bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800 backdrop-blur">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-end">
@@ -48,21 +44,7 @@
 
         <main class="py-10">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <?php if(session('status')): ?>
-                    <div x-data x-init="setTimeout(() => $el.remove(), 4000)" class="mb-6 rounded-2xl border-2 border-emerald-300 dark:border-emerald-700 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/40 dark:to-green-950/40 px-5 py-4 flex items-start gap-4 shadow-lg shadow-emerald-500/20">
-                        <div class="flex-shrink-0 mt-0.5">
-                            <div class="h-8 w-8 rounded-xl bg-gradient-to-br from-emerald-600 to-green-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/50">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-xs font-semibold tracking-wide text-emerald-600 dark:text-emerald-400 uppercase mb-1">Success</p>
-                            <p class="text-sm font-medium text-emerald-900 dark:text-emerald-100"><?php echo e(session('status')); ?></p>
-                        </div>
-                    </div>
-                <?php endif; ?>
+                
 
                 <?php if($errors->order->any()): ?>
                     <div x-data x-init="setTimeout(() => $el.remove(), 4000)" class="mb-6 rounded-2xl border-2 border-red-300 dark:border-red-700 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-950/40 dark:to-pink-950/40 px-5 py-4 flex items-start gap-4 shadow-lg shadow-red-500/20">
@@ -81,62 +63,54 @@
                 <?php endif; ?>
 
                 <div class="grid gap-6 lg:grid-cols-[0.85fr,1.15fr]">
-                    <section class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl p-6 space-y-5">
-                        <p class="<?php echo e($labelClass); ?>">Produk</p>
-
-                        <div class="space-y-4">
-                            <div class="rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800">
-                                <?php if($product->image): ?>
-                                    <img src="<?php echo e(Storage::url($product->image)); ?>" alt="<?php echo e($product->name); ?>" class="w-full h-44 object-cover">
-                                <?php else: ?>
-                                    <div class="w-full h-44 bg-gradient-to-br from-slate-200 via-slate-100 to-slate-300 dark:from-slate-800 dark:via-slate-700 dark:to-slate-900 flex items-center justify-center text-xs text-gray-500 dark:text-gray-300">
-                                        Foto produk menyusul
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-
-                            <div class="space-y-2">
-                                <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 leading-tight"><?php echo e($product->name); ?></h1>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Kategori: <?php echo e($product->category ?? 'Tanpa kategori'); ?></p>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Kondisi: <?php echo e($product->condition_label); ?></p>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Ukuran: <span class="font-semibold text-gray-700 dark:text-gray-200"><?php echo e($product->size ?? '-'); ?></span></p>
-                                <?php if($product->description): ?>
-                                    <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
-                                        <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Deskripsi:</p>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-line"><?php echo e(strip_tags($product->description)); ?></p>
-                                    </div>
-                                <?php endif; ?>
-                                <p class="text-3xl font-bold text-green-600 pt-2"><?php echo e(rupiah($product->price)); ?></p>
-                            </div>
-                        </div>
-
-                        <div class="rounded-2xl bg-gray-50 dark:bg-gray-800/70 p-4 text-xs text-gray-600 dark:text-gray-300 space-y-1">
-                            <!-- Stok dihapus, hanya tampil status -->
-                            <p>Status: <span class="font-semibold text-gray-900 dark:text-gray-100"><?php echo e($product->is_available ? 'Ready to ship' : 'Sold Out'); ?></span></p>
-                        </div>
-
-                        <div class="rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 p-4 text-xs text-gray-500 dark:text-gray-400">
-                            Kamu bisa review kembali order ini setelah submit. Admin akan menghubungi lewat kontak yang kamu isi.
-                        </div>
-                    </section>
+                    <?php echo $__env->make('landing.sections.checkout.product-info', ['product' => $product, 'labelClass' => $labelClass], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
                     <section class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl p-6 space-y-6">
                         <div class="space-y-1">
                             <p class="<?php echo e($labelClass); ?>">Form Pembelian</p>
                             <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Isi data pengirimanmu</h2>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Semua data akan dijaga kerahasiaannya</p>
                         </div>
 
-                        <form method="POST" action="<?php echo e(route('landing.products.order', $product)); ?>" class="space-y-6" id="checkout-form">
-                                                        <div class="space-y-1">
-                                                            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Metode Pembayaran</label>
-                                                            <select name="payment_method" class="<?php echo e($inputClass); ?>" required>
-                                                                <option value="cash">Cash On Delivery</option>
-                                                                <option value="transfer">Transfer</option>
-                                                                <option value="midtrans">Midtrans</option>
-                                                            </select>
-                                                        </div>
+                        <form method="POST" action="<?php echo e(route('landing.products.order', $product)); ?>" class="space-y-6" id="checkout-form"
+                              x-data="checkoutFormData({
+                                  buyer_name: '<?php echo e($prefill['buyer_name'] ?? ''); ?>',
+                                  buyer_contact: '<?php echo e($prefill['buyer_contact'] ?? ''); ?>',
+                                  shipping_address: '<?php echo e($prefill['shipping_address'] ?? ''); ?>',
+                                  notes: '<?php echo e($prefill['notes'] ?? ''); ?>'
+                              })">
                             <?php echo csrf_field(); ?>
+                            <div class="space-y-3">
+                                <div class="space-y-1">
+                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Metode Pengiriman</label>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <label class="cursor-pointer relative">
+                                            <input type="radio" name="delivery_type" value="shipping" x-model="deliveryMethod" class="peer sr-only">
+                                            <div class="rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 peer-checked:border-slate-900 peer-checked:bg-slate-50 dark:peer-checked:border-slate-400 dark:peer-checked:bg-slate-900/50 transition-all text-center">
+                                                <div class="text-sm font-semibold text-gray-900 dark:text-gray-100">Pesan Antar</div>
+                                                <div class="text-xs text-gray-500 mt-0.5">Kurir Toko (Balam) / Ekspedisi</div>
+                                            </div>
+                                        </label>
+                                        <label class="cursor-pointer relative">
+                                            <input type="radio" name="delivery_type" value="pickup" x-model="deliveryMethod" class="peer sr-only">
+                                            <div class="rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 peer-checked:border-slate-900 peer-checked:bg-slate-50 dark:peer-checked:border-slate-400 dark:peer-checked:bg-slate-900/50 transition-all text-center">
+                                                <div class="text-sm font-semibold text-gray-900 dark:text-gray-100">Ambil di Toko</div>
+                                                <div class="text-xs text-gray-500 mt-0.5">Gratis Ongkir</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-1">
+                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Metode Pembayaran</label>
+                                    <select name="payment_method" x-model="paymentMethod" class="<?php echo e($inputClass); ?>" required>
+                                        <option value="cash" x-text="deliveryMethod === 'pickup' ? 'Bayar di Toko (Cash / QRIS)' : 'Cash On Delivery'"></option>
+                                        <option value="midtrans">Midtrans (Transfer / QRIS)</option>
+                                    </select>
+                                </div>
+                            
+                            <!-- Hidden input to pass delivery type if needed by backend validation logic -->
+                            
+                            <div class="pt-2"></div>
 
                             <div class="space-y-3">
                                 <div class="flex items-center gap-2">
@@ -147,34 +121,48 @@
                                     </div>
                                     <p class="<?php echo e($labelClass); ?>">Data Pembeli</p>
                                 </div>
-                                <div class="space-y-1">
-                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Nama penerima</label>
-                                    <input type="text" name="buyer_name" value="<?php echo e($prefill['buyer_name']); ?>" class="<?php echo e($inputClass); ?>" required>
-                                    <?php $__errorArgs = ['buyer_name', 'order'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                        <p class="text-xs text-red-500"><?php echo e($message); ?></p>
-                                    <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <?php if (isset($component)) { $__componentOriginal5c2a97ab476b69c1189ee85d1a95204b = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal5c2a97ab476b69c1189ee85d1a95204b = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form.input','data' => ['name' => 'buyer_name','label' => 'Nama penerima','xModel' => 'buyerName','required' => true,'autocomplete' => 'name']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('form.input'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'buyer_name','label' => 'Nama penerima','x-model' => 'buyerName','required' => true,'autocomplete' => 'name']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal5c2a97ab476b69c1189ee85d1a95204b)): ?>
+<?php $attributes = $__attributesOriginal5c2a97ab476b69c1189ee85d1a95204b; ?>
+<?php unset($__attributesOriginal5c2a97ab476b69c1189ee85d1a95204b); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal5c2a97ab476b69c1189ee85d1a95204b)): ?>
+<?php $component = $__componentOriginal5c2a97ab476b69c1189ee85d1a95204b; ?>
+<?php unset($__componentOriginal5c2a97ab476b69c1189ee85d1a95204b); ?>
+<?php endif; ?>
 
-                                <div class="space-y-1">
-                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Kontak (WA / IG)</label>
-                                    <input type="text" name="buyer_contact" value="<?php echo e($prefill['buyer_contact']); ?>" class="<?php echo e($inputClass); ?>">
-                                    <?php $__errorArgs = ['buyer_contact', 'order'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                        <p class="text-xs text-red-500"><?php echo e($message); ?></p>
-                                    <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
+                                    <?php if (isset($component)) { $__componentOriginal5c2a97ab476b69c1189ee85d1a95204b = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal5c2a97ab476b69c1189ee85d1a95204b = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form.input','data' => ['name' => 'buyer_contact','label' => 'Kontak (WA / IG)','xModel' => 'buyerContact','autocomplete' => 'tel']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('form.input'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'buyer_contact','label' => 'Kontak (WA / IG)','x-model' => 'buyerContact','autocomplete' => 'tel']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal5c2a97ab476b69c1189ee85d1a95204b)): ?>
+<?php $attributes = $__attributesOriginal5c2a97ab476b69c1189ee85d1a95204b; ?>
+<?php unset($__attributesOriginal5c2a97ab476b69c1189ee85d1a95204b); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal5c2a97ab476b69c1189ee85d1a95204b)): ?>
+<?php $component = $__componentOriginal5c2a97ab476b69c1189ee85d1a95204b; ?>
+<?php unset($__componentOriginal5c2a97ab476b69c1189ee85d1a95204b); ?>
+<?php endif; ?>
                                 </div>
                             </div>
 
@@ -188,35 +176,62 @@ unset($__errorArgs, $__bag); ?>
                                     </div>
                                     <p class="<?php echo e($labelClass); ?>">Detail Pengiriman</p>
                                 </div>
-                                <div class="space-y-1">
-                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Alamat pengiriman</label>
-                                    <textarea name="shipping_address" rows="3" class="<?php echo e($inputClass); ?>" placeholder="Kota, detail alamat, atau info COD"><?php echo e($prefill['shipping_address']); ?></textarea>
-                                    <?php $__errorArgs = ['shipping_address', 'order'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                        <p class="text-xs text-red-500"><?php echo e($message); ?></p>
-                                    <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
+                                
+                                <!-- Address Section -->
+                                <div x-show="deliveryMethod === 'shipping'" x-transition>
+                                    <?php if (isset($component)) { $__componentOriginalcd97a59301ba78d56b3ed60dd41409ab = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalcd97a59301ba78d56b3ed60dd41409ab = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form.textarea','data' => ['name' => 'shipping_address','label' => 'Alamat pengiriman','xModel' => 'shippingAddress','rows' => 3,'placeholder' => 'Tulis alamat lengkap (Kecamatan & Kota wajib diisi untuk cek ongkir)',':required' => 'deliveryMethod === \'shipping\'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('form.textarea'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'shipping_address','label' => 'Alamat pengiriman','x-model' => 'shippingAddress','rows' => 3,'placeholder' => 'Tulis alamat lengkap (Kecamatan & Kota wajib diisi untuk cek ongkir)',':required' => 'deliveryMethod === \'shipping\'']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalcd97a59301ba78d56b3ed60dd41409ab)): ?>
+<?php $attributes = $__attributesOriginalcd97a59301ba78d56b3ed60dd41409ab; ?>
+<?php unset($__attributesOriginalcd97a59301ba78d56b3ed60dd41409ab); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalcd97a59301ba78d56b3ed60dd41409ab)): ?>
+<?php $component = $__componentOriginalcd97a59301ba78d56b3ed60dd41409ab; ?>
+<?php unset($__componentOriginalcd97a59301ba78d56b3ed60dd41409ab); ?>
+<?php endif; ?>
+                                </div>
+                                
+                                <!-- Shop Address Info when Pickup -->
+                                <div x-show="deliveryMethod === 'pickup'" x-cloak class="rounded-2xl bg-slate-50 dark:bg-slate-900/50 p-4 border border-slate-200 dark:border-slate-700">
+                                    <p class="text-xs font-semibold text-slate-500 uppercase mb-2">Lokasi Toko</p>
+                                    <p class="font-medium text-gray-900 dark:text-gray-100 text-sm"><?php echo e($shopName); ?></p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1"><?php echo e($shopAddress); ?></p>
+                                    <p class="text-xs text-gray-500 mt-2">Silakan ambil pesananmu langsung di toko kami.</p>
+                                    
+                                    <!-- Hidden input to fill address for backend validation -->
+                                    <input type="hidden" name="pickup_address_note" value="AMBIL DI TOKO" :disabled="deliveryMethod !== 'pickup'">
                                 </div>
 
-                                <div class="space-y-1">
-                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Catatan (Opsional)</label>
-                                    <textarea name="notes" rows="2" class="<?php echo e($inputClass); ?>" placeholder="Tambahkan catatan untuk pesanan ini..."><?php echo e($prefill['notes']); ?></textarea>
-                                    <?php $__errorArgs = ['notes', 'order'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                        <p class="text-xs text-red-500"><?php echo e($message); ?></p>
-                                    <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                </div>
+                                <?php if (isset($component)) { $__componentOriginalcd97a59301ba78d56b3ed60dd41409ab = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalcd97a59301ba78d56b3ed60dd41409ab = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form.textarea','data' => ['name' => 'notes','label' => 'Catatan (Opsional)','xModel' => 'notes','rows' => 2,'placeholder' => 'Tambahkan catatan untuk pesanan ini...','value' => $prefill['notes'] ?? '']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('form.textarea'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'notes','label' => 'Catatan (Opsional)','x-model' => 'notes','rows' => 2,'placeholder' => 'Tambahkan catatan untuk pesanan ini...','value' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($prefill['notes'] ?? '')]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalcd97a59301ba78d56b3ed60dd41409ab)): ?>
+<?php $attributes = $__attributesOriginalcd97a59301ba78d56b3ed60dd41409ab; ?>
+<?php unset($__attributesOriginalcd97a59301ba78d56b3ed60dd41409ab); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalcd97a59301ba78d56b3ed60dd41409ab)): ?>
+<?php $component = $__componentOriginalcd97a59301ba78d56b3ed60dd41409ab; ?>
+<?php unset($__componentOriginalcd97a59301ba78d56b3ed60dd41409ab); ?>
+<?php endif; ?>
 
                                 <!-- Size Selector -->
                                 <input type="hidden" name="size" value="<?php echo e($product->size); ?>" required>
@@ -285,6 +300,12 @@ unset($__errorArgs, $__bag); ?>
 <?php $component = $__componentOriginal7cfab914afdd05940201ca0b2cbc009b; ?>
 <?php unset($__componentOriginal7cfab914afdd05940201ca0b2cbc009b); ?>
 <?php endif; ?>
+    
+    <?php if(session('status')): ?>
+        <div data-checkout-status="<?php echo e(session('status')); ?>" data-checkout-redirect="<?php echo e(route('landing.orders.history')); ?>" style="display:none;"></div>
+    <?php endif; ?>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::scripts(); ?>
 
 </body>

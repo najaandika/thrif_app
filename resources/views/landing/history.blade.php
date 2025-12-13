@@ -17,6 +17,7 @@
     </script>
     @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         html, body { touch-action: pan-x pan-y; overscroll-behavior: none; overflow-x: hidden; }
     </style>
@@ -41,65 +42,105 @@
         <main class="py-12">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
                 <div class="space-y-1">
-                    <p class="text-[11px] font-semibold tracking-[0.2em] text-gray-500 dark:text-gray-400 uppercase">Riwayat pembelian</p>
-                    <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Halo, {{ $customer->name }} — berikut ringkasan order kamu.</h1>
+                    <p class="text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] text-gray-500 dark:text-gray-400 uppercase">Riwayat pembelian</p>
+                    <h1 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-gray-100 leading-tight">Halo, {{ $customer->name }} — ringkasan order kamu.</h1>
                 </div>
-
-                @if (session('status'))
-                    <div x-data x-init="setTimeout(() => $el.remove(), 4000)" class="rounded-2xl border-2 border-emerald-300 dark:border-emerald-700 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/40 dark:to-green-950/40 px-5 py-4 flex items-start gap-4 shadow-lg shadow-emerald-500/20">
-                        <div class="flex-shrink-0 mt-0.5">
-                            <div class="h-8 w-8 rounded-xl bg-gradient-to-br from-emerald-600 to-green-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/50">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-xs font-semibold tracking-wide text-emerald-600 dark:text-emerald-400 uppercase mb-1">Success</p>
-                            <p class="text-sm font-medium text-emerald-900 dark:text-emerald-100">{{ session('status') }}</p>
-                        </div>
-                    </div>
-                @endif
 
                 <div class="space-y-4">
                     @forelse ($orders as $order)
-                        <article class="rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm p-5 flex flex-col md:flex-row gap-4">
-                            <div class="flex-1 space-y-2">
-                                <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                                    <span>#{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</span>
-                                    <span>{{ $order->created_at->translatedFormat('d M Y H:i') }}</span>
+                        <article class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm p-4 sm:p-5 flex flex-col md:flex-row gap-4 sm:gap-6">
+                            <div class="flex-1 space-y-3">
+                                <div class="flex items-center justify-between text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">
+                                    <span class="font-mono bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded">{{ $order->invoice_number }}</span>
+                                    <span>{{ $order->created_at->translatedFormat('d M Y, H:i') }}</span>
                                 </div>
-                                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ $order->product->name ?? 'Produk terhapus' }}</h2>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Qty {{ $order->quantity }} · {{ rupiah($order->total_price) }}</p>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Status: <span class="font-semibold text-gray-900 dark:text-gray-100">{{ ucfirst($order->status) }}</span></p>
-
+                                <div>
+                                    <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100 leading-snug">
+                                        {{ $order->items->first()->product->name ?? 'Produk terhapus' }}
+                                        @if($order->items->count() > 1)
+                                            <span class="text-sm font-normal text-gray-500">(+{{ $order->items->count() - 1 }} lainnya)</span>
+                                        @endif
+                                    </h2>
+                                    <div class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                        @foreach($order->items->take(1) as $item)
+                                            <p>{{ $item->product->name ?? 'Deleted' }} (x{{ $item->quantity }})</p>
+                                        @endforeach
+                                    </div>
+                                    <div class="pt-2 font-bold text-sm sm:text-base text-gray-900 dark:text-gray-100">{{ rupiah($order->total_price) }}</div>
+                                </div>
+                                <div class="inline-flex items-center gap-2">
+                                     <!-- Status Logic Same as Before -->
+                                    <span class="px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold border {{ $order->status_class }}">
+                                        {{ $order->status_label }}
+                                    </span>
+                                </div>
                             </div>
-                            <div class="md:w-64 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/60 p-4 text-sm text-gray-600 dark:text-gray-300">
-                                <p class="font-semibold text-gray-900 dark:text-gray-100 mb-3">Detail Pengiriman</p>
+                            
+                            <!-- Detail Section Refined -->
+                            <div class="md:w-64 pt-4 md:pt-0 md:pl-6 border-t md:border-t-0 md:border-l border-gray-100 dark:border-gray-800 flex flex-col justify-between">
                                 <div class="space-y-3">
-                                    <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Nama Penerima</p>
-                                        <p class="font-medium text-gray-900 dark:text-gray-200">{{ $order->buyer_name }}</p>
+                                    <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2">Info Pengiriman</p>
+                                    
+                                    <div class="grid grid-cols-2 md:grid-cols-1 gap-2">
+                                        <div>
+                                            <p class="text-[10px] text-gray-400 dark:text-gray-500">Penerima</p>
+                                            <p class="text-xs font-medium text-gray-900 dark:text-gray-300 truncate">{{ $order->buyer_name }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[10px] text-gray-400 dark:text-gray-500">Kontak</p>
+                                            <p class="text-xs font-medium text-gray-900 dark:text-gray-300 truncate">{{ $order->buyer_contact ?? '-' }}</p>
+                                        </div>
                                     </div>
+
                                     <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Kontak</p>
-                                        <p class="font-medium text-gray-900 dark:text-gray-200">{{ $order->buyer_contact ?? '-' }}</p>
+                                        <p class="text-[10px] text-gray-400 dark:text-gray-500">Alamat</p>
+                                        @if($order->shipping_address === 'AMBIL DI TOKO')
+                                            <div class="mt-0.5">
+                                                <p class="text-xs font-medium text-gray-900 dark:text-gray-300 leading-snug">{{ \App\Models\Setting::get('shop_address') ?? 'Alamat Toko' }}</p>
+                                                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 mt-1 border border-indigo-100 dark:border-indigo-800/50">
+                                                    Ambil di Toko
+                                                </span>
+                                            </div>
+                                        @else
+                                            <p class="text-xs font-medium text-gray-900 dark:text-gray-300 leading-snug">{{ Str::limit($order->shipping_address ?? 'Belum diisi', 50) }}</p>
+                                        @endif
                                     </div>
+                                    
                                     <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Alamat</p>
-                                        <p class="font-medium text-gray-900 dark:text-gray-200">{{ $order->shipping_address ?? 'Belum diisi' }}</p>
+                                        <p class="text-[10px] text-gray-400 dark:text-gray-500">Metode Bayar</p>
+                                        <p class="text-xs font-medium text-gray-900 dark:text-gray-300">
+                                            @if($order->payment_method === 'cash')
+                                                @if($order->shipping_address === 'AMBIL DI TOKO')
+                                                    Bayar di Kasir
+                                                @else
+                                                    COD
+                                                @endif
+                                            @else
+                                                Non-Tunai
+                                            @endif
+                                        </p>
                                     </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Metode Pembayaran</p>
-                                        <p class="font-medium text-gray-900 dark:text-gray-200">{{ $order->payment_method === 'cash' ? 'Cash On Delivery' : ucfirst($order->payment_method) }}</p>
-                                    </div>
+                                    
                                     @if ($order->notes)
                                         <div>
-                                            <p class="text-xs text-gray-500 dark:text-gray-400">Catatan</p>
-                                            <p class="font-medium text-gray-900 dark:text-gray-200 italic">{{ $order->notes }}</p>
+                                            <p class="text-[10px] text-gray-400 dark:text-gray-500">Catatan</p>
+                                            <p class="text-xs text-gray-700 dark:text-gray-400 italic truncate">{{ $order->notes }}</p>
                                         </div>
                                     @endif
                                 </div>
+                                
+                                @if($order->status !== 'pending')
+                                <button 
+                                    x-data 
+                                    x-on:click="Livewire.dispatch('open-receipt-modal', { orderId: {{ $order->id }} })"
+                                    class="w-full mt-4 inline-flex items-center justify-center rounded-lg bg-indigo-50 border border-indigo-100 dark:bg-gray-800 dark:border-gray-700 px-3 py-2 text-xs font-semibold text-indigo-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-gray-700 transition-all active:scale-95"
+                                >
+                                    <svg class="w-3.5 h-3.5 mr-1.5 text-indigo-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    Lihat Struk
+                                </button>
+                                @endif
                             </div>
                         </article>
                     @empty
@@ -112,6 +153,12 @@
         </main>
     </div>
     <x-toast />
+    
+    @if(session('status'))
+        <div data-checkout-status="{{ session('status') }}" data-checkout-redirect="{{ route('landing.orders.history') }}" style="display:none;"></div>
+    @endif
+
+    @livewire('orders.customer-receipt-modal')
     @livewireScripts
 </body>
 </html>

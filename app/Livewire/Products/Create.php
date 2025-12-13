@@ -23,6 +23,11 @@ class Create extends Component
     public $image;
     public $imagePreviewUrl = null;
     
+    public $newAdditionalImages = []; // For input
+    public $additionalImages = []; // Accumulator
+    public $additionalImagePreviews = [];
+    public $uploadIteration = 0;
+    
     public $size;
 
     protected $rules = [
@@ -32,6 +37,8 @@ class Create extends Component
         'condition' => 'required|in:new,like-new,good,fair,poor',
         'category' => 'nullable|string|max:255',
         'image' => 'nullable|image|max:2048',
+        'additionalImages.*' => 'nullable|image|max:2048',
+        'newAdditionalImages.*' => 'nullable|image|max:2048',
         'size' => 'required|string|max:100',
     ];
 
@@ -53,6 +60,40 @@ class Create extends Component
         }
     }
 
+    public function updatedNewAdditionalImages()
+    {
+        $this->resetErrorBag('newAdditionalImages');
+        
+        foreach ($this->newAdditionalImages as $image) {
+            $this->additionalImages[] = $image;
+        }
+
+        $this->updatePreviews();
+        
+        // Reset input
+        $this->newAdditionalImages = [];
+        $this->uploadIteration++;
+    }
+
+    protected function updatePreviews()
+    {
+        $this->additionalImagePreviews = [];
+        foreach ($this->additionalImages as $key => $image) {
+            try {
+                $this->additionalImagePreviews[$key] = $image->temporaryUrl();
+            } catch (\Livewire\Features\SupportFileUploads\FileNotPreviewableException $exception) {
+                // Skip preview
+            }
+        }
+    }
+
+    public function removeAdditionalImage($index)
+    {
+        unset($this->additionalImages[$index]);
+        unset($this->additionalImagePreviews[$index]);
+        $this->additionalImages = array_values($this->additionalImages);
+        $this->additionalImagePreviews = array_values($this->additionalImagePreviews);
+    }
 
     public function save()
     {
@@ -73,6 +114,17 @@ class Create extends Component
             'image' => $imagePath,
             'size' => $this->size,
         ]);
+
+        // Save additional images
+        if (!empty($this->additionalImages)) {
+            foreach ($this->additionalImages as $index => $additionalImage) {
+                $additionalImagePath = $additionalImage->store('products', 'public');
+                $product->images()->create([
+                    'image_path' => $additionalImagePath,
+                    'sort_order' => $index + 1,
+                ]);
+            }
+        }
 
         session()->flash('message', 'Product created successfully.');
         return redirect()->route('products.index');

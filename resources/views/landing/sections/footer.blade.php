@@ -59,9 +59,9 @@
             <div class="space-y-3">
                 <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100">Navigasi</h4>
                 <ul class="space-y-2 text-xs text-gray-600 dark:text-gray-400">
-                    <li><a href="#tentang" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block">Home</a></li>
-                    <li><a href="{{ route('landing.products.index') }}" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block">Catalog</a></li>
-                    <li><a href="#tentang-kami" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block">Tentang Kami</a></li>
+                    <li><a href="#tentang" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block hover:opacity-80">Home</a></li>
+                    <li><a href="{{ route('landing.products.index') }}" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block hover:opacity-80">Catalog</a></li>
+                    <li><a href="#tentang-kami" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block hover:opacity-80">Tentang Kami</a></li>
                     @auth
                         @if(auth()->user()->isCustomer())
                             <li><a href="{{ route('profile') }}" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block">Profil</a></li>
@@ -78,7 +78,7 @@
                 <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100">Kontak Kami</h4>
                 <div class="space-y-2.5">
                     @if($shopEmail)
-                    <a href="mailto:{{ $shopEmail }}" class="group flex items-start gap-2.5 text-xs text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                    <a href="mailto:{{ $shopEmail }}" class="group flex items-start gap-2.5 text-xs text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors hover:opacity-80">
                         <div class="flex-shrink-0">
                             <div class="h-8 w-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center group-hover:bg-indigo-200 dark:group-hover:bg-indigo-900/50 transition-colors">
                                 <svg class="h-4 w-4 text-indigo-600 dark:text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -94,7 +94,7 @@
                     @endif
                     
                     @if($shopPhone)
-                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $shopPhone) }}" class="group flex items-start gap-2.5 text-xs text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $shopPhone) }}" class="group flex items-start gap-2.5 text-xs text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors hover:opacity-80">
                         <div class="flex-shrink-0">
                             <div class="h-8 w-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center group-hover:bg-emerald-200 dark:group-hover:bg-emerald-900/50 transition-colors">
                                 <svg class="h-4 w-4 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

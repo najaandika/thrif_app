@@ -10,8 +10,9 @@
                     <div class="p-8">
                         @include('livewire.orders._filters')
 
-                        @include('livewire.orders._table')
 
+
+                        @include('livewire.orders._table')
                         <div class="mt-4">
                             {{ $orders->links() }}
                         </div>

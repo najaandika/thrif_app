@@ -3,6 +3,8 @@
 namespace App\View\Composers;
 
 use App\Models\Setting;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\View\View;
 
 class LandingComposer
@@ -15,7 +17,18 @@ class LandingComposer
      */
     public function compose(View $view): void
     {
+        // Fetch categories for navigation
+        $categories = Category::all()->map(function ($category) {
+            $category->products_count = Product::where('is_available', true)
+                ->where('category', 'LIKE', '%' . $category->name . '%')
+                ->count();
+            return $category;
+        })->filter(function ($category) {
+            return $category->products_count > 0;
+        })->sortBy('name')->values();
+
         $view->with([
+            'categories' => $categories,
             // Shop Information
             'shopLogo' => Setting::get('shop_logo'),
             'shopName' => Setting::get('shop_name', 'Thrif'),

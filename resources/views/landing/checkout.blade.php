@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Checkout Produk · Thrif Studio</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="midtrans-snap-token" content="{{ $snapToken }}">
     <script>
         (function() {
             try {
@@ -22,13 +23,8 @@
         src="https://app.sandbox.midtrans.com/snap/snap.js"
         data-client-key="{{ config('services.midtrans.client_key') }}">
     </script>
-    <script>
-        window.snapToken = @json($snapToken);
-    </script>
 </head>
-<body class="antialiased bg-gray-50 dark:bg-gray-900 font-sans" x-data="{ 
-}" 
-">
+<body class="antialiased bg-gray-50 dark:bg-gray-900 font-sans">
     <div class="min-h-screen">
         <header class="bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800 backdrop-blur">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-end">
@@ -47,21 +43,7 @@
 
         <main class="py-10">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                @if (session('status'))
-                    <div x-data x-init="setTimeout(() => $el.remove(), 4000)" class="mb-6 rounded-2xl border-2 border-emerald-300 dark:border-emerald-700 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/40 dark:to-green-950/40 px-5 py-4 flex items-start gap-4 shadow-lg shadow-emerald-500/20">
-                        <div class="flex-shrink-0 mt-0.5">
-                            <div class="h-8 w-8 rounded-xl bg-gradient-to-br from-emerald-600 to-green-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/50">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-xs font-semibold tracking-wide text-emerald-600 dark:text-emerald-400 uppercase mb-1">Success</p>
-                            <p class="text-sm font-medium text-emerald-900 dark:text-emerald-100">{{ session('status') }}</p>
-                        </div>
-                    </div>
-                @endif
+                {{-- Default status alert removed in favor of SweetAlert --}}
 
                 @if ($errors->order->any())
                     <div x-data x-init="setTimeout(() => $el.remove(), 4000)" class="mb-6 rounded-2xl border-2 border-red-300 dark:border-red-700 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-950/40 dark:to-pink-950/40 px-5 py-4 flex items-start gap-4 shadow-lg shadow-red-500/20">
@@ -80,62 +62,54 @@
                 @endif
 
                 <div class="grid gap-6 lg:grid-cols-[0.85fr,1.15fr]">
-                    <section class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl p-6 space-y-5">
-                        <p class="{{ $labelClass }}">Produk</p>
-
-                        <div class="space-y-4">
-                            <div class="rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800">
-                                @if ($product->image)
-                                    <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-44 object-cover">
-                                @else
-                                    <div class="w-full h-44 bg-gradient-to-br from-slate-200 via-slate-100 to-slate-300 dark:from-slate-800 dark:via-slate-700 dark:to-slate-900 flex items-center justify-center text-xs text-gray-500 dark:text-gray-300">
-                                        Foto produk menyusul
-                                    </div>
-                                @endif
-                            </div>
-
-                            <div class="space-y-2">
-                                <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 leading-tight">{{ $product->name }}</h1>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Kategori: {{ $product->category ?? 'Tanpa kategori' }}</p>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Kondisi: {{ $product->condition_label }}</p>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Ukuran: <span class="font-semibold text-gray-700 dark:text-gray-200">{{ $product->size ?? '-' }}</span></p>
-                                @if ($product->description)
-                                    <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
-                                        <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Deskripsi:</p>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-line">{{ strip_tags($product->description) }}</p>
-                                    </div>
-                                @endif
-                                <p class="text-3xl font-bold text-green-600 pt-2">{{ rupiah($product->price) }}</p>
-                            </div>
-                        </div>
-
-                        <div class="rounded-2xl bg-gray-50 dark:bg-gray-800/70 p-4 text-xs text-gray-600 dark:text-gray-300 space-y-1">
-                            <!-- Stok dihapus, hanya tampil status -->
-                            <p>Status: <span class="font-semibold text-gray-900 dark:text-gray-100">{{ $product->is_available ? 'Ready to ship' : 'Sold Out' }}</span></p>
-                        </div>
-
-                        <div class="rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 p-4 text-xs text-gray-500 dark:text-gray-400">
-                            Kamu bisa review kembali order ini setelah submit. Admin akan menghubungi lewat kontak yang kamu isi.
-                        </div>
-                    </section>
+                    @include('landing.sections.checkout.product-info', ['product' => $product, 'labelClass' => $labelClass])
 
                     <section class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl p-6 space-y-6">
                         <div class="space-y-1">
                             <p class="{{ $labelClass }}">Form Pembelian</p>
                             <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Isi data pengirimanmu</h2>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Semua data akan dijaga kerahasiaannya</p>
                         </div>
 
-                        <form method="POST" action="{{ route('landing.products.order', $product) }}" class="space-y-6" id="checkout-form">
-                                                        <div class="space-y-1">
-                                                            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Metode Pembayaran</label>
-                                                            <select name="payment_method" class="{{ $inputClass }}" required>
-                                                                <option value="cash">Cash On Delivery</option>
-                                                                <option value="transfer">Transfer</option>
-                                                                <option value="midtrans">Midtrans</option>
-                                                            </select>
-                                                        </div>
+                        <form method="POST" action="{{ route('landing.products.order', $product) }}" class="space-y-6" id="checkout-form"
+                              x-data="checkoutFormData({
+                                  buyer_name: '{{ $prefill['buyer_name'] ?? '' }}',
+                                  buyer_contact: '{{ $prefill['buyer_contact'] ?? '' }}',
+                                  shipping_address: '{{ $prefill['shipping_address'] ?? '' }}',
+                                  notes: '{{ $prefill['notes'] ?? '' }}'
+                              })">
                             @csrf
+                            <div class="space-y-3">
+                                <div class="space-y-1">
+                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Metode Pengiriman</label>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <label class="cursor-pointer relative">
+                                            <input type="radio" name="delivery_type" value="shipping" x-model="deliveryMethod" class="peer sr-only">
+                                            <div class="rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 peer-checked:border-slate-900 peer-checked:bg-slate-50 dark:peer-checked:border-slate-400 dark:peer-checked:bg-slate-900/50 transition-all text-center">
+                                                <div class="text-sm font-semibold text-gray-900 dark:text-gray-100">Pesan Antar</div>
+                                                <div class="text-xs text-gray-500 mt-0.5">Kurir Toko (Balam) / Ekspedisi</div>
+                                            </div>
+                                        </label>
+                                        <label class="cursor-pointer relative">
+                                            <input type="radio" name="delivery_type" value="pickup" x-model="deliveryMethod" class="peer sr-only">
+                                            <div class="rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 peer-checked:border-slate-900 peer-checked:bg-slate-50 dark:peer-checked:border-slate-400 dark:peer-checked:bg-slate-900/50 transition-all text-center">
+                                                <div class="text-sm font-semibold text-gray-900 dark:text-gray-100">Ambil di Toko</div>
+                                                <div class="text-xs text-gray-500 mt-0.5">Gratis Ongkir</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-1">
+                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Metode Pembayaran</label>
+                                    <select name="payment_method" x-model="paymentMethod" class="{{ $inputClass }}" required>
+                                        <option value="cash" x-text="deliveryMethod === 'pickup' ? 'Bayar di Toko (Cash / QRIS)' : 'Cash On Delivery'"></option>
+                                        <option value="midtrans">Midtrans (Transfer / QRIS)</option>
+                                    </select>
+                                </div>
+                            
+                            <!-- Hidden input to pass delivery type if needed by backend validation logic -->
+                            
+                            <div class="pt-2"></div>
 
                             <div class="space-y-3">
                                 <div class="flex items-center gap-2">
@@ -146,20 +120,21 @@
                                     </div>
                                     <p class="{{ $labelClass }}">Data Pembeli</p>
                                 </div>
-                                <div class="space-y-1">
-                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Nama penerima</label>
-                                    <input type="text" name="buyer_name" value="{{ $prefill['buyer_name'] }}" class="{{ $inputClass }}" required>
-                                    @error('buyer_name', 'order')
-                                        <p class="text-xs text-red-500">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <x-form.input 
+                                        name="buyer_name" 
+                                        label="Nama penerima" 
+                                        x-model="buyerName" 
+                                        :required="true"
+                                        autocomplete="name"
+                                    />
 
-                                <div class="space-y-1">
-                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Kontak (WA / IG)</label>
-                                    <input type="text" name="buyer_contact" value="{{ $prefill['buyer_contact'] }}" class="{{ $inputClass }}">
-                                    @error('buyer_contact', 'order')
-                                        <p class="text-xs text-red-500">{{ $message }}</p>
-                                    @enderror
+                                    <x-form.input 
+                                        name="buyer_contact" 
+                                        label="Kontak (WA / IG)" 
+                                        x-model="buyerContact"
+                                        autocomplete="tel"
+                                    />
                                 </div>
                             </div>
 
@@ -173,21 +148,38 @@
                                     </div>
                                     <p class="{{ $labelClass }}">Detail Pengiriman</p>
                                 </div>
-                                <div class="space-y-1">
-                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Alamat pengiriman</label>
-                                    <textarea name="shipping_address" rows="3" class="{{ $inputClass }}" placeholder="Kota, detail alamat, atau info COD">{{ $prefill['shipping_address'] }}</textarea>
-                                    @error('shipping_address', 'order')
-                                        <p class="text-xs text-red-500">{{ $message }}</p>
-                                    @enderror
+                                
+                                <!-- Address Section -->
+                                <div x-show="deliveryMethod === 'shipping'" x-transition>
+                                    <x-form.textarea 
+                                        name="shipping_address" 
+                                        label="Alamat pengiriman" 
+                                        x-model="shippingAddress" 
+                                        :rows="3"
+                                        placeholder="Tulis alamat lengkap (Kecamatan & Kota wajib diisi untuk cek ongkir)"
+                                        ::required="deliveryMethod === 'shipping'"
+                                    />
+                                </div>
+                                
+                                <!-- Shop Address Info when Pickup -->
+                                <div x-show="deliveryMethod === 'pickup'" x-cloak class="rounded-2xl bg-slate-50 dark:bg-slate-900/50 p-4 border border-slate-200 dark:border-slate-700">
+                                    <p class="text-xs font-semibold text-slate-500 uppercase mb-2">Lokasi Toko</p>
+                                    <p class="font-medium text-gray-900 dark:text-gray-100 text-sm">{{ $shopName }}</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ $shopAddress }}</p>
+                                    <p class="text-xs text-gray-500 mt-2">Silakan ambil pesananmu langsung di toko kami.</p>
+                                    
+                                    <!-- Hidden input to fill address for backend validation -->
+                                    <input type="hidden" name="pickup_address_note" value="AMBIL DI TOKO" :disabled="deliveryMethod !== 'pickup'">
                                 </div>
 
-                                <div class="space-y-1">
-                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Catatan (Opsional)</label>
-                                    <textarea name="notes" rows="2" class="{{ $inputClass }}" placeholder="Tambahkan catatan untuk pesanan ini...">{{ $prefill['notes'] }}</textarea>
-                                    @error('notes', 'order')
-                                        <p class="text-xs text-red-500">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                <x-form.textarea 
+                                    name="notes" 
+                                    label="Catatan (Opsional)" 
+                                    x-model="notes" 
+                                    :rows="2"
+                                    placeholder="Tambahkan catatan untuk pesanan ini..."
+                                    :value="$prefill['notes'] ?? ''"
+                                />
 
                                 <!-- Size Selector -->
                                 <input type="hidden" name="size" value="{{ $product->size }}" required>
@@ -230,6 +222,12 @@
     </div>
 
     <x-toast />
+    
+    @if(session('status'))
+        <div data-checkout-status="{{ session('status') }}" data-checkout-redirect="{{ route('landing.orders.history') }}" style="display:none;"></div>
+    @endif
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @livewireScripts
 </body>
 </html>

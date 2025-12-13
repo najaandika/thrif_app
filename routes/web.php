@@ -98,6 +98,12 @@ Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
 
     Route::post('/landing/cart', [LandingCartController::class, 'store'])
         ->name('landing.cart.store');
+
+    Route::get('/landing/cart', \App\Livewire\Landing\Cart::class)
+        ->name('landing.cart.index');
+
+    Route::post('/landing/cart/finalize', [LandingCartController::class, 'finalize'])
+        ->name('landing.cart.finalize');
 });
 
 // --------------------------------------------------
@@ -108,13 +114,11 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/pos', \App\Livewire\Pos\Index::class)->name('pos.index');
 
-    Route::get('/transactions', TransactionsIndex::class)->name('transactions.index');
+
     
     // Export Routes (Moved to top to avoid conflicts)
     Route::get('/admin/export/orders/excel', [OrderExportController::class, 'excel'])->name('orders.export.excel');
     Route::get('/admin/export/orders/pdf', [OrderExportController::class, 'pdf'])->name('orders.export.pdf');
-    Route::get('/admin/export/transactions/excel', [TransactionExportController::class, 'excel'])->name('transactions.export.excel');
-    Route::get('/admin/export/transactions/pdf', [TransactionExportController::class, 'pdf'])->name('transactions.export.pdf');
 
     // Products (Livewire)
     Route::get('/products', ProductsIndex::class)->name('products.index');
@@ -137,5 +141,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 use App\Http\Controllers\AuthGoogleController;
 Route::get('/auth/google/redirect', [AuthGoogleController::class, 'redirect'])->name('google.redirect');
 Route::get('/auth/google/callback', [AuthGoogleController::class, 'callback'])->name('google.callback');
+
+// Midtrans Notification
+Route::post('/midtrans/notification', [App\Http\Controllers\MidtransNotificationController::class, 'handle'])->name('midtrans.notification');
 
 require __DIR__ . '/auth.php';

@@ -19,6 +19,14 @@ class Index extends Component
     public $discount = 0;
     public $discountType = 'fixed'; // 'fixed' or 'percent'
     public $loadProducts = false;
+    public $showModal = false;
+    public $selectedOrder;
+
+    public function closeModal()
+    {
+        $this->showModal = false;
+        $this->selectedOrder = null;
+    }
 
     public function getProductsProperty()
     {
@@ -154,24 +162,28 @@ class Index extends Component
                 $discountAmount = (float) $discountValue;
             }
 
-            // Simpan ke tabel transactions (terpisah dari orders)
-            $transaction = \App\Models\Transaction::create([
-                'user_id' => Auth::id(),
-                'total_price' => $this->total, // Ini sudah harga setelah diskon
-                'discount' => $discountAmount,
+            // Simpan ke tabel orders (Unified)
+            $order = \App\Models\Order::create([
+                'type' => 'pos',
+                'user_id' => Auth::id(), // Cashier
+                // 'customer_id' => null, // Optional if we add customer selection later
+                'buyer_name' => 'Walk-in Customer', // Default for POS
+                'total_price' => $this->total, // Total grand incl discount
+                'discount' => $discountAmount, // Store discount in dedicated field
                 'payment_method' => $this->payment_method,
                 'payment_status' => 'paid',
+                'status' => 'paid',
                 'paid_at' => now(),
                 'amount_received' => (float) $this->amount_received,
             ]);
 
             foreach ($this->cart as $item) {
-                \App\Models\TransactionItem::create([
-                    'transaction_id' => $transaction->id,
+                \App\Models\OrderItem::create([
+                    'order_id' => $order->id,
                     'product_id' => $item['id'],
-                    'product_name' => $item['name'],
+                    // 'product_name' => $item['name'], // Not in schema, relying on relation
                     'price' => $item['price'],
-                    'qty' => $item['qty'],
+                    'quantity' => $item['qty'],
                     'subtotal' => $item['price'] * $item['qty'],
                 ]);
 
@@ -194,7 +206,8 @@ class Index extends Component
 
             $this->dispatch('transaction-completed');
 
-            session()->flash('success', 'Transaksi berhasil disimpan!');
+            // Dispatch event with status message for SweetAlert
+            $this->dispatch('show-pos-success', message: 'Transaksi berhasil disimpan! ' . $order->invoice_number);
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', 'Gagal menyimpan transaksi: ' . $e->getMessage());

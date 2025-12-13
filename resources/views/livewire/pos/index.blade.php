@@ -23,4 +23,27 @@
             </div>
         </div>
     </div>
+    {{-- Modal removed as per request --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+            Livewire.on('show-pos-success', (event) => {
+                Swal.fire({
+                    title: 'Sukses!',
+                    text: event.message, // Access message from event detail
+                    imageUrl: "{{ asset('images/success-icon.svg') }}",
+                    imageWidth: 80,
+                    imageHeight: 80,
+                    imageAlt: 'Success',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#10b981', // emerald-500
+                    customClass: {
+                        popup: 'rounded-3xl',
+                        confirmButton: 'rounded-xl px-6 py-2.5 font-semibold',
+                        image: 'mb-4'
+                    }
+                });
+            });
+        });
+    </script>
 </div>

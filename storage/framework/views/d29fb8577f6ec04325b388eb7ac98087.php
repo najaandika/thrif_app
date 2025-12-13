@@ -2,7 +2,7 @@
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Order</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">No. Invoice</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Produk</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Pembeli</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Total</th>
@@ -15,10 +15,13 @@
             <!--[if BLOCK]><![endif]--><?php $__empty_1 = true; $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr class="hover:bg-indigo-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
                     <td class="px-6 py-4">
-                        <div class="text-sm font-semibold text-gray-900 dark:text-gray-100">#<?php echo e(str_pad($order->id, 4, '0', STR_PAD_LEFT)); ?></div>
+                        <div class="text-sm font-semibold text-gray-900 dark:text-gray-100"><?php echo e($order->invoice_number); ?></div>
                     </td>
                     <td class="px-6 py-4">
-                        <div class="text-sm font-medium text-gray-900 dark:text-gray-100"><?php echo e($order->product->name ?? '-'); ?></div>
+                        <div class="text-sm font-medium text-gray-900 dark:text-gray-100"><?php echo e($order->product_name ?? '-'); ?></div>
+                        <!--[if BLOCK]><![endif]--><?php if($order->items->count() > 1): ?>
+                            <div class="text-xs text-gray-500">+ <?php echo e($order->items->count() - 1); ?> lainnya</div>
+                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                     </td>
                     <td class="px-6 py-4">
                         <div class="text-sm font-medium text-gray-900 dark:text-gray-100"><?php echo e($order->buyer_name); ?></div>
@@ -27,7 +30,7 @@
                         <div class="text-sm font-bold text-gray-900 dark:text-gray-100"><?php echo e(rupiah($order->total_price)); ?></div>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="px-3 py-1 inline-flex text-xs font-semibold rounded-full <?php echo e($order->getStatusBadgeClass()); ?>"><?php echo e(ucfirst($order->status)); ?></span>
+                        <span class="px-3 py-1 inline-flex text-xs font-semibold rounded-full <?php echo e($order->status_class); ?>"><?php echo e($order->status_label); ?></span>
                     </td>
                     <td class="px-6 py-4">
                         <div class="text-sm text-gray-500 dark:text-gray-400"><?php echo e($order->updated_at->diffForHumans()); ?></div>

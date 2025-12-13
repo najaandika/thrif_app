@@ -14,10 +14,10 @@
         </a>
 
         <nav class="hidden lg:flex items-center gap-5 text-[13px] font-medium text-gray-600 dark:text-gray-300">
-            <a href="#tentang" class="smooth-scroll hover:text-gray-900 dark:hover:text-gray-100">Home</a>
-            <a href="<?php echo e(route('landing.products.index')); ?>" class="hover:text-gray-900 dark:hover:text-gray-100">Catalog</a>
+            <a href="#tentang" class="smooth-scroll hover:text-gray-900 dark:hover:text-gray-100 hover:opacity-80 transition-opacity">Home</a>
+            <a href="<?php echo e(route('landing.products.index')); ?>" class="hover:text-gray-900 dark:hover:text-gray-100 hover:opacity-80 transition-opacity">Catalog</a>
             <div class="relative group">
-                <button type="button" class="inline-flex items-center gap-1 hover:text-gray-900 dark:hover:text-gray-100">
+                <button type="button" class="inline-flex items-center gap-1 hover:text-gray-900 dark:hover:text-gray-100 hover:opacity-80 transition-opacity">
                     Categories
                     <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
@@ -44,13 +44,16 @@
         </nav>
 
         <div class="flex items-center gap-2 lg:gap-3">
-            <button type="button" id="search-toggle" class="hidden md:flex h-9 w-9 lg:h-10 lg:w-10 items-center justify-center rounded-2xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" aria-label="Search">
+
+
+
+            <button type="button" id="search-toggle" class="hidden md:flex h-9 w-9 lg:h-10 lg:w-10 items-center justify-center rounded-2xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:opacity-80 transition-all" aria-label="Search">
                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="11" cy="11" r="8" />
                     <path d="M21 21l-4.35-4.35" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </button>
-            <button type="button" @click="$store.darkMode.toggle()" class="hidden md:flex h-9 w-9 lg:h-10 lg:w-10 items-center justify-center rounded-2xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" aria-label="Toggle theme">
+            <button type="button" @click="$store.darkMode.toggle()" class="hidden md:flex h-9 w-9 lg:h-10 lg:w-10 items-center justify-center rounded-2xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-transform hover:scale-105 active:scale-95" aria-label="Toggle theme">
                 <svg x-show="!$store.darkMode.on" x-cloak class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="3" />
                     <path d="M12 5V2M12 22v-3M5 12H2m20 0h-3M5.64 5.64L3.51 3.51m16.98 16.98-2.13-2.13M18.36 5.64l2.13-2.13M5.64 18.36l-2.13 2.13" stroke-linecap="round" />
@@ -67,9 +70,22 @@
                 </svg>
             </button>
 
+            <!-- Cart Button (Visible on Mobile & Desktop) -->
+            <a href="<?php echo e(route('landing.cart.index')); ?>" class="flex h-9 w-9 lg:h-10 lg:w-10 items-center justify-center rounded-2xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 relative transition-transform hover:scale-105 active:scale-95 hover:opacity-80 transition-all" aria-label="Cart">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <?php if(session('cart_count') > 0): ?>
+                    <span class="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-bold text-white flex items-center justify-center shadow-sm">
+                        <?php echo e(session('cart_count')); ?>
+
+                    </span>
+                <?php endif; ?>
+            </a>
+
             <?php if(auth()->guard()->check()): ?>
                 <?php if(auth()->user()->isAdmin()): ?>
-                    <a href="<?php echo e(route('dashboard')); ?>" class="hidden lg:inline-flex items-center justify-center gap-2 h-10 px-4 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white font-semibold shadow-md shadow-emerald-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/40 hover:scale-105 active:scale-95">
+                    <a href="<?php echo e(route('dashboard')); ?>" class="hidden lg:inline-flex items-center justify-center gap-2 h-10 px-4 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white font-semibold shadow-md shadow-emerald-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/40 hover:scale-105 active:scale-95 hover:opacity-90">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M3 12l9-9 9 9" stroke-linecap="round" stroke-linejoin="round" />
                             <path d="M9 21V12h6v9" stroke-linecap="round" stroke-linejoin="round" />
@@ -179,6 +195,12 @@
                                 <path d="M12 6v6l4 2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                             <span class="text-white font-medium text-xs">History</span>
+                        </a>
+                        <a href="<?php echo e(route('landing.cart.index')); ?>" class="group inline-flex items-center justify-center gap-1.5 h-10 px-2.5 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-md shadow-emerald-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/40 active:scale-95">
+                            <svg class="h-4 w-4 text-white drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span class="text-white font-medium text-xs">Cart (<?php echo e(session('cart_count') ?? 0); ?>)</span>
                         </a>
                     <?php endif; ?>
                 <?php endif; ?>

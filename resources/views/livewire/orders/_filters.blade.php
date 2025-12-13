@@ -17,16 +17,15 @@
         </div>
         <div class="w-auto flex items-center gap-2">
             <select
-                wire:model.live="paymentMethod"
-                id="order_payment"
-                name="order_payment"
-                aria-label="Filter berdasarkan metode pembayaran"
+                wire:model.live="orderType"
+                id="order_type"
+                name="order_type"
+                aria-label="Filter berdasarkan tipe order"
                 class="pl-4 pr-11 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none bg-no-repeat bg-[length:0.75em] bg-[right_1rem_center] custom-select-arrow"
             >
                 <option value="all">Semua</option>
-                <option value="cash">Cash On Delivery</option>
-                <option value="transfer">Transfer</option>
-                <option value="midtrans">Midtrans</option>
+                <option value="online">Online</option>
+                <option value="pos">POS</option>
             </select>
         </div>
     </div>

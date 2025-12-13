@@ -41,7 +41,7 @@ class OrderHistory extends Component
     {
         $hasCustomerColumn = Schema::hasColumn('orders', 'customer_id');
 
-        return Order::with('product')
+        return Order::with('items.product')
             ->where(function ($query) use ($userId, $email, $hasCustomerColumn) {
                 if ($hasCustomerColumn) {
                     $query->where('customer_id', $userId)

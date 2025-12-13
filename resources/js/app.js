@@ -13,7 +13,7 @@ try {
 } catch (e) { }
 // Import dependencies
 import './bootstrap';           // Axios setup and basic configurations
-import './scroll-animations';   // Custom scroll animation utilities
+
 import './ripple-effect';       // Material Design ripple effects
 import './pos';                 // POS page input formatting & Livewire helpers
 import './swal';                // SweetAlert helpers (confirmDelete, etc)
@@ -22,6 +22,11 @@ import Chart from 'chart.js/auto';  // Chart.js for data visualization
 import { initHeader } from './landing/header';
 import { initProducts } from './landing/products';
 import { initLoginModal } from './landing/login-modal';
+import { checkoutFormData } from './checkout-form';  // Checkout form AlpineJS data
+import { initCheckoutAlerts } from './checkout-alerts';  // Checkout success alerts
+
+// Make checkout form data globally available
+window.checkoutFormData = checkoutFormData;
 
 /**
  * Dark Mode Management
@@ -147,6 +152,7 @@ document.addEventListener('livewire:navigated', () => {
     initHeader();
     initProducts();
     initLoginModal();
+    initCheckoutAlerts();
 
     // Re-apply dark mode after navigation to prevent flicker
     if (window.Alpine?.store('darkMode')) {
@@ -160,4 +166,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeader();
     initProducts();
     initLoginModal();
+    initCheckoutAlerts();
 });

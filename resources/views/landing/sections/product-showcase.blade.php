@@ -1,4 +1,4 @@
-<div class="space-y-5 max-w-5xl mx-auto opacity-0 translate-y-8" id="produk" data-carousel="product-highlight" data-animate data-section="products">
+<div class="space-y-5 max-w-5xl mx-auto" id="produk" data-carousel="product-highlight" data-section="products">
     <div class="flex flex-wrap items-center gap-3 justify-between">
         <div>
             <p class="text-xs font-semibold tracking-[0.12em] text-gray-500 dark:text-gray-400 uppercase">Etalase produk terbaru</p>
@@ -95,10 +95,7 @@
                             </div>
                             <div class="flex items-center gap-2 text-[11px]">
                                 <span class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-white font-bold shadow-sm
-                                    {{ $product->condition === 'new' ? 'bg-blue-500' : 
-                                      ($product->condition === 'like-new' ? 'bg-indigo-500' : 
-                                      ($product->condition === 'good' ? 'bg-emerald-500' : 
-                                      ($product->condition === 'fair' ? 'bg-yellow-500' : 'bg-orange-500'))) }}">
+                                    {{ $product->condition_class }}">
                                     {{ $product->condition_label }}
                                 </span>
                             </div>
@@ -120,10 +117,19 @@
 
                         @if ($product->is_available)
                             <div class="mt-4 flex items-center justify-center">
-                                <a href="{{ route('landing.products.checkout', $product) }}"
-                                   class="inline-flex w-full max-w-[220px] items-center justify-center rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-500/40 transition hover:bg-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2">
-                                    Buy Now
-                                </a>
+                                <div class="flex gap-2 w-full max-w-[220px]">
+                                    <form action="{{ route('landing.cart.store') }}" method="POST" class="flex-1">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <button type="submit" class="w-full inline-flex items-center justify-center rounded-full bg-slate-900 text-white px-3 py-2.5 text-sm font-semibold shadow-md hover:bg-slate-800 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 hover:opacity-90">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                        </button>
+                                    </form>
+                                    <a href="{{ route('landing.products.checkout', $product) }}"
+                                       class="flex-[2] inline-flex items-center justify-center rounded-full bg-emerald-500 px-3 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-500/40 transition hover:bg-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 hover:opacity-90">
+                                        Buy Now
+                                    </a>
+                                </div>
                             </div>
                         @endif
                     </div>

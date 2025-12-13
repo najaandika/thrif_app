@@ -31,10 +31,14 @@
     @foreach($orders as $order)
         <tr>
             <td>#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT) }}</td>
-            <td>{{ $order->product->name ?? '-' }}</td>
+            <td>
+                @foreach($order->items as $item)
+                    <div>- {{ $item->product->name ?? '-' }} (x{{ $item->quantity }})</div>
+                @endforeach
+            </td>
             <td>{{ $order->buyer_name }}</td>
             <td>{{ $order->buyer_contact ?: '-' }}</td>
-            <td>{{ $order->quantity }}</td>
+            <td>{{ $order->items->sum('quantity') }}</td>
             <td>{{ rupiah($order->total_price) }}</td>
             <td>{{ ucfirst($order->status) }}</td>
             <td>{{ $order->updated_at?->format('d/m/Y H:i') }}</td>

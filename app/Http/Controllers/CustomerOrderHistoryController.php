@@ -14,7 +14,7 @@ class CustomerOrderHistoryController extends Controller
 
         abort_unless($user && $user->isCustomer(), 403);
 
-        $orders = Order::with('product')
+        $orders = Order::with('items.product')
             ->where(function ($query) use ($user) {
                 $query->where('customer_id', $user->id)
                     ->orWhere('buyer_contact', $user->email);

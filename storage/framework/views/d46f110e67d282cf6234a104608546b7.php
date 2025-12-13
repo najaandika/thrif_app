@@ -29,8 +29,9 @@
                     <div class="p-8">
                         <?php echo $__env->make('livewire.orders._filters', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
-                        <?php echo $__env->make('livewire.orders._table', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
+
+                        <?php echo $__env->make('livewire.orders._table', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
                         <div class="mt-4">
                             <?php echo e($orders->links()); ?>
 

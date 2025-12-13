@@ -1,4 +1,4 @@
-<section class="grid gap-12 pt-4 sm:pt-6 lg:pt-10 opacity-0 translate-y-8" id="tentang" data-animate data-section="hero">
+<section class="grid gap-12 pt-4 sm:pt-6 lg:pt-10" id="tentang" data-section="hero">
     <div class="space-y-8 md:space-y-10">
         <div class="space-y-5 sm:space-y-6 max-w-3xl">
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100 leading-[1.2] sm:leading-[1.25]">
@@ -11,7 +11,7 @@
 
         <div class="flex flex-wrap items-center gap-4">
             @auth
-                <a href="#produk" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-slate-800/40 transition-all duration-300 hover:shadow-xl hover:shadow-slate-900/50 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:ring-slate-500">
+                <a href="#produk" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-slate-800/40 transition-all duration-300 hover:shadow-xl hover:shadow-slate-900/50 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:ring-slate-500 hover:opacity-90">
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                         <path d="M15 11l-3-3m0 0l-3 3m3-3v8" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M3 12h18M3 6h18M3 18h18" stroke-linecap="round"/>
@@ -19,7 +19,7 @@
                     Lihat etalase terbaru
                 </a>
             @else
-                <a href="{{ route('login') }}" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-slate-800/40 transition-all duration-300 hover:shadow-xl hover:shadow-slate-900/50 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:ring-slate-500">
+                <a href="{{ route('login') }}" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-slate-800/40 transition-all duration-300 hover:shadow-xl hover:shadow-slate-900/50 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:ring-slate-500 hover:opacity-90">
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                         <path d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>

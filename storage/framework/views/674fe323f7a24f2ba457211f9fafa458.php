@@ -71,7 +71,20 @@
                         </div>
                         <div class="product-info">
                             <div class="product-title"><?php echo e($product->name); ?></div>
-                            <div class="text-green-600 font-bold text-sm"><?php echo e(rupiah($product->price)); ?></div>
+                            <div class="flex items-center justify-between mt-2">
+                                <div class="text-green-600 font-bold text-sm"><?php echo e(rupiah($product->price)); ?></div>
+                                <!--[if BLOCK]><![endif]--><?php if($product->is_available): ?>
+                                    <div class="flex items-center gap-2">
+                                        <form action="<?php echo e(route('landing.cart.store')); ?>" method="POST" onclick="event.stopPropagation();">
+                                            <?php echo csrf_field(); ?>
+                                            <input type="hidden" name="product_id" value="<?php echo e($product->id); ?>">
+                                            <button type="submit" class="p-2 rounded-full bg-slate-900 text-white hover:bg-slate-800 shadow-sm transition transform hover:scale-105">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                            </div>
                         </div>
                     </a>
                 </div>

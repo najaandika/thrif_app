@@ -26,6 +26,13 @@ class Edit extends Component
 
     public $size;
 
+    // Additional Images
+    public $newAdditionalImages = []; // For input
+    public $additionalImages = []; // Accumulator
+    public $additionalImagePreviews = [];
+    public $uploadIteration = 0;
+    public $imagesToDelete = []; // IDs of existing images to delete
+
     protected $rules = [
         'name' => 'required|string|max:255',
         'description' => 'nullable|string',
@@ -35,6 +42,8 @@ class Edit extends Component
         'image' => 'nullable|image|max:2048',
         'is_available' => 'boolean',
         'size' => 'required|string|max:100',
+        'additionalImages.*' => 'nullable|image|max:2048',
+        'newAdditionalImages.*' => 'nullable|image|max:2048',
     ];
 
     public function mount(Product $product)
@@ -57,6 +66,49 @@ class Edit extends Component
 
 
 
+    public function updatedNewAdditionalImages()
+    {
+        $this->resetErrorBag('newAdditionalImages');
+        
+        foreach ($this->newAdditionalImages as $image) {
+            $this->additionalImages[] = $image;
+        }
+
+        $this->updatePreviews();
+        
+        // Reset input to allow adding more
+        $this->newAdditionalImages = [];
+        $this->uploadIteration++;
+    }
+
+    protected function updatePreviews()
+    {
+        $this->additionalImagePreviews = [];
+        foreach ($this->additionalImages as $key => $image) {
+            try {
+                $this->additionalImagePreviews[$key] = $image->temporaryUrl();
+            } catch (\Livewire\Features\SupportFileUploads\FileNotPreviewableException $exception) {
+                // Skip preview
+            }
+        }
+    }
+
+    public function removeNewAdditionalImage($index)
+    {
+        unset($this->additionalImages[$index]);
+        unset($this->additionalImagePreviews[$index]);
+        $this->additionalImages = array_values($this->additionalImages);
+        $this->additionalImagePreviews = array_values($this->additionalImagePreviews);
+    }
+
+    public function deleteExistingImage($imageId)
+    {
+        // Don't delete immediately, just mark for deletion
+        if (!in_array($imageId, $this->imagesToDelete)) {
+            $this->imagesToDelete[] = $imageId;
+        }
+    }
+
     public function update()
     {
         $this->validate();
@@ -76,6 +128,32 @@ class Edit extends Component
                 Storage::disk('public')->delete($this->product->image);
             }
             $data['image'] = $this->image->store('products', 'public');
+        }
+
+        // Process deferred deletions
+        if (!empty($this->imagesToDelete)) {
+            $imagesToDelete = \App\Models\ProductImage::whereIn('id', $this->imagesToDelete)
+                ->where('product_id', $this->product->id)
+                ->get();
+
+            foreach ($imagesToDelete as $img) {
+                Storage::disk('public')->delete($img->image_path);
+                $img->delete();
+            }
+        }
+
+        // Save new additional images
+        if (!empty($this->additionalImages)) {
+            // Get current max sort order
+            $currentMaxSort = $this->product->images()->max('sort_order') ?? 0;
+            
+            foreach ($this->additionalImages as $index => $additionalImage) {
+                $additionalImagePath = $additionalImage->store('products', 'public');
+                $this->product->images()->create([
+                    'image_path' => $additionalImagePath,
+                    'sort_order' => $currentMaxSort + $index + 1,
+                ]);
+            }
         }
 
         $this->product->update($data);

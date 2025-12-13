@@ -8,15 +8,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Order extends Model
 {
     protected $fillable = [
-        'user_id',
-        'customer_id',
-        'product_id',
+        'type', // 'online', 'pos'
+        'user_id', // Cashier/User
+        'customer_id', // Customer (optional)
+        'invoice_number',
         'buyer_name',
         'buyer_contact',
         'shipping_address',
-        'quantity',
-        'size',
         'total_price',
+        'amount_received', // For POS
+        'discount', // Discount amount
         'status',
         'payment_method',
         'payment_status',
@@ -25,8 +26,8 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'quantity' => 'integer',
         'total_price' => 'decimal:2',
+        'amount_received' => 'decimal:2',
         'paid_at' => 'datetime',
     ];
 
@@ -40,21 +41,70 @@ class Order extends Model
         return $this->belongsTo(User::class, 'customer_id');
     }
 
-    public function product(): BelongsTo
+    public function items(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->belongsTo(Product::class);
+        return $this->hasMany(OrderItem::class);
+    }
+    
+    // Helper to get the first product name (for display in lists where we can't show all)
+    public function getProductNameAttribute()
+    {
+        return $this->items->first()?->product->name ?? 'Deleted Product';
     }
 
-    /**
-     * Get the CSS classes for status badge based on order status.
-     * Only 'pending' and 'paid' statuses are currently used in the system.
-     */
-    public function getStatusBadgeClass(): string
+    // SCOPES
+    public function scopeOnline($query)
+    {
+        return $query->where('type', 'online');
+    }
+
+    public function scopePos($query)
+    {
+        return $query->where('type', 'pos');
+    }
+
+    // ACCESSORS
+    public function getStatusLabelAttribute(): string
     {
         return match ($this->status) {
-            'pending' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200',
-            'paid' => 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-200',
-            default => 'bg-gray-100 text-gray-800 dark:bg-gray-900/40 dark:text-gray-200',
+            'pending' => 'Menunggu Konfirmasi',
+            'paid' => 'Lunas',
+            default => ucfirst($this->status),
         };
+    }
+
+    public function getStatusClassAttribute(): string
+    {
+        return match ($this->status) {
+            'pending' => 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/50 dark:text-amber-200 dark:border-amber-700/50',
+            'paid' => 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/50 dark:text-emerald-200 dark:border-emerald-700/50',
+            default => 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
+        };
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($order) {
+            if (!$order->invoice_number) {
+                $order->invoice_number = self::generateInvoiceNumber();
+            }
+        });
+    }
+
+    public static function generateInvoiceNumber()
+    {
+        $prefix = 'INV/' . date('Ymd') . '/';
+        $latestOrder = self::where('invoice_number', 'like', $prefix . '%')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if ($latestOrder) {
+            $lastNumber = intval(substr($latestOrder->invoice_number, -4));
+            $newNumber = $lastNumber + 1;
+        } else {
+            $newNumber = 1;
+        }
+
+        return $prefix . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
     }
 }

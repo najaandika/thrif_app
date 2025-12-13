@@ -18,11 +18,11 @@ class OrderExportController extends Controller
 
         $headers = [
             'ID Order',
+            'Type', // New
             'Produk',
-            'Harga Produk',
             'Nama Pembeli',
             'Kontak Pembeli',
-            'Jumlah',
+            'Total Qty',
             'Total Harga',
             'Status',
             'Terakhir Diupdate',
@@ -32,13 +32,17 @@ class OrderExportController extends Controller
         fputcsv($output, $headers);
 
         foreach ($orders as $order) {
+            // Join product names
+            $productNames = $order->items->map(fn($item) => $item->product->name ?? '-')->join(', ');
+            $totalQty = $order->items->sum('quantity');
+
             fputcsv($output, [
                 sprintf('#%04d', $order->id),
-                optional($order->product)->name,
-                optional($order->product)->price,
+                ucfirst($order->type),
+                $productNames,
                 $order->buyer_name,
                 $order->buyer_contact,
-                $order->quantity,
+                $totalQty,
                 $order->total_price,
                 $order->status,
                 optional($order->updated_at)->toDateTimeString(),
@@ -79,14 +83,14 @@ class OrderExportController extends Controller
 
     private function getOrders($search, $status)
     {
-        return Order::with('product')
+        return Order::with('items.product')
             ->where('user_id', Auth::id())
             ->when($search, function ($query) use ($search) {
                 $term = '%' . $search . '%';
                 $query->where(function ($subQuery) use ($term) {
                     $subQuery->where('buyer_name', 'like', $term)
                         ->orWhere('buyer_contact', 'like', $term)
-                        ->orWhereHas('product', function ($productQuery) use ($term) {
+                        ->orWhereHas('items.product', function ($productQuery) use ($term) {
                             $productQuery->where('name', 'like', $term);
                         });
                 });

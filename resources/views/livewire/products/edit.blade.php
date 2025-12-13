@@ -141,7 +141,7 @@
 
                             <!-- New Image -->
                             <div>
-                                <label for="image" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{{ $product->image ? 'Replace Image' : 'Product Image' }}</label>
+                                <label for="image" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{{ $product->image ? 'Replace Main Image' : 'Main Product Image' }}</label>
                                 <input wire:model="image" name="image" type="file" id="image" accept="image/*" class="block w-full text-sm text-gray-500 dark:text-gray-400
                                     file:mr-4 file:py-2.5 file:px-4
                                     file:rounded-lg file:border-0
@@ -154,10 +154,63 @@
                                 
                                 @if ($image)
                                     <div class="mt-3">
-                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">New image preview:</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">New main image preview:</p>
                                         <img src="{{ $image->temporaryUrl() }}" alt="Preview" class="h-40 w-40 object-cover rounded-lg border-2 border-gray-200 dark:border-gray-600">
                                     </div>
                                 @endif
+                            </div>
+
+                            <!-- Additional Images Section (Unified Gallery) -->
+                            <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Additional Images (Optional)</label>
+
+                                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                                    <!-- 1. Existing Additional Images -->
+                                    @foreach($product->images as $img)
+                                        @if(in_array($img->id, $imagesToDelete)) @continue @endif
+                                        <div class="relative group aspect-square">
+                                            <img src="{{ Storage::url($img->image_path) }}" class="h-full w-full object-cover rounded-xl border border-gray-200 dark:border-gray-600">
+                                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
+                                                <button type="button" wire:click="deleteExistingImage({{ $img->id }})" 
+                                                    class="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition shadow-sm"
+                                                    title="Delete Image">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+                                    <!-- 2. New Images Preview -->
+                                    @foreach ($additionalImagePreviews as $index => $preview)
+                                        <div class="relative group aspect-square">
+                                            <img src="{{ $preview }}" class="h-full w-full object-cover rounded-xl border-2 border-indigo-500 dark:border-indigo-400">
+                                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
+                                                <button type="button" wire:click="removeNewAdditionalImage({{ $index }})" 
+                                                    class="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition shadow-sm"
+                                                    title="Remove Upload">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+                                    <!-- 3. Add Image Button (Hidden Input Trigger) -->
+                                    <div class="aspect-square">
+                                        <label for="additionalImages-{{ $uploadIteration }}" class="flex flex-col items-center justify-center h-full w-full border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group">
+                                            <div class="p-3 rounded-full bg-gray-100 dark:bg-gray-700 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/30 transition-colors">
+                                                <svg class="w-6 h-6 text-gray-400 dark:text-gray-500 group-hover:text-indigo-500 dark:group-hover:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                                </svg>
+                                            </div>
+                                            <span class="mt-2 text-xs font-medium text-gray-500 dark:text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Add Image</span>
+                                            <input wire:model="newAdditionalImages" type="file" id="additionalImages-{{ $uploadIteration }}" multiple accept="image/*" class="hidden">
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    @error('additionalImages.*') <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span> @enderror
+                                    @error('newAdditionalImages.*') <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span> @enderror
+                                </div>
                             </div>
 
                             <!-- Availability -->

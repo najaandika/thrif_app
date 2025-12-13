@@ -1,6 +1,9 @@
 // resources/js/swal.js
 import Swal from 'sweetalert2';
 
+// Expose Swal globally so other scripts (like checkout-alerts.js) can use it without importing
+window.Swal = Swal;
+
 const swalConfig = {
     icon: 'warning',
     showCancelButton: true,
@@ -19,7 +22,7 @@ const swalConfig = {
     }
 };
 
-window.showDeleteConfirmation = function(id, title, eventName) {
+window.showDeleteConfirmation = function (id, title, eventName) {
     Swal.fire({
         ...swalConfig,
         title: title,
@@ -31,10 +34,10 @@ window.showDeleteConfirmation = function(id, title, eventName) {
     });
 };
 
-window.confirmDelete = function(id) {
+window.confirmDelete = function (id) {
     window.showDeleteConfirmation(id, 'Yakin hapus data ini?', 'delete');
 };
 
-window.confirmDeleteTransaction = function(id) {
+window.confirmDeleteTransaction = function (id) {
     window.showDeleteConfirmation(id, 'Yakin hapus transaksi ini?', 'deleteTransaction');
 };

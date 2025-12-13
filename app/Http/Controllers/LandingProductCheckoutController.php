@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\CustomerAddress;
+
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Services\MidtransService;
@@ -17,7 +17,7 @@ class LandingProductCheckoutController extends Controller
         abort_unless($user && $user->isCustomer(), 403);
 
         // Get first address (since there's no user relationship)
-        $savedAddress = CustomerAddress::first();
+
 
         $quantity = max(1, (int) old('quantity', 1));
         $grossAmount = $quantity * $product->price;
@@ -47,10 +47,12 @@ class LandingProductCheckoutController extends Controller
             'labelClass' => $labelClass,
             'prefilledQuantity' => $quantity,
             'subtotal' => $grossAmount,
+            'shopName' => \App\Models\Setting::get('shop_name', 'Thrif Studio'),
+            'shopAddress' => \App\Models\Setting::get('shop_address', 'Alamat belum diatur'),
             'prefill' => [
-                'buyer_name' => old('buyer_name', $savedAddress?->recipient_name ?? $user->name),
-                'buyer_contact' => old('buyer_contact', $savedAddress?->phone ?? $user->email),
-                'shipping_address' => old('shipping_address', $savedAddress?->address_line),
+                'buyer_name' => old('buyer_name', $user->name),
+                'buyer_contact' => old('buyer_contact', $user->email),
+                'shipping_address' => old('shipping_address'),
                 'quantity' => $quantity,
                 'notes' => old('notes'),
             ],

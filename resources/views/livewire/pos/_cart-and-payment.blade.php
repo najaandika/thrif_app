@@ -1,11 +1,14 @@
 <!-- Right Column: Cart + Payment -->
 <div class="w-full lg:w-96 space-y-6">
-    <!-- Keranjang Transaksi -->
-    <div class="bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+    <!-- Keranjang Transaksi & Pembayaran Container -->
+    <div class="bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden flex flex-col h-full">
+        <!-- Header -->
         <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
             <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Keranjang</h2>
         </div>
-        <div class="p-4 max-h-80 overflow-y-auto">
+        
+        <!-- Cart List -->
+        <div class="p-4 max-h-80 overflow-y-auto border-b border-gray-100 dark:border-gray-700">
             @forelse ($cart as $item)
                 <div class="flex items-center gap-3 py-3 border-b border-gray-100 dark:border-gray-700 last:border-0">
                     <!-- Product Name & Qty -->
@@ -35,31 +38,42 @@
                 </div>
             @endforelse
         </div>
-    </div>
 
-    <!-- Detail Pembayaran -->
-    <div class="bg-white dark:bg-gray-800/50 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm space-y-6">
-        <h2 class="text-base font-semibold text-gray-900 dark:text-white mb-4">Detail Pembayaran</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Detail Pembayaran -->
+        <div class="p-4 space-y-4 bg-gray-50/50 dark:bg-gray-800/30">
             <div>
-                <label for="payment_method" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Metode Pembayaran</label>
-                <select id="payment_method" name="payment_method" wire:model="payment_method" class="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:border-transparent transition-all shadow-sm">
-                    <option value="cash">Cash</option>
-                    <option value="transfer">Transfer</option>
-                    <option value="ewallet">Qris</option>
+                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5 uppercase tracking-wider">Metode Pembayaran</label>
+                <select wire:model.live="payment_method" class="w-full rounded-lg border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm focus:ring-gray-900 focus:border-gray-900 dark:text-white">
+                    <option value="cash">Tunai (Cash)</option>
+                    <option value="qris">QRIS</option>
                 </select>
             </div>
+
             <div>
-                <label for="amount_received" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Uang Diterima</label>
-                <div wire:ignore>
-                    <input type="text" id="amount_received" name="amount_received" class="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:border-transparent transition-all shadow-sm" placeholder="0">
+                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5 uppercase tracking-wider">Uang Diterima</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span class="text-gray-500 sm:text-sm">Rp</span>
+                    </div>
+                    <input 
+                        type="text" 
+                        x-data="{ 
+                            formatNumber(e) {
+                                let value = e.target.value.replace(/\D/g, '');
+                                e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                                $wire.set('amount_received', value);
+                            }
+                        }"
+                        x-on:input="formatNumber($event)"
+                        value="{{ number_format((float)$amount_received, 0, ',', '.') }}"
+                        class="w-full pl-10 rounded-lg border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm focus:ring-gray-900 focus:border-gray-900 dark:text-white" 
+                        placeholder="0">
                 </div>
             </div>
         </div>
 
         <!-- Total Section -->
-        <div class="pt-6 border-t-2 border-gray-200 dark:border-gray-700 space-y-3">
+        <div class="p-4 space-y-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
             <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
                 <span class="font-medium">Subtotal</span>
                 <span class="font-bold text-gray-900 dark:text-white">{{ rupiah($this->subtotal) }}</span>
@@ -73,7 +87,19 @@
                         <option value="fixed">Rp</option>
                         <option value="percent">%</option>
                     </select>
-                    <input type="number" wire:model.live.debounce.500ms="discount" class="w-24 py-1 px-2 border-gray-200 dark:border-gray-600 rounded-lg text-xs text-right focus:ring-gray-900 focus:border-gray-900 dark:bg-gray-800 dark:text-gray-200" placeholder="0">
+                    <input 
+                        type="text" 
+                        x-data="{ 
+                            formatNumber(e) {
+                                let value = e.target.value.replace(/\D/g, '');
+                                e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                                $wire.set('discount', value);
+                            }
+                        }"
+                        x-on:input="formatNumber($event)"
+                        value="{{ number_format((float)$discount, 0, ',', '.') }}"
+                        class="w-24 py-1 px-2 border-gray-200 dark:border-gray-600 rounded-lg text-xs text-right focus:ring-gray-900 focus:border-gray-900 dark:bg-gray-800 dark:text-gray-200" 
+                        placeholder="0">
                 </div>
             </div>
 
@@ -89,20 +115,21 @@
                 <span class="text-2xl font-bold text-gray-900 dark:text-white">Total:</span>
                 <span class="text-2xl font-bold text-gray-900 dark:text-white">{{ rupiah($this->total()) }}</span>
             </div>
+            
             <div class="flex justify-between items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl">
                 <span class="text-base font-semibold text-gray-700 dark:text-gray-300">Kembalian:</span>
                 <span class="text-lg font-bold text-green-600 dark:text-green-400">{{ rupiah($this->change()) }}</span>
             </div>
         </div>
-    </div>
 
-    <!-- Submit Button -->
-    <div class="flex items-center justify-end gap-3 pt-6 border-t-2 border-gray-200 dark:border-gray-700">
-        <button type="submit" class="inline-flex items-center px-8 py-4 bg-gray-900 dark:bg-white border border-transparent rounded-xl font-bold text-base text-white dark:text-gray-900 uppercase tracking-wider hover:bg-black dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white focus:ring-offset-2 transition-all duration-200 shadow-xl hover:shadow-2xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100" @if(count($cart) == 0) disabled @endif>
-            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-            </svg>
-            Simpan Transaksi
-        </button>
+        <!-- Submit Button Footer -->
+        <div class="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+            <button type="submit" class="w-full inline-flex items-center justify-center px-8 py-4 bg-gray-900 dark:bg-white border border-transparent rounded-xl font-bold text-base text-white dark:text-gray-900 uppercase tracking-wider hover:bg-black dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white focus:ring-offset-2 transition-all duration-200 shadow-xl hover:shadow-2xl hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100" @if(count($cart) == 0) disabled @endif>
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Simpan Transaksi
+            </button>
+        </div>
     </div>
 </div>
