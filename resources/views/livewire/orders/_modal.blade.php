@@ -1,10 +1,9 @@
 @if($showModal && $selectedOrder)
 <div 
-    x-data="receiptModal"
+    x-data='receiptModal(@json($this->receiptConfig))'
     class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto px-4 py-6 sm:px-0"
     style="display: flex;" 
 >
-    @include('livewire.orders._modal_scripts')
     <!-- Backdrop -->
     <div wire:click="closeModal" class="fixed inset-0 transform transition-all" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
         <div class="absolute inset-0 bg-gray-900/75 backdrop-blur-sm"></div>
@@ -215,18 +214,17 @@
             <button 
                 @click="downloadReceipt()" 
                 :disabled="downloading"
-                class="w-full inline-flex items-center justify-center rounded-xl border border-transparent bg-slate-900 px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-wait transition-all"
+                class="w-full inline-flex items-center justify-center rounded-xl border border-transparent bg-slate-900 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-wait transition-all"
             >
-                <svg x-show="!downloading" class="mr-2 -ml-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                 <svg x-show="downloading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <svg x-show="downloading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" style="display: none;">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                <span x-text="downloading ? 'Memproses...' : 'Download Struk (JPG)'"></span>
+                <span>Download Struk (JPG)</span>
             </button>
         </div>
     </div>
 </div>
 @endif
+
+

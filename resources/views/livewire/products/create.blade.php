@@ -72,19 +72,12 @@
                                 <!-- Price -->
                                 <div>
                                     <label for="price" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Price (Rp) <span class="text-red-500">*</span></label>
-                                    <div x-data="{
-                                        displayPrice: '{{ number_format((float) ($price ?? 0), 0, ',', '.') }}',
-                                        updatePrice(e) {
-                                            let value = e.target.value.replace(/\D/g, '');
-                                            $wire.set('price', value);
-                                            this.displayPrice = value ? new Intl.NumberFormat('id-ID').format(value) : '';
-                                        }
-                                    }">
+                                    <div x-data="currencyInput('{{ $price ?? 0 }}', 'price')">
                                         <input 
                                             type="text" 
                                             id="price" 
-                                            :value="displayPrice" 
-                                            @input="updatePrice"
+                                            :value="displayValue" 
+                                            @input="update"
                                             class="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all"
                                             placeholder="0"
                                         >

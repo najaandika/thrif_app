@@ -57,15 +57,11 @@
                     </div>
                     <input 
                         type="text" 
-                        x-data="{ 
-                            formatNumber(e) {
-                                let value = e.target.value.replace(/\D/g, '');
-                                e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                                $wire.set('amount_received', value);
-                            }
-                        }"
-                        x-on:input="formatNumber($event)"
-                        value="{{ number_format((float)$amount_received, 0, ',', '.') }}"
+                        x-data="currencyInput('{{ $amount_received }}', 'amount_received')"
+                        x-on:input="update($event)"
+                        :value="displayValue"
+                        
+
                         class="w-full pl-10 rounded-lg border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm focus:ring-gray-900 focus:border-gray-900 dark:text-white" 
                         placeholder="0">
                 </div>
@@ -89,15 +85,11 @@
                     </select>
                     <input 
                         type="text" 
-                        x-data="{ 
-                            formatNumber(e) {
-                                let value = e.target.value.replace(/\D/g, '');
-                                e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                                $wire.set('discount', value);
-                            }
-                        }"
-                        x-on:input="formatNumber($event)"
-                        value="{{ number_format((float)$discount, 0, ',', '.') }}"
+                        x-data="currencyInput('{{ $discount }}', 'discount')"
+                        x-on:input="update($event)"
+                        :value="displayValue"
+                        
+
                         class="w-24 py-1 px-2 border-gray-200 dark:border-gray-600 rounded-lg text-xs text-right focus:ring-gray-900 focus:border-gray-900 dark:bg-gray-800 dark:text-gray-200" 
                         placeholder="0">
                 </div>

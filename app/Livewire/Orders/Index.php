@@ -7,8 +7,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\Setting;
 
 #[Layout('layouts.app')]
 class Index extends Component
@@ -101,6 +103,51 @@ class Index extends Component
             
             session()->flash('message', 'Order berhasil dikonfirmasi!');
         }
+    }
+
+    #[Computed]
+    public function receiptConfig()
+    {
+        if (!$this->selectedOrder) {
+            return null;
+        }
+
+        $order = $this->selectedOrder;
+        $whatsappMessage = '';
+        $itemsList = '';
+
+        foreach ($order->items as $item) {
+            $productName = $item->product->name ?? "Item";
+            $itemsList .= "• $productName (x{$item->quantity})\n";
+        }
+
+        $shopName = strtoupper(Setting::get("shop_name") ?? "THRIF STUDIO");
+        $invoice = $order->invoice_number ?? "-";
+        $date = optional($order->created_at)->format("d/m/Y H:i") ?? "-";
+        $total = number_format($order->total_price ?? 0, 0, ",", ".");
+        
+        $whatsappMessage = "*STRUK DIGITAL - $shopName*\n" .
+                          "--------------------------------\n" .
+                          "No. Invoice: $invoice\n" .
+                          "Tanggal: $date\n\n" .
+                          "*Detail Belanja:*\n" .
+                          $itemsList;
+
+        if (($order->discount ?? 0) > 0) {
+            $discount = number_format($order->discount, 0, ",", ".");
+            $whatsappMessage .= "\nDiskon: - Rp $discount";
+        }
+
+        $whatsappMessage .= "\n--------------------------------\n" .
+                           "*TOTAL: Rp $total*\n" .
+                           "--------------------------------\n" .
+                           "Terima kasih sudah berbelanja!";
+
+        return [
+            'phone' => $order->buyer_contact ?? "",
+            'message' => $whatsappMessage,
+            'invoiceNumber' => $order->invoice_number ?? "INV"
+        ];
     }
 
     public function render()

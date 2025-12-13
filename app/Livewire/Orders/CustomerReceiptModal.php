@@ -4,6 +4,8 @@ namespace App\Livewire\Orders;
 
 use App\Models\Order;
 use Livewire\Component;
+use Livewire\Attributes\Computed;
+use App\Models\Setting;
 
 class CustomerReceiptModal extends Component
 {
@@ -25,6 +27,20 @@ class CustomerReceiptModal extends Component
     {
         $this->showModal = false;
         $this->order = null;
+    }
+
+    #[Computed]
+    public function receiptConfig()
+    {
+        if (!$this->order) {
+            return null;
+        }
+
+        return [
+            'phone' => '', // Not needed for download only
+            'message' => '', // Not needed for download only
+            'invoiceNumber' => $this->order->invoice_number ?? "INV"
+        ];
     }
 
     public function render()

@@ -24,6 +24,8 @@ import { initProducts } from './landing/products';
 import { initLoginModal } from './landing/login-modal';
 import { checkoutFormData } from './checkout-form';  // Checkout form AlpineJS data
 import { initCheckoutAlerts } from './checkout-alerts';  // Checkout success alerts
+import './receipt-modal'; // Receipt Modal logic
+import './currency-input'; // Shared Currency Input logic
 
 // Make checkout form data globally available
 window.checkoutFormData = checkoutFormData;

@@ -76,4 +76,6 @@
             </div>
         </div>
     </div>
+
+    @livewire('orders.customer-receipt-modal')
 </x-app-layout>

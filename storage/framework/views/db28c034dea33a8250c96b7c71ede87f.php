@@ -1,6 +1,7 @@
 <script>
-    document.addEventListener('alpine:init', () => {
-        <?php $ord = $selectedOrder ?? $order ?? null; ?>
+    <?php $ord = $selectedOrder ?? $order ?? null; ?>
+    
+    if (typeof Alpine !== 'undefined') {
         Alpine.data('receiptModal', () => ({
             downloading: false,
 
@@ -97,7 +98,7 @@
                 const url = `https://wa.me/${finalPhone}?text=${encodeURIComponent(message)}`;
                 window.open(url, '_blank');
             }
-        }))
-    })
+        }));
+    }
 </script>
 <?php /**PATH C:\laragon\www\thrif\resources\views/livewire/orders/_modal_scripts.blade.php ENDPATH**/ ?>
