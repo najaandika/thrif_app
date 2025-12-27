@@ -23,10 +23,16 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@thrif.test',
         ]);
 
-        User::factory()->create([
-            'name' => 'Customer Demo',
+        User::factory()->admin()->create([
+            'name' => 'Admin 1',
             'password' => 'password',
-            'email' => 'customer@thrif.test',
+            'email' => 'admin1@thrif.test',
+        ]);
+
+        User::factory()->admin()->create([
+            'name' => 'Admin 2',
+            'password' => 'password',
+            'email' => 'admin2@thrif.test',
         ]);
     }
 }

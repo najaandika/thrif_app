@@ -53,7 +53,19 @@
 
         <div class="flex items-center justify-between pt-1">
             <span class="font-medium">Total Harga</span>
-            <span class="font-bold text-lg text-emerald-600 dark:text-emerald-400">{{ rupiah($product->price) }}</span>
+            @if($product->is_on_sale)
+                <div class="text-right">
+                    <span class="text-xs text-gray-400 line-through block">{{ rupiah($product->price) }}</span>
+                    <span class="font-bold text-lg text-red-500">{{ rupiah($product->final_price) }}</span>
+                </div>
+            @else
+                <span class="font-bold text-lg text-emerald-600 dark:text-emerald-400">{{ rupiah($product->price) }}</span>
+            @endif
         </div>
+        @if($product->is_on_sale)
+            <div class="text-right">
+                <span class="text-xs text-red-500 font-medium">Kamu hemat {{ rupiah($product->price - $product->final_price) }}!</span>
+            </div>
+        @endif
     </div>
 </div>

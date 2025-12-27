@@ -18,6 +18,8 @@ class Index extends Component
     public $shop_email;
     public $shop_phone;
     public $shop_address;
+    public $shop_location_name;
+    public $shop_maps_url;
     public $shop_logo;
     public $new_logo;
     
@@ -47,6 +49,8 @@ class Index extends Component
         $this->shop_email = Setting::get('shop_email');
         $this->shop_phone = Setting::get('shop_phone');
         $this->shop_address = Setting::get('shop_address');
+        $this->shop_location_name = Setting::get('shop_location_name');
+        $this->shop_maps_url = Setting::get('shop_maps_url');
         $this->shop_logo = Setting::get('shop_logo');
         
         $this->social_instagram = Setting::get('social_instagram');
@@ -71,6 +75,8 @@ class Index extends Component
             'shop_email' => 'nullable|email|max:255',
             'shop_phone' => 'nullable|string|max:50',
             'shop_address' => 'nullable|string|max:1000',
+            'shop_location_name' => 'nullable|string|max:255',
+            'shop_maps_url' => 'nullable|url|max:500',
             'new_logo' => 'nullable|image|max:2048',
             'social_instagram' => 'nullable|url|max:255',
             'social_facebook' => 'nullable|url|max:255',
@@ -89,6 +95,8 @@ class Index extends Component
         Setting::set('shop_email', $this->shop_email);
         Setting::set('shop_phone', $this->shop_phone);
         Setting::set('shop_address', $this->shop_address);
+        Setting::set('shop_location_name', $this->shop_location_name);
+        Setting::set('shop_maps_url', $this->shop_maps_url);
         
         Setting::set('social_instagram', $this->social_instagram);
         Setting::set('social_facebook', $this->social_facebook);

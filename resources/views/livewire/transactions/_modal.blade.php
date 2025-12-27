@@ -16,12 +16,7 @@
                         <span class="receipt-label">Tanggal:</span>
                         <span class="receipt-value">{{ $selectedTransaction->created_at->format('d M Y, H:i') }}</span>
                     </div>
-                    <div class="receipt-row">
-                        <span class="receipt-label">Metode Pembayaran:</span>
-                        <span class="receipt-value">
-                            {{ $selectedTransaction->payment_method === 'ewallet' ? 'Qris' : ucfirst($selectedTransaction->payment_method) }}
-                        </span>
-                    </div>
+
                     <div class="receipt-row">
                         <span class="receipt-label">Status:</span>
                         <span class="status-badge {{ $selectedTransaction->payment_status === 'paid' ? 'status-paid' : 'status-unpaid' }}">
@@ -37,9 +32,26 @@
                             <div class="receipt-item">
                                 <div class="receipt-item-info">
                                     <div class="receipt-item-name">{{ $item->product_name ?? $item->product?->name ?? 'Produk dihapus' }}</div>
-                                    <div class="receipt-item-detail">{{ $item->qty }} x {{ rupiah($item->price) }}</div>
+                                    <div class="receipt-item-detail">
+                                        @php
+                                            $originalPrice = $item->product?->price ?? $item->price;
+                                            $isDiscounted = $item->product && $item->price < $originalPrice;
+                                            $discountPercent = $isDiscounted ? round((($originalPrice - $item->price) / $originalPrice) * 100) : 0;
+                                        @endphp
+
+                                        @if($isDiscounted)
+                                            <div class="flex items-center gap-2 mt-0.5">
+                                                <span class="text-xs bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold">-{{ $discountPercent }}%</span>
+                                                <span class="text-xs text-gray-400 line-through">{{ rupiah($originalPrice) }}</span>
+                                                <span class="text-red-600 font-bold">{{ rupiah($item->price) }}</span>
+                                            </div>
+                                            <div class="text-[10px] text-gray-500 mt-0.5">{{ $item->qty }} x {{ rupiah($item->price) }}</div>
+                                        @else
+                                            {{ $item->qty }} x {{ rupiah($item->price) }}
+                                        @endif
+                                    </div>
                                 </div>
-                                <div class="receipt-item-subtotal">{{ rupiah($item->subtotal) }}</div>
+                                <div class="receipt-item-subtotal font-semibold">{{ rupiah($item->subtotal) }}</div>
                             </div>
                         @endforeach
                     </div>
@@ -57,8 +69,10 @@
                         <span class="receipt-label">Total Harga:</span>
                         <span class="receipt-value">{{ rupiah($selectedTransaction->total_price) }}</span>
                     </div>
+
+
                     
-                    @if($selectedTransaction->amount_received > 0)
+                    @if($selectedTransaction->payment_method === 'cash')
                         <div class="receipt-row">
                             <span class="receipt-label">Uang Diterima:</span>
                             <span class="receipt-value">{{ rupiah($selectedTransaction->amount_received) }}</span>
@@ -68,6 +82,13 @@
                             <span class="receipt-value text-green-600 font-medium">{{ rupiah($selectedTransaction->change) }}</span>
                         </div>
                     @endif
+
+                    <div class="receipt-row" style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #eee;">
+                        <span class="receipt-label">Metode Bayar:</span>
+                        <span class="receipt-value font-bold uppercase">
+                            {{ $selectedTransaction->payment_method === 'ewallet' ? 'Qris' : ucfirst($selectedTransaction->payment_method) }}
+                        </span>
+                    </div>
                 </div>
 
                 @if($selectedTransaction->notes)

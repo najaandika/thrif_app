@@ -22,36 +22,30 @@
 
                 </p>
                 <div class="space-y-2.5 text-xs">
-                    <div class="flex items-start gap-2.5 text-gray-600 dark:text-gray-400">
-                        <div class="h-8 w-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center flex-shrink-0">
-                            <svg class="h-4 w-4 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
+                    <div class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                        <svg class="w-4 h-4 flex-shrink-0 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
                         <div class="flex-1 min-w-0">
-                            <p class="text-[10px] text-gray-500 dark:text-gray-500 uppercase tracking-wide font-semibold mb-0.5">Jam Buka</p>
+                            <p class="text-[10px] text-gray-500 dark:text-gray-500 uppercase tracking-wide font-semibold">Jam Buka</p>
                             <p class="font-medium leading-snug"><?php echo e($operatingHours); ?></p>
                         </div>
                     </div>
-                    <div class="flex items-start gap-2.5 text-gray-600 dark:text-gray-400">
-                        <div class="h-8 w-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center flex-shrink-0">
-                            <svg class="h-4 w-4 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-                        </div>
+                    <div class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                        <svg class="w-4 h-4 flex-shrink-0 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
                         <div class="flex-1 min-w-0">
-                            <p class="text-[10px] text-gray-500 dark:text-gray-500 uppercase tracking-wide font-semibold mb-0.5">Pembayaran</p>
+                            <p class="text-[10px] text-gray-500 dark:text-gray-500 uppercase tracking-wide font-semibold">Pembayaran</p>
                             <p class="font-medium leading-snug"><?php echo e($paymentMethods); ?></p>
                         </div>
                     </div>
-                    <div class="flex items-start gap-2.5 text-gray-600 dark:text-gray-400">
-                        <div class="h-8 w-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center flex-shrink-0">
-                            <svg class="h-4 w-4 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                            </svg>
-                        </div>
+                    <div class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                        <svg class="w-4 h-4 flex-shrink-0 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
                         <div class="flex-1 min-w-0">
-                            <p class="text-[10px] text-gray-500 dark:text-gray-500 uppercase tracking-wide font-semibold mb-0.5">Jaminan</p>
+                            <p class="text-[10px] text-gray-500 dark:text-gray-500 uppercase tracking-wide font-semibold">Jaminan</p>
                             <p class="font-medium leading-snug">100% Original & Trusted</p>
                         </div>
                     </div>
@@ -61,16 +55,46 @@
             <!-- Column 2: Navigation -->
             <div class="space-y-3">
                 <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100">Navigasi</h4>
-                <ul class="space-y-2 text-xs text-gray-600 dark:text-gray-400">
-                    <li><a href="#tentang" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block hover:opacity-80">Home</a></li>
-                    <li><a href="<?php echo e(route('landing.products.index')); ?>" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block hover:opacity-80">Catalog</a></li>
-                    <li><a href="#tentang-kami" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block hover:opacity-80">Tentang Kami</a></li>
+                <ul class="space-y-2 text-xs text-gray-600 dark:text-gray-400 font-medium">
+                    <li>
+                        <a href="#tentang" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-2 hover:opacity-80">
+                            <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo e(route('landing.products.index')); ?>" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-2 hover:opacity-80">
+                            <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                            Catalog
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#tentang-kami" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-2 hover:opacity-80">
+                            <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Tentang Kami
+                        </a>
+                    </li>
                     <?php if(auth()->guard()->check()): ?>
                         <?php if(auth()->user()->isCustomer()): ?>
-                            <li><a href="<?php echo e(route('profile')); ?>" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block">Profil</a></li>
-                            <li><a href="<?php echo e(route('landing.orders.history')); ?>" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block">Riwayat Order</a></li>
+                            <li>
+                                <a href="<?php echo e(route('profile')); ?>" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-2">
+                                    <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="4"/></svg>
+                                    Profil
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php echo e(route('landing.orders.history')); ?>" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-2">
+                                    <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    Riwayat Order
+                                </a>
+                            </li>
                         <?php else: ?>
-                            <li><a href="<?php echo e(route('dashboard')); ?>" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block">Dashboard</a></li>
+                            <li>
+                                <a href="<?php echo e(route('dashboard')); ?>" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-2">
+                                    <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    Dashboard
+                                </a>
+                            </li>
                         <?php endif; ?>
                     <?php endif; ?>
                 </ul>
@@ -79,54 +103,42 @@
             <!-- Column 3: Contact -->
             <div class="space-y-3">
                 <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100">Kontak Kami</h4>
-                <div class="space-y-2.5">
+                <div class="space-y-2.5 text-xs">
                     <?php if($shopEmail): ?>
-                    <a href="mailto:<?php echo e($shopEmail); ?>" class="group flex items-start gap-2.5 text-xs text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors hover:opacity-80">
-                        <div class="flex-shrink-0">
-                            <div class="h-8 w-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center group-hover:bg-indigo-200 dark:group-hover:bg-indigo-900/50 transition-colors">
-                                <svg class="h-4 w-4 text-indigo-600 dark:text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                        </div>
+                    <a href="mailto:<?php echo e($shopEmail); ?>" class="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                        <svg class="w-4 h-4 flex-shrink-0 text-indigo-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                         <div class="flex-1 min-w-0">
-                            <p class="text-[10px] text-gray-500 dark:text-gray-500 uppercase tracking-wide font-semibold mb-0.5">Email</p>
+                            <p class="text-[10px] text-gray-500 dark:text-gray-500 uppercase tracking-wide font-semibold">Email</p>
                             <p class="font-medium leading-snug break-all"><?php echo e($shopEmail); ?></p>
                         </div>
                     </a>
                     <?php endif; ?>
                     
                     <?php if($shopPhone): ?>
-                    <a href="https://wa.me/<?php echo e(preg_replace('/[^0-9]/', '', $shopPhone)); ?>" class="group flex items-start gap-2.5 text-xs text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors hover:opacity-80">
-                        <div class="flex-shrink-0">
-                            <div class="h-8 w-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center group-hover:bg-emerald-200 dark:group-hover:bg-emerald-900/50 transition-colors">
-                                <svg class="h-4 w-4 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                        </div>
+                    <a href="https://wa.me/<?php echo e(preg_replace('/[^0-9]/', '', $shopPhone)); ?>" class="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                        <svg class="w-4 h-4 flex-shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                         <div class="flex-1 min-w-0">
-                            <p class="text-[10px] text-gray-500 dark:text-gray-500 uppercase tracking-wide font-semibold mb-0.5">WhatsApp</p>
+                            <p class="text-[10px] text-gray-500 dark:text-gray-500 uppercase tracking-wide font-semibold">WhatsApp</p>
                             <p class="font-medium leading-snug"><?php echo e($shopPhone); ?></p>
                         </div>
                     </a>
                     <?php endif; ?>
                     
                     <?php if($shopAddress): ?>
-                    <div class="flex items-start gap-2.5 text-xs text-gray-600 dark:text-gray-400">
-                        <div class="flex-shrink-0">
-                            <div class="h-8 w-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                                <svg class="h-4 w-4 text-gray-600 dark:text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                        </div>
+                    <a href="<?php echo e($shopMapsUrl ?? 'https://www.google.com/maps/search/?api=1&query=' . urlencode($shopAddress)); ?>" target="_blank" rel="noopener noreferrer" class="group flex items-start gap-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                        <svg class="w-4 h-4 flex-shrink-0 text-blue-500 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                         <div class="flex-1 min-w-0">
-                            <p class="text-[10px] text-gray-500 dark:text-gray-500 uppercase tracking-wide font-semibold mb-0.5">Alamat</p>
-                            <p class="font-medium leading-snug"><?php echo e($shopAddress); ?></p>
+                            <p class="text-[10px] text-gray-500 dark:text-gray-500 uppercase tracking-wide font-semibold">Alamat</p>
+                            <p class="font-medium leading-snug"><?php echo e($shopLocationName ?? $shopAddress); ?></p>
                         </div>
-                    </div>
+                    </a>
                     <?php endif; ?>
                 </div>
             </div>

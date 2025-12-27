@@ -52,10 +52,28 @@
                 <!-- Items -->
                 <div class="space-y-3 mb-4">
                     <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $selectedOrder->items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php
+                        $originalPrice = $item->product->price ?? $item->price;
+                        $wasDiscounted = $originalPrice > $item->price;
+                    ?>
                     <div class="text-sm">
-                        <div class="font-medium text-gray-900"><?php echo e($item->product->name ?? 'Produk dihapus'); ?></div>
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="font-medium text-gray-900"><?php echo e($item->product->name ?? 'Produk dihapus'); ?></div>
+                            <!--[if BLOCK]><![endif]--><?php if($wasDiscounted && $item->product && $item->product->discount_percentage): ?>
+                                <span class="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold shrink-0">-<?php echo e(round($item->product->discount_percentage)); ?>%</span>
+                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                        </div>
                         <div class="flex justify-between text-xs text-gray-500 mt-1">
-                            <span><?php echo e($item->quantity); ?> x <?php echo e(number_format($item->price, 0, ',', '.')); ?></span>
+                            <span>
+                                <?php echo e($item->quantity); ?> x 
+                                <!--[if BLOCK]><![endif]--><?php if($wasDiscounted): ?>
+                                    <span class="line-through"><?php echo e(number_format($originalPrice, 0, ',', '.')); ?></span>
+                                    <span class="text-red-500 font-medium"><?php echo e(number_format($item->price, 0, ',', '.')); ?></span>
+                                <?php else: ?>
+                                    <?php echo e(number_format($item->price, 0, ',', '.')); ?>
+
+                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                            </span>
                             <span class="font-medium text-gray-900"><?php echo e(number_format($item->subtotal, 0, ',', '.')); ?></span>
                         </div>
                     </div>
@@ -69,7 +87,7 @@
                 <!-- Totals -->
                 <div class="space-y-1 mb-6">
                      <!-- POS Details -->
-                    <!--[if BLOCK]><![endif]--><?php if($selectedOrder->type === 'pos'): ?>
+                    <?php if($selectedOrder->type === 'pos'): ?>
                         
                         <!--[if BLOCK]><![endif]--><?php if($selectedOrder->discount > 0): ?>
                             <?php
@@ -93,14 +111,14 @@
                         </div>
 
                         <!-- Payment -->
-                        <!--[if BLOCK]><![endif]--><?php if($selectedOrder->type === 'pos'): ?>
+                        <!--[if BLOCK]><![endif]--><?php if($selectedOrder->type === 'pos' && $selectedOrder->payment_method === 'cash'): ?>
                         <div class="flex justify-between text-xs text-gray-500 pt-2">
                             <span>Uang Diterima</span>
                             <span><?php echo e(number_format($selectedOrder->amount_received, 0, ',', '.')); ?></span>
                         </div>
                         <div class="flex justify-between text-xs text-gray-500 pt-1">
                             <span>Kembalian</span>
-                            <span><?php echo e(number_format($selectedOrder->amount_received - $selectedOrder->total_price, 0, ',', '.')); ?></span>
+                            <span class="text-green-600 font-bold"><?php echo e(number_format($selectedOrder->amount_received - $selectedOrder->total_price, 0, ',', '.')); ?></span>
                         </div>
                         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
@@ -125,23 +143,23 @@
                         </div>
                     <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                     
-                    <!--[if BLOCK]><![endif]--><?php if($selectedOrder->type !== 'pos'): ?>
                     <div class="flex justify-between text-xs text-gray-500 pt-2">
                         <span>Metode Bayar</span>
-                        <span>
-                            <!--[if BLOCK]><![endif]--><?php if($selectedOrder->payment_method === 'cash'): ?>
+                        <span class="font-bold text-gray-900 uppercase">
+                            <!--[if BLOCK]><![endif]--><?php if($selectedOrder->type === 'pos' && $selectedOrder->payment_method === 'cash'): ?>
+                                Tunai
+                            <?php elseif($selectedOrder->payment_method === 'cash'): ?>
                                 <!--[if BLOCK]><![endif]--><?php if($selectedOrder->shipping_address === 'AMBIL DI TOKO'): ?>
                                     Bayar di Kasir
                                 <?php else: ?>
                                     COD
                                 <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                             <?php else: ?>
-                                <?php echo e(ucfirst($selectedOrder->payment_method ?? 'Non-Tunai')); ?>
+                                <?php echo e($selectedOrder->payment_method === 'qris' || $selectedOrder->payment_method === 'ewallet' ? 'QRIS' : ucfirst($selectedOrder->payment_method ?? 'Non-Tunai')); ?>
 
                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                         </span>
                     </div>
-                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                     
                     <!--[if BLOCK]><![endif]--><?php if($selectedOrder->type !== 'pos'): ?>
                     <div class="flex justify-between text-xs text-gray-500 pt-1">

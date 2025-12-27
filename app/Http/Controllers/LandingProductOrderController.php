@@ -103,7 +103,7 @@ class LandingProductOrderController extends Controller
                     // The schema analysis said "add_size_to_orders_table" existed, but my migration dropped product_id and quantity.
                     // Did I drop size? The migration "unify" didn't explicitly drop 'size' column from orders.
                     // Let's check if 'size' matches. If not, I put it in notes.
-                    'total_price' => $product->price,
+                    'total_price' => $product->final_price,
                     'status' => 'pending',
                     'notes' => $data['notes'] ?? null, // Just use notes as-is, size info removed
                     'payment_method' => $data['payment_method'],
@@ -114,8 +114,8 @@ class LandingProductOrderController extends Controller
                     'order_id' => $order->id,
                     'product_id' => $product->id,
                     'quantity' => 1,
-                    'price' => $product->price,
-                    'subtotal' => $product->price,
+                    'price' => $product->final_price,
+                    'subtotal' => $product->final_price,
                 ]);
 
                 return $order;

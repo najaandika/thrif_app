@@ -15,31 +15,10 @@
         <nav class="hidden lg:flex items-center gap-5 text-[13px] font-medium text-gray-600 dark:text-gray-300">
             <a href="#tentang" class="smooth-scroll hover:text-gray-900 dark:hover:text-gray-100 hover:opacity-80 transition-opacity">Home</a>
             <a href="{{ route('landing.products.index') }}" class="hover:text-gray-900 dark:hover:text-gray-100 hover:opacity-80 transition-opacity">Catalog</a>
-            <div class="relative group">
-                <button type="button" class="inline-flex items-center gap-1 hover:text-gray-900 dark:hover:text-gray-100 hover:opacity-80 transition-opacity">
-                    Categories
-                    <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </button>
-                <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition absolute left-0 mt-3 w-56 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-xl p-4 text-xs space-y-2">
-                    @if(isset($categories) && $categories->count() > 0)
-                        <div class="grid grid-cols-2 gap-2">
-                            @foreach ($categories as $category)
-                                <button type="button" data-category="{{ $category->name }}" class="filter-category text-left px-2 py-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 flex items-center justify-between transition">
-                                    <span>{{ $category->name }}</span>
-                                    <span class="text-[10px] text-gray-400">({{ $category->products_count }})</span>
-                                </button>
-                            @endforeach
-                        </div>
-                    @else
-                        <p class="text-[11px] text-gray-400 text-center py-2">No categories yet</p>
-                    @endif
-                </div>
-            </div>
-            
 
-            <a href="{{ route('landing.products.index') }}" class="smooth-scroll hover:text-gray-900 dark:hover:text-gray-100">Promo</a>
+            <a href="{{ route('landing.products.index', ['promo' => 1]) }}" class="smooth-scroll hover:text-gray-900 dark:hover:text-gray-100 inline-flex items-center gap-1">
+                <span class="text-orange-500">🔥</span> Flash Sale
+            </a>
         </nav>
 
         <div class="flex items-center gap-2 lg:gap-3">
@@ -74,11 +53,7 @@
                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-                @if(session('cart_count') > 0)
-                    <span class="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-bold text-white flex items-center justify-center shadow-sm">
-                        {{ session('cart_count') }}
-                    </span>
-                @endif
+                <span data-cart-count class="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-[10px] font-bold text-white flex items-center justify-center {{ session('cart_count', 0) > 0 ? '' : 'hidden' }}">{{ session('cart_count', 0) }}</span>
             </a>
 
             @auth
@@ -127,18 +102,8 @@
             <div class="grid gap-3">
                 <a href="#tentang">Home</a>
                 <a href="{{ route('landing.products.index') }}">Catalog</a>
-                
-                <!-- Categories Collapsible -->
-                <button type="button" id="mobile-categories-toggle" class="flex items-center justify-between text-left hover:text-emerald-600 dark:hover:text-emerald-400 transition py-0.5">
-                    <span>Categories</span>
-                    <svg id="mobile-categories-icon" class="h-3.5 w-3.5 transition-transform duration-300 ease-in-out text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-                
-             
 
-                <a href="#produk">Promo</a>
+                <a href="{{ route('landing.products.index', ['promo' => 1]) }}" class="flex items-center gap-1"><span class="text-orange-500">🔥</span> Flash Sale</a>
                 
                 <!-- Theme Toggle -->
                 <button type="button" @click="$store.darkMode.toggle()" class="flex items-center justify-between text-left hover:text-emerald-600 dark:hover:text-emerald-400 transition py-0.5" aria-label="Toggle theme">

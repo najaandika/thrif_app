@@ -25,6 +25,12 @@
                             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Add a new product to your inventory.</p>
                         </div>
                     </div>
+                    <div class="mt-4">
+                        <label for="is_available" class="flex items-center cursor-pointer">
+                            <input wire:model="is_available" name="is_available" id="is_available" type="checkbox" class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 shadow-sm focus:ring-gray-500">
+                            <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Product is available for sale</span>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-2xl border-l-4 border-gray-900 dark:border-gray-600">
@@ -76,6 +82,7 @@
                                         <input 
                                             type="text" 
                                             id="price" 
+                                            name="price"
                                             :value="displayValue" 
                                             @input="update"
                                             class="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all"
@@ -113,11 +120,52 @@
 
                             <!-- Size & Stock (Single) -->
                             <div class="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-xl border border-gray-200 dark:border-gray-600">
-                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Size</label>
+                                <label for="size" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Size</label>
                                 <div>
-                                    <input wire:model="size" type="text" placeholder="Input Size" class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500">
+                                    <input wire:model="size" name="size" id="size" type="text" placeholder="Input Size" class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500">
                                     @error('size') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
                                 </div>
+                            </div>
+
+                            <!-- Discount Section -->
+                            <div class="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 p-4 rounded-xl border border-red-200 dark:border-red-800">
+                                <div class="flex items-center gap-2 mb-4">
+                                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Diskon (Opsional)</label>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label for="discount_percentage" class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Persentase Diskon</label>
+                                        <div class="relative">
+                                            <input wire:model="discount_percentage" name="discount_percentage" type="number" id="discount_percentage" min="0" max="100" step="1" 
+                                                class="w-full px-4 py-2 pr-8 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all" 
+                                                placeholder="0">
+                                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">%</span>
+                                        </div>
+                                        @error('discount_percentage') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
+                                    </div>
+                                    <div>
+                                        <label for="discount_start" class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Mulai Diskon</label>
+                                        <div x-data x-init="flatpickr($refs.startPicker, { enableTime: true, dateFormat: 'Y-m-d H:i', time_24hr: true, disableMobile: true })">
+                                            <input wire:model="discount_start" name="discount_start" x-ref="startPicker" type="text" id="discount_start" 
+                                                class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all placeholder-gray-400"
+                                                placeholder="Pilih Tanggal...">
+                                        </div>
+                                        @error('discount_start') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
+                                    </div>
+                                    <div>
+                                        <label for="discount_end" class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Berakhir Diskon</label>
+                                        <div x-data x-init="flatpickr($refs.endPicker, { enableTime: true, dateFormat: 'Y-m-d H:i', time_24hr: true, disableMobile: true })">
+                                            <input wire:model="discount_end" name="discount_end" x-ref="endPicker" type="text" id="discount_end" 
+                                                class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all placeholder-gray-400"
+                                                placeholder="Pilih Tanggal...">
+                                        </div>
+                                        @error('discount_end') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
+                                    </div>
+                                </div>
+                                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Kosongkan tanggal untuk diskon tanpa batas waktu.</p>
                             </div>
 
                             <!-- Main Image -->
@@ -173,7 +221,7 @@
                                                 </svg>
                                             </div>
                                             <span class="mt-2 text-xs font-medium text-gray-500 dark:text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Add Image</span>
-                                            <input wire:model="newAdditionalImages" type="file" id="additionalImages-{{ $uploadIteration }}" multiple accept="image/*" class="hidden">
+                                            <input wire:model="newAdditionalImages" name="newAdditionalImages[]" type="file" id="additionalImages-{{ $uploadIteration }}" multiple accept="image/*" class="hidden">
                                         </label>
                                     </div>
                                 </div>

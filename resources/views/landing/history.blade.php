@@ -55,18 +55,38 @@
                                     <span>{{ $order->created_at->translatedFormat('d M Y, H:i') }}</span>
                                 </div>
                                 <div>
+                                    @php
+                                        $firstItem = $order->items->first();
+                                        $originalPrice = $firstItem->product->price ?? $firstItem->price;
+                                        $wasDiscounted = $originalPrice > $firstItem->price;
+                                    @endphp
                                     <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100 leading-snug">
-                                        {{ $order->items->first()->product->name ?? 'Produk terhapus' }}
-                                        @if($order->items->count() > 1)
-                                            <span class="text-sm font-normal text-gray-500">(+{{ $order->items->count() - 1 }} lainnya)</span>
-                                        @endif
+                                        {{ $firstItem->product->name ?? 'Produk terhapus' }}
                                     </h2>
-                                    <div class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                        @foreach($order->items->take(1) as $item)
-                                            <p>{{ $item->product->name ?? 'Deleted' }} (x{{ $item->quantity }})</p>
-                                        @endforeach
+                                    <div class="flex items-center gap-2 mt-1 flex-wrap">
+                                        <span class="text-xs sm:text-sm text-gray-500">(x{{ $firstItem->quantity }})</span>
+                                        @if($order->items->count() > 1)
+                                            <span class="text-xs sm:text-sm text-gray-500">+{{ $order->items->count() - 1 }} lainnya</span>
+                                        @endif
+                                        @if($wasDiscounted && $firstItem->product && $firstItem->product->discount_percentage)
+                                            <span class="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold">-{{ round($firstItem->product->discount_percentage) }}%</span>
+                                        @endif
                                     </div>
-                                    <div class="pt-2 font-bold text-sm sm:text-base text-emerald-600 dark:text-emerald-400">{{ rupiah($order->total_price) }}</div>
+                                    @php
+                                        $totalOriginalPrice = $order->items->sum(function($item) {
+                                            return ($item->product->price ?? $item->price) * $item->quantity;
+                                        });
+                                        $hasSavings = $totalOriginalPrice > $order->total_price;
+                                    @endphp
+                                    <div class="pt-2 flex items-center flex-wrap gap-1">
+                                        @if($hasSavings)
+                                            <span class="text-xs text-gray-400 line-through">{{ rupiah($totalOriginalPrice) }}</span>
+                                            <span class="font-bold text-sm sm:text-base text-red-500">{{ rupiah($order->total_price) }}</span>
+                                            <span class="text-[10px] text-red-500 font-medium">Hemat {{ rupiah($totalOriginalPrice - $order->total_price) }}</span>
+                                        @else
+                                            <span class="font-bold text-sm sm:text-base text-emerald-600 dark:text-emerald-400">{{ rupiah($order->total_price) }}</span>
+                                        @endif
+                                    </div>
                                 </div>
                                 <div class="inline-flex items-center gap-2">
                                      <!-- Status Logic Same as Before -->

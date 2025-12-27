@@ -34,6 +34,12 @@
                 @guest
                     <span class="text-[11px]">Login dulu untuk bisa order</span>
                 @endguest
+                <a href="{{ route('landing.products.index') }}" class="text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline inline-flex items-center gap-1">
+                    Lihat Semua
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
             </div>
         </div>
 
@@ -81,38 +87,31 @@
                                 </svg>
                             </div>
                         @endif
-                    </div>
-                    <div class="p-4 flex flex-col flex-1 bg-gradient-to-b from-transparent to-gray-50/50 dark:to-gray-900/50">
-                        <div class="flex-1 space-y-2.5">
-                            <h3 data-product-name class="text-sm font-bold text-gray-900 dark:text-gray-100 line-clamp-2 leading-tight min-h-[2.5rem]">{{ \Illuminate\Support\Str::title($product->name) }}</h3>
-                            <div class="flex items-center gap-2 text-[11px]">
-                                <span class="inline-flex items-center gap-1 rounded-full bg-indigo-50 dark:bg-indigo-900/30 px-2 py-0.5 text-indigo-700 dark:text-indigo-300 font-medium">
-                                    <svg class="h-3 w-3 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M7 7h10M7 12h10M7 17h10" stroke-linecap="round"/>
-                                    </svg>
-                                    <span class="truncate">{{ $product->category ? \Illuminate\Support\Str::title($product->category) : 'Umum' }}</span>
-                                </span>
+                        @if ($product->is_on_sale)
+                            <div class="absolute top-2 left-2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-lg animate-pulse">
+                                -{{ $product->discount_percent }}%
                             </div>
+                        @endif
+                    </div>
+                    <div class="p-3 flex flex-col flex-1 bg-gradient-to-b from-transparent to-gray-50/50 dark:to-gray-900/50">
+                        <div class="flex-1 space-y-2">
+                            <h3 data-product-name class="text-sm font-bold text-gray-900 dark:text-gray-100 line-clamp-2 leading-tight min-h-[2.5rem]">{{ \Illuminate\Support\Str::title($product->name) }}</h3>
                             <div class="flex items-center gap-2 text-[11px]">
                                 <span class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-white font-bold shadow-sm
                                     {{ $product->condition_class }}">
                                     {{ $product->condition_label }}
                                 </span>
                             </div>
-                            @if ($product->description)
-                                <p class="text-[11px] text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-2 min-h-[2.5rem]">
-                                    {{ strip_tags($product->description) }}
-                                </p>
-                            @else
-                                <div class="min-h-[2.5rem]"></div>
-                            @endif
                         </div>
-                        <div class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100 dark:border-gray-700">
+                        <div class="flex items-center justify-between mt-auto pt-2 border-t border-gray-100 dark:border-gray-700">
                             <div>
-                                <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-0.5">Harga</p>
-                                <span data-product-price class="text-base font-bold text-green-600">{{ rupiah($product->price) }}</span>
+                                @if ($product->is_on_sale)
+                                    <span class="text-xs text-gray-400 line-through">{{ rupiah($product->price) }}</span>
+                                    <span data-product-price class="text-base font-bold text-red-500">{{ rupiah($product->final_price) }}</span>
+                                @else
+                                    <span data-product-price class="text-base font-bold text-green-600">{{ rupiah($product->price) }}</span>
+                                @endif
                             </div>
-                            <!-- Stock badge removed -->
                         </div>
 
                         @if ($product->is_available)
@@ -125,7 +124,7 @@
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                                         </button>
                                     </form>
-                                    <a href="{{ route('landing.products.checkout', $product) }}"
+                                    <a href="{{ route('landing.products.checkout', ['product' => $product, 'from' => 'home']) }}"
                                        class="flex-[2] inline-flex items-center justify-center rounded-full bg-emerald-500 px-3 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-500/40 transition hover:bg-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 hover:opacity-90">
                                         Buy Now
                                     </a>

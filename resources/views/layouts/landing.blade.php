@@ -40,9 +40,11 @@
             html:not(.dark) body { background-color: #f9fafb !important; }
         </style>
 
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
         <!-- Styles -->
         @livewireStyles
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/ajax-cart.js'])
     </head>
     <body class="antialiased font-sans bg-gray-50 dark:bg-gray-900" x-data>
         <div class="min-h-screen flex flex-col">

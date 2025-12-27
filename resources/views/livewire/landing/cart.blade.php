@@ -17,12 +17,17 @@
                     <ul class="divide-y divide-gray-100 dark:divide-gray-800">
                         @foreach($cartItems as $key => $item)
                             <li class="flex py-4 first:pt-0 last:pb-0 gap-4">
-                                <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+                                <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 relative">
                                     @if(isset($item['image']) && $item['image'])
                                         <img src="{{ Storage::url($item['image']) }}" alt="{{ $item['name'] }}" class="h-full w-full object-cover object-center">
                                     @else
                                         <div class="h-full w-full flex items-center justify-center text-xs text-gray-400">
                                             No Img
+                                        </div>
+                                    @endif
+                                    @if(isset($item['is_on_sale']) && $item['is_on_sale'])
+                                        <div class="absolute top-1 left-1 bg-gradient-to-r from-red-500 to-orange-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full shadow">
+                                            -{{ $item['discount_percent'] }}%
                                         </div>
                                     @endif
                                 </div>
@@ -37,7 +42,14 @@
                                         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Size: {{ $item['size'] ?? '-' }}</p>
                                     </div>
                                     <div class="flex items-end justify-between text-sm">
-                                        <p class="font-bold text-emerald-600 dark:text-emerald-400 font-mono">{{ rupiah($item['price']) }}</p>
+                                        <div>
+                                            @if(isset($item['is_on_sale']) && $item['is_on_sale'])
+                                                <p class="text-xs text-gray-400 line-through">{{ rupiah($item['original_price']) }}</p>
+                                                <p class="font-bold text-red-500 font-mono">{{ rupiah($item['price']) }}</p>
+                                            @else
+                                                <p class="font-bold text-emerald-600 dark:text-emerald-400 font-mono">{{ rupiah($item['price']) }}</p>
+                                            @endif
+                                        </div>
 
                                         <div class="flex items-center gap-3">
                                             <p class="text-gray-500 dark:text-gray-400">Qty {{ $item['quantity'] }}</p>
@@ -221,8 +233,20 @@
                     
                             <div class="flex items-center justify-between pt-1">
                                 <span class="font-medium">Total Harga</span>
-                                <span class="font-bold text-lg text-emerald-600 dark:text-emerald-400">{{ rupiah($total) }}</span>
+                                @if($originalTotal > $total)
+                                    <div class="text-right">
+                                        <span class="text-xs text-gray-400 line-through block">{{ rupiah($originalTotal) }}</span>
+                                        <span class="font-bold text-lg text-red-500">{{ rupiah($total) }}</span>
+                                    </div>
+                                @else
+                                    <span class="font-bold text-lg text-emerald-600 dark:text-emerald-400">{{ rupiah($total) }}</span>
+                                @endif
                             </div>
+                            @if($originalTotal > $total)
+                                <div class="text-right mt-1">
+                                    <span class="text-xs text-red-500 font-medium">Kamu hemat {{ rupiah($originalTotal - $total) }}!</span>
+                                </div>
+                            @endif
                         </div>
                     </div>
 
@@ -246,6 +270,6 @@
         <input type="hidden" name="notes" value="{{ $notes }}">
         <input type="hidden" name="payment_result" id="payment-result-input">
     </form>
-</div>
 
-@vite(['resources/js/cart-checkout.js'])
+    @vite(['resources/js/cart-checkout.js'])
+</div>

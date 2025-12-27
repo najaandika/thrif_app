@@ -28,7 +28,7 @@
         </script>
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/ajax-cart.js'])
         @livewireStyles
         <!-- CSS dihandle oleh app.css -->
     </head>

@@ -6,6 +6,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Setting;
 
 #[Layout('layouts.app')]
 class Index extends Component
@@ -16,11 +17,15 @@ class Index extends Component
     public $cartQty = [];
     public $payment_method = 'cash';
     public $amount_received = 0;
-    public $discount = 0;
-    public $discountType = 'fixed'; // 'fixed' or 'percent'
-    public $loadProducts = false;
+    public $loadProducts = true;
     public $showModal = false;
     public $selectedOrder;
+
+    public function showLastReceipt($orderId)
+    {
+        $this->selectedOrder = \App\Models\Order::find($orderId);
+        $this->showModal = true;
+    }
 
     public function closeModal()
     {
@@ -37,7 +42,11 @@ class Index extends Component
         return \App\Models\Product::query()
             ->where('is_available', true)
             ->when($this->search, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
+                $query->where(function($q) {
+                    $q->where('name', 'like', '%' . $this->search . '%')
+                      ->orWhere('category', 'like', '%' . $this->search . '%')
+                      ->orWhere('condition', 'like', '%' . $this->search . '%');
+                });
             })
             ->orderByDesc('id')
             ->limit(100)
@@ -60,33 +69,59 @@ class Index extends Component
     }
 
     #[Computed]
-    public function discountAmount()
-    {
-        $total = 0;
-        foreach ($this->cart as $item) {
-            $total += $item['price'] * $item['qty'];
-        }
-
-        $discountValue = $this->discount === null || $this->discount === '' ? 0 : $this->discount;
-        
-        if ($this->discountType === 'percent') {
-            return $total * ((float) $discountValue / 100);
-        }
-        
-        return (float) $discountValue;
-    }
-
-    #[Computed]
     public function total()
     {
-        $subtotal = $this->subtotal();
-        return max($subtotal - $this->discountAmount(), 0);
+        return $this->subtotal();
     }
 
     #[Computed]
     public function change()
     {
         return max((float) $this->amount_received - $this->total(), 0);
+    }
+
+    #[Computed]
+    public function receiptConfig()
+    {
+        if (!$this->selectedOrder) {
+            return null;
+        }
+
+        $order = $this->selectedOrder;
+        $itemsList = '';
+
+        foreach ($order->items as $item) {
+            $productName = $item->product->name ?? "Item";
+            $itemsList .= "• $productName (x{$item->quantity})\n";
+        }
+
+        $shopName = strtoupper(Setting::get("shop_name") ?? "THRIF STUDIO");
+        $invoice = $order->invoice_number ?? "-";
+        $date = optional($order->created_at)->format("d/m/Y H:i") ?? "-";
+        $total = number_format($order->total_price ?? 0, 0, ",", ".");
+        
+        $whatsappMessage = "*STRUK DIGITAL - $shopName*\n" .
+                          "--------------------------------\n" .
+                          "No. Invoice: $invoice\n" .
+                          "Tanggal: $date\n\n" .
+                          "*Detail Belanja:*\n" .
+                          $itemsList;
+
+        if (($order->discount ?? 0) > 0) {
+            $discount = number_format($order->discount, 0, ",", ".");
+            $whatsappMessage .= "\nDiskon: - Rp $discount";
+        }
+
+        $whatsappMessage .= "\n--------------------------------\n" .
+                           "*TOTAL: Rp $total*\n" .
+                           "--------------------------------\n" .
+                           "Terima kasih sudah berbelanja!";
+
+        return [
+            'phone' => $order->buyer_contact ?? "",
+            'message' => $whatsappMessage,
+            'invoiceNumber' => $order->invoice_number ?? "INV"
+        ];
     }
 
     public function addToCart($productId)
@@ -104,7 +139,7 @@ class Index extends Component
         $this->cart[] = [
             'id' => $product->id,
             'name' => $product->name,
-            'price' => $product->price,
+            'price' => $product->final_price,
             'qty' => 1,
         ];
         $this->cartQty[$product->id] = 1;
@@ -133,12 +168,6 @@ class Index extends Component
         }
     }
 
-    public function updatedDiscountType()
-    {
-        $this->discount = 0;
-        $this->dispatch('reset-discount');
-    }
-
     public function saveTransaction()
     {
         if (count($this->cart) == 0) {
@@ -148,28 +177,13 @@ class Index extends Component
 
             DB::beginTransaction();
             try {
-                // hitung total quantity dan subtotal dari cart
-            $subtotal = 0;
-            foreach ($this->cart as $item) {
-                $subtotal += $item['price'] * $item['qty'];
-            }
-
-            // Hitung nilai diskon
-            $discountValue = $this->discount === null || $this->discount === '' ? 0 : $this->discount;
-            if ($this->discountType === 'percent') {
-                $discountAmount = $subtotal * ((float) $discountValue / 100);
-            } else {
-                $discountAmount = (float) $discountValue;
-            }
-
-            // Simpan ke tabel orders (Unified)
+                // Simpan ke tabel orders (Unified)
             $order = \App\Models\Order::create([
                 'type' => 'pos',
                 'user_id' => Auth::id(), // Cashier
-                // 'customer_id' => null, // Optional if we add customer selection later
                 'buyer_name' => 'Pelanggan Umum', // Default for POS
-                'total_price' => $this->total, // Total grand incl discount
-                'discount' => $discountAmount, // Store discount in dedicated field
+                'total_price' => $this->total,
+                'discount' => 0, // No manual discount in POS
                 'payment_method' => $this->payment_method,
                 'payment_status' => 'paid',
                 'status' => 'paid',
@@ -200,14 +214,12 @@ class Index extends Component
             $this->cart = [];
             $this->cartQty = [];
             $this->amount_received = 0;
-            $this->discount = 0;
-            $this->discountType = 'fixed';
             $this->payment_method = 'cash';
 
             $this->dispatch('transaction-completed');
 
-            // Dispatch event with status message for SweetAlert
-            $this->dispatch('show-pos-success', message: 'Transaksi berhasil disimpan! ' . $order->invoice_number);
+            // Dispatch event with status message for SweetAlert, passing orderId for printing
+            $this->dispatch('show-pos-success', message: 'Transaksi berhasil disimpan! ' . $order->invoice_number, orderId: $order->id);
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', 'Gagal menyimpan transaksi: ' . $e->getMessage());
@@ -224,7 +236,6 @@ class Index extends Component
             'change' => $this->change,
             'payment_method' => $this->payment_method,
             'amount_received' => $this->amount_received,
-            'discount' => $this->discount,
         ]);
     }
 }

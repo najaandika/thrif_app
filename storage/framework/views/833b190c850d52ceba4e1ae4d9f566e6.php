@@ -53,8 +53,20 @@
 
         <div class="flex items-center justify-between pt-1">
             <span class="font-medium">Total Harga</span>
-            <span class="font-bold text-lg text-emerald-600 dark:text-emerald-400"><?php echo e(rupiah($product->price)); ?></span>
+            <?php if($product->is_on_sale): ?>
+                <div class="text-right">
+                    <span class="text-xs text-gray-400 line-through block"><?php echo e(rupiah($product->price)); ?></span>
+                    <span class="font-bold text-lg text-red-500"><?php echo e(rupiah($product->final_price)); ?></span>
+                </div>
+            <?php else: ?>
+                <span class="font-bold text-lg text-emerald-600 dark:text-emerald-400"><?php echo e(rupiah($product->price)); ?></span>
+            <?php endif; ?>
         </div>
+        <?php if($product->is_on_sale): ?>
+            <div class="text-right">
+                <span class="text-xs text-red-500 font-medium">Kamu hemat <?php echo e(rupiah($product->price - $product->final_price)); ?>!</span>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 <?php /**PATH C:\laragon\www\thrif\resources\views/landing/components/order-summary.blade.php ENDPATH**/ ?>

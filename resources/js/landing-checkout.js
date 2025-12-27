@@ -135,12 +135,17 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             onPending: function (result) {
                 console.log('Midtrans pending', result);
+                setLoading(false);
+
+                // DO NOT submit form - payment is not complete yet
+                // Just show info message and let user retry or wait
                 Swal.fire({
                     title: 'Menunggu Pembayaran',
-                    text: 'Silakan selesaikan pembayaran Anda.',
+                    text: 'Pembayaran belum selesai. Silakan selesaikan pembayaran untuk melanjutkan pesanan.',
                     icon: 'info',
                     confirmButtonText: 'OK',
-                    width: '260px',
+                    confirmButtonColor: '#3b82f6',
+                    width: '280px',
                     padding: '1rem',
                     customClass: {
                         popup: 'rounded-2xl swal-mobile-compact',
@@ -148,9 +153,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         title: 'text-sm font-bold',
                         htmlContainer: 'text-xs'
                     }
-                }).then(() => {
-                    form.submit();
                 });
+                // Form NOT submitted - order will NOT be created
             },
             onError: function (result) {
                 console.error('Midtrans error', result);
@@ -163,8 +167,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             },
             onClose: function () {
-                console.log('Midtrans popup closed');
+                console.log('Midtrans popup closed without completing payment');
                 setLoading(false);
+
+                // Show message that payment was cancelled
+                Swal.fire({
+                    title: 'Pembayaran Dibatalkan',
+                    text: 'Anda menutup halaman pembayaran. Pesanan tidak dibuat.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#f59e0b',
+                    width: '280px',
+                    padding: '1rem',
+                    customClass: {
+                        popup: 'rounded-2xl swal-mobile-compact',
+                        confirmButton: 'rounded-lg px-4 py-1.5 text-xs font-semibold',
+                        title: 'text-sm font-bold',
+                        htmlContainer: 'text-xs'
+                    }
+                });
             }
         });
     });

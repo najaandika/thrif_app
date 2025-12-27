@@ -4,17 +4,16 @@
     <div class="bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden flex flex-col h-full">
         <!-- Header -->
         <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-            <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Keranjang</h2>
+            <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Keranjang @if(count($cart) > 0)<span class="text-gray-500 font-normal">({{ count($cart) }})</span>@endif</h2>
         </div>
         
         <!-- Cart List -->
         <div class="p-4 max-h-80 overflow-y-auto border-b border-gray-100 dark:border-gray-700">
             @forelse ($cart as $item)
                 <div class="flex items-center gap-3 py-3 border-b border-gray-100 dark:border-gray-700 last:border-0">
-                    <!-- Product Name & Qty -->
+                    <!-- Product Name -->
                     <div class="flex-1 min-w-0">
                         <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ $item['name'] }}</p>
-                        <!-- Hapus input quantity dan harga, hanya tampilkan nama produk -->
                     </div>
                     
                     <!-- Subtotal & Delete -->
@@ -39,88 +38,66 @@
             @endforelse
         </div>
 
-        <!-- Detail Pembayaran -->
-        <div class="p-4 space-y-4 bg-gray-50/50 dark:bg-gray-800/30">
-            <div>
-                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5 uppercase tracking-wider">Metode Pembayaran</label>
-                <select wire:model.live="payment_method" class="w-full rounded-lg border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm focus:ring-gray-900 focus:border-gray-900 dark:text-white">
-                    <option value="cash">Tunai (Cash)</option>
-                    <option value="qris">QRIS</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5 uppercase tracking-wider">Uang Diterima</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span class="text-gray-500 sm:text-sm">Rp</span>
-                    </div>
-                    <input 
-                        type="text" 
-                        x-data="currencyInput('{{ $amount_received }}', 'amount_received')"
-                        x-on:input="update($event)"
-                        :value="displayValue"
-                        
-
-                        class="w-full pl-10 rounded-lg border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm focus:ring-gray-900 focus:border-gray-900 dark:text-white" 
-                        placeholder="0">
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Section -->
+        <!-- Total & Payment Section -->
         <div class="p-4 space-y-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+            <!-- Subtotal -->
             <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
                 <span class="font-medium">Subtotal</span>
                 <span class="font-bold text-gray-900 dark:text-white">{{ rupiah($this->subtotal) }}</span>
             </div>
 
-            <!-- Diskon Inline -->
-            <div class="flex justify-between items-center text-sm">
-                <label for="discount" class="font-medium text-gray-600 dark:text-gray-400">Diskon</label>
-                <div class="flex items-center gap-2">
-                    <select wire:model.live="discountType" class="py-1 pl-2 pr-6 border-gray-200 dark:border-gray-600 rounded-lg text-xs focus:ring-gray-900 focus:border-gray-900 dark:bg-gray-800 dark:text-gray-200">
-                        <option value="fixed">Rp</option>
-                        <option value="percent">%</option>
-                    </select>
-                    <input 
-                        type="text" 
-                        x-data="currencyInput('{{ $discount }}', 'discount')"
-                        x-on:input="update($event)"
-                        :value="displayValue"
-                        
-
-                        class="w-24 py-1 px-2 border-gray-200 dark:border-gray-600 rounded-lg text-xs text-right focus:ring-gray-900 focus:border-gray-900 dark:bg-gray-800 dark:text-gray-200" 
-                        placeholder="0">
-                </div>
-            </div>
-
-            <!-- Discount Amount Display -->
-            @if($this->discountAmount > 0)
-                <div class="flex justify-between items-center text-sm text-red-500">
-                    <span class="font-medium">Potongan Diskon</span>
-                    <span class="font-bold">- {{ rupiah($this->discountAmount) }}</span>
-                </div>
-            @endif
-
+            <!-- Total -->
             <div class="flex justify-between items-center pt-3 border-t border-dashed border-gray-200 dark:border-gray-700">
-                <span class="text-2xl font-bold text-gray-900 dark:text-white">Total:</span>
-                <span class="text-2xl font-bold text-gray-900 dark:text-white">{{ rupiah($this->total()) }}</span>
+                <span class="text-xl font-bold text-gray-900 dark:text-white">Total</span>
+                <span class="text-xl font-bold text-gray-900 dark:text-white">{{ rupiah($this->total()) }}</span>
             </div>
             
-            <div class="flex justify-between items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl">
-                <span class="text-base font-semibold text-gray-700 dark:text-gray-300">Kembalian:</span>
-                <span class="text-lg font-bold text-green-600 dark:text-green-400">{{ rupiah($this->change()) }}</span>
+            <!-- Payment Method -->
+            <div class="pt-3 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex items-center justify-between gap-3">
+                    <label for="payment_method" class="text-xs font-medium text-gray-600 dark:text-gray-400">Pembayaran</label>
+                    <select wire:model.live="payment_method" id="payment_method" name="payment_method" class="flex-1 max-w-[150px] py-1.5 px-3 rounded-lg border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm focus:ring-gray-900 focus:border-gray-900 dark:text-white">
+                        <option value="cash">Tunai</option>
+                        <option value="qris">QRIS</option>
+                    </select>
+                </div>
             </div>
+
+            <!-- Uang Diterima - Only show for Cash -->
+            @if($payment_method === 'cash')
+                <div class="flex items-center justify-between gap-3">
+                    <label for="amount_received" class="text-xs font-medium text-gray-600 dark:text-gray-400">Diterima</label>
+                    <div class="relative flex-1 max-w-[150px]">
+                        <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
+                            <span class="text-gray-400 text-xs">Rp</span>
+                        </div>
+                        <input 
+                            type="text" 
+                            x-data="currencyInput('{{ $amount_received }}', 'amount_received')"
+                            x-on:input="update($event)"
+                            :value="displayValue"
+                            id="amount_received"
+                            name="amount_received"
+                            class="w-full pl-7 py-1.5 rounded-lg border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-right focus:ring-gray-900 focus:border-gray-900 dark:text-white" 
+                            placeholder="0">
+                    </div>
+                </div>
+
+                <!-- Kembalian -->
+                <div class="flex justify-between items-center p-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg">
+                    <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Kembalian</span>
+                    <span class="text-base font-bold text-green-600 dark:text-green-400">{{ rupiah($this->change()) }}</span>
+                </div>
+            @endif
         </div>
 
         <!-- Submit Button Footer -->
-        <div class="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-            <button type="submit" class="w-full inline-flex items-center justify-center px-8 py-4 bg-gray-900 dark:bg-white border border-transparent rounded-xl font-bold text-base text-white dark:text-gray-900 uppercase tracking-wider hover:bg-black dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white focus:ring-offset-2 transition-all duration-200 shadow-xl hover:shadow-2xl hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100" @if(count($cart) == 0) disabled @endif>
-                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+            <button type="submit" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-gray-900 dark:bg-white border border-transparent rounded-lg font-semibold text-sm text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white focus:ring-offset-2 transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed" @if(count($cart) == 0) disabled @endif>
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
-                Simpan Transaksi
+                Simpan
             </button>
         </div>
     </div>

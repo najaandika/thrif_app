@@ -40,10 +40,12 @@
             html:not(.dark) body { background-color: #f9fafb !important; }
         </style>
 
+        <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+
         <!-- Styles -->
         <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::styles(); ?>
 
-        <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
+        <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js', 'resources/js/ajax-cart.js']); ?>
     </head>
     <body class="antialiased font-sans bg-gray-50 dark:bg-gray-900" x-data>
         <div class="min-h-screen flex flex-col">

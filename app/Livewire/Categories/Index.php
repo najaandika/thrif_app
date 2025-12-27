@@ -36,6 +36,7 @@ class Index extends Component
     public function render()
     {
         $categories = Category::query()
+            ->withCount('products')
             ->when($this->search, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })

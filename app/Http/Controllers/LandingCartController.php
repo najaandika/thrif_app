@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class LandingCartController extends Controller
 {
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|\Illuminate\Http\JsonResponse
     {
         $validated = $request->validate([
             'product_id' => ['required', 'integer', 'exists:products,id'],
@@ -26,13 +26,22 @@ class LandingCartController extends Controller
         // If unique, we should check if already exists. But for now let's just allow add.
         // Assuming unique thrift item means qty 1.
         if ($newQty > 1) {
-             return back()->with('error', 'Produk ini hanya tersedia 1 stok (Thrift).');
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Produk ini sudah ada di keranjang.'
+                ], 400);
+            }
+            return back()->with('error', 'Produk ini hanya tersedia 1 stok (Thrift).');
         }
 
         $cartItems[$product->id] = [
             'product_id' => $product->id,
             'name' => $product->name,
-            'price' => $product->price,
+            'price' => $product->final_price,
+            'original_price' => $product->price,
+            'is_on_sale' => $product->is_on_sale,
+            'discount_percent' => $product->discount_percent,
             'size' => $product->size,
             'quantity' => $newQty,
         ];
@@ -41,6 +50,14 @@ class LandingCartController extends Controller
 
         $cartCount = collect($cartItems)->sum('quantity');
         $request->session()->put('cart_count', $cartCount);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Produk ditambahkan ke keranjang!',
+                'cart_count' => $cartCount
+            ]);
+        }
 
         return back()->with('message', 'Produk ditambahkan ke keranjang.');
     }
@@ -119,8 +136,8 @@ class LandingCartController extends Controller
                         'order_id' => $order->id,
                         'product_id' => $product->id,
                         'quantity' => $item['quantity'],
-                        'price' => $product->price,
-                        'subtotal' => $product->price * $item['quantity'],
+                        'price' => $product->final_price,
+                        'subtotal' => $product->final_price * $item['quantity'],
                     ]);
                 }
             }

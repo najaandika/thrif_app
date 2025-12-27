@@ -17,6 +17,7 @@ class Cart extends Component
 {
     public $cartItems = [];
     public $total = 0;
+    public $originalTotal = 0;
     public $buyerName;
     public $buyerContact;
     public $shippingAddress;
@@ -58,6 +59,12 @@ class Cart extends Component
 
                     $sessionItems[$key]['image'] = $image;
                     
+                    // Add discount info
+                    $sessionItems[$key]['original_price'] = $product->price;
+                    $sessionItems[$key]['price'] = $product->final_price;
+                    $sessionItems[$key]['is_on_sale'] = $product->is_on_sale;
+                    $sessionItems[$key]['discount_percent'] = $product->discount_percent;
+                    
                     // Add size if not already present
                     if (!isset($sessionItems[$key]['size'])) {
                         $sessionItems[$key]['size'] = $product->size;
@@ -75,6 +82,11 @@ class Cart extends Component
         $this->total = collect($this->cartItems)->sum(function($item) {
             return $item['price'] * $item['quantity'];
         });
+        
+        $this->originalTotal = collect($this->cartItems)->sum(function($item) {
+            $originalPrice = $item['original_price'] ?? $item['price'];
+            return $originalPrice * $item['quantity'];
+        });
     }
 
     public function removeFromCart($productId)
@@ -83,6 +95,11 @@ class Cart extends Component
         if (isset($cart[$productId])) {
             unset($cart[$productId]);
             Session::put('cart_items', $cart);
+            
+            // Update cart count in session
+            $cartCount = collect($cart)->sum('quantity');
+            Session::put('cart_count', $cartCount);
+            
             $this->dispatch('cart-updated');
         }
         $this->loadCart();
@@ -222,8 +239,8 @@ class Cart extends Component
                     'order_id' => $order->id,
                     'product_id' => $product->id,
                     'quantity' => $item['quantity'],
-                    'price' => $product->price,
-                    'subtotal' => $product->price * $item['quantity'],
+                    'price' => $product->final_price,
+                    'subtotal' => $product->final_price * $item['quantity'],
                 ]);
             }
         }

@@ -40,9 +40,24 @@
     </div>
     <!-- Shop Address -->
     <div>
-        <label for="shop_address" class="form-label">Alamat Toko</label>
+        <label for="shop_address" class="form-label">Alamat Toko (Lengkap)</label>
         <textarea id="shop_address" wire:model="shop_address" rows="3" placeholder="Jl. Contoh No. 123, Jakarta" class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md"></textarea>
+        <p class="form-hint">Alamat lengkap untuk pencarian Google Maps jika link tidak diisi</p>
         @error('shop_address') <span class="form-error">{{ $message }}</span> @enderror
+    </div>
+    <!-- Location Name (Display) -->
+    <div>
+        <label for="shop_location_name" class="form-label">Nama Lokasi (Tampilan)</label>
+        <input type="text" id="shop_location_name" wire:model="shop_location_name" placeholder="Mr Crab Shop, Bandar Lampung" class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md">
+        <p class="form-hint">Nama singkat yang ditampilkan di footer (opsional, jika kosong akan tampil alamat lengkap)</p>
+        @error('shop_location_name') <span class="form-error">{{ $message }}</span> @enderror
+    </div>
+    <!-- Google Maps URL -->
+    <div>
+        <label for="shop_maps_url" class="form-label">Link Google Maps</label>
+        <input type="url" id="shop_maps_url" wire:model="shop_maps_url" placeholder="https://maps.google.com/..." class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md">
+        <p class="form-hint">Buka Google Maps → Cari lokasi toko → Klik "Bagikan" → "Salin link"</p>
+        @error('shop_maps_url') <span class="form-error">{{ $message }}</span> @enderror
     </div>
 </div>
 </div>

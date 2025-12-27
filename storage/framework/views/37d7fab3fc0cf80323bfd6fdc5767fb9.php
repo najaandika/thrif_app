@@ -109,6 +109,7 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
                                         <input 
                                             type="text" 
                                             id="price" 
+                                            name="price"
                                             :value="displayValue" 
                                             @input="update"
                                             class="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all"
@@ -167,9 +168,9 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
 
                             <!-- Size & Stock (Single) -->
                             <div class="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-xl border border-gray-200 dark:border-gray-600">
-                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Size</label>
+                                <label for="size" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Size</label>
                                 <div>
-                                    <input wire:model="size" type="text" placeholder="Size (e.g. S, M, 42)" class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500">
+                                    <input wire:model="size" name="size" id="size" type="text" placeholder="Size (e.g. S, M, 42)" class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500">
                                     <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['size'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -179,6 +180,68 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
                                 </div>
+                            </div>
+
+                            <!-- Discount Section -->
+                            <div class="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 p-4 rounded-xl border border-red-200 dark:border-red-800">
+                                <div class="flex items-center gap-2 mb-4">
+                                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Diskon (Opsional)</label>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label for="discount_percentage" class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Persentase Diskon</label>
+                                        <div class="relative">
+                                            <input wire:model="discount_percentage" name="discount_percentage" type="number" id="discount_percentage" min="0" max="100" step="1" 
+                                                class="w-full px-4 py-2 pr-8 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all" 
+                                                placeholder="0">
+                                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">%</span>
+                                        </div>
+                                        <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['discount_percentage'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 dark:text-red-400 mt-1"><?php echo e($message); ?></span> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                    <div>
+                                        <label for="discount_start" class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Mulai Diskon</label>
+                                        <div x-data x-init="flatpickr($refs.startPicker, { enableTime: true, dateFormat: 'Y-m-d H:i', time_24hr: true, disableMobile: true })">
+                                            <input wire:model="discount_start" name="discount_start" x-ref="startPicker" type="text" id="discount_start" 
+                                                class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all placeholder-gray-400"
+                                                placeholder="Pilih Tanggal...">
+                                        </div>
+                                        <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['discount_start'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 dark:text-red-400 mt-1"><?php echo e($message); ?></span> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                    <div>
+                                        <label for="discount_end" class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Berakhir Diskon</label>
+                                        <div x-data x-init="flatpickr($refs.endPicker, { enableTime: true, dateFormat: 'Y-m-d H:i', time_24hr: true, disableMobile: true })">
+                                            <input wire:model="discount_end" name="discount_end" x-ref="endPicker" type="text" id="discount_end" 
+                                                class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all placeholder-gray-400"
+                                                placeholder="Pilih Tanggal...">
+                                        </div>
+                                        <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['discount_end'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 dark:text-red-400 mt-1"><?php echo e($message); ?></span> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                </div>
+                                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Kosongkan tanggal untuk diskon tanpa batas waktu.</p>
                             </div>
                             </div>
 
@@ -261,7 +324,7 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
                                                 </svg>
                                             </div>
                                             <span class="mt-2 text-xs font-medium text-gray-500 dark:text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Add Image</span>
-                                            <input wire:model="newAdditionalImages" type="file" id="additionalImages-<?php echo e($uploadIteration); ?>" multiple accept="image/*" class="hidden">
+                                            <input wire:model="newAdditionalImages" name="newAdditionalImages[]" type="file" id="additionalImages-<?php echo e($uploadIteration); ?>" multiple accept="image/*" class="hidden">
                                         </label>
                                     </div>
                                 </div>
@@ -287,8 +350,8 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
 
                             <!-- Availability -->
                             <div>
-                                <label class="flex items-center">
-                                    <input wire:model="is_available" name="is_available" type="checkbox" class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 shadow-sm focus:ring-gray-500">
+                                <label for="is_available" class="flex items-center cursor-pointer">
+                                    <input wire:model="is_available" name="is_available" id="is_available" type="checkbox" class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 shadow-sm focus:ring-gray-500">
                                     <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Product is available for sale</span>
                                 </label>
                                 <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['is_available'];

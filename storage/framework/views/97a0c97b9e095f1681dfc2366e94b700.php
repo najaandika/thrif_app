@@ -56,19 +56,39 @@
                                     <span><?php echo e($order->created_at->translatedFormat('d M Y, H:i')); ?></span>
                                 </div>
                                 <div>
+                                    <?php
+                                        $firstItem = $order->items->first();
+                                        $originalPrice = $firstItem->product->price ?? $firstItem->price;
+                                        $wasDiscounted = $originalPrice > $firstItem->price;
+                                    ?>
                                     <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100 leading-snug">
-                                        <?php echo e($order->items->first()->product->name ?? 'Produk terhapus'); ?>
+                                        <?php echo e($firstItem->product->name ?? 'Produk terhapus'); ?>
 
-                                        <?php if($order->items->count() > 1): ?>
-                                            <span class="text-sm font-normal text-gray-500">(+<?php echo e($order->items->count() - 1); ?> lainnya)</span>
-                                        <?php endif; ?>
                                     </h2>
-                                    <div class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                        <?php $__currentLoopData = $order->items->take(1); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <p><?php echo e($item->product->name ?? 'Deleted'); ?> (x<?php echo e($item->quantity); ?>)</p>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <div class="flex items-center gap-2 mt-1 flex-wrap">
+                                        <span class="text-xs sm:text-sm text-gray-500">(x<?php echo e($firstItem->quantity); ?>)</span>
+                                        <?php if($order->items->count() > 1): ?>
+                                            <span class="text-xs sm:text-sm text-gray-500">+<?php echo e($order->items->count() - 1); ?> lainnya</span>
+                                        <?php endif; ?>
+                                        <?php if($wasDiscounted && $firstItem->product && $firstItem->product->discount_percentage): ?>
+                                            <span class="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold">-<?php echo e(round($firstItem->product->discount_percentage)); ?>%</span>
+                                        <?php endif; ?>
                                     </div>
-                                    <div class="pt-2 font-bold text-sm sm:text-base text-emerald-600 dark:text-emerald-400"><?php echo e(rupiah($order->total_price)); ?></div>
+                                    <?php
+                                        $totalOriginalPrice = $order->items->sum(function($item) {
+                                            return ($item->product->price ?? $item->price) * $item->quantity;
+                                        });
+                                        $hasSavings = $totalOriginalPrice > $order->total_price;
+                                    ?>
+                                    <div class="pt-2 flex items-center flex-wrap gap-1">
+                                        <?php if($hasSavings): ?>
+                                            <span class="text-xs text-gray-400 line-through"><?php echo e(rupiah($totalOriginalPrice)); ?></span>
+                                            <span class="font-bold text-sm sm:text-base text-red-500"><?php echo e(rupiah($order->total_price)); ?></span>
+                                            <span class="text-[10px] text-red-500 font-medium">Hemat <?php echo e(rupiah($totalOriginalPrice - $order->total_price)); ?></span>
+                                        <?php else: ?>
+                                            <span class="font-bold text-sm sm:text-base text-emerald-600 dark:text-emerald-400"><?php echo e(rupiah($order->total_price)); ?></span>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                                 <div class="inline-flex items-center gap-2">
                                      <!-- Status Logic Same as Before -->

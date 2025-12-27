@@ -30,10 +30,18 @@ class Create extends Component
     
     public $size;
 
+    // Discount fields
+    public $discount_percentage;
+    public $discount_start;
+    public $discount_end;
+
     protected $rules = [
         'name' => 'required|string|max:255',
         'description' => 'nullable|string',
         'price' => 'required|numeric|min:0',
+        'discount_percentage' => 'nullable|numeric|min:0|max:100',
+        'discount_start' => 'nullable|date',
+        'discount_end' => 'nullable|date|after_or_equal:discount_start',
         'condition' => 'required|in:new,like-new,good,fair,poor',
         'category' => 'nullable|string|max:255',
         'image' => 'nullable|image|max:2048',
@@ -109,6 +117,9 @@ class Create extends Component
             'name' => $this->name,
             'description' => $this->description,
             'price' => $this->price,
+            'discount_percentage' => $this->discount_percentage ?: null,
+            'discount_start' => $this->discount_start ?: null,
+            'discount_end' => $this->discount_end ?: null,
             'condition' => $this->condition,
             'category' => $this->category,
             'image' => $imagePath,

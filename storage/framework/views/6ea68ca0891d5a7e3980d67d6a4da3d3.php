@@ -19,6 +19,11 @@
                         Foto produk menyusul
                     </div>
                 <?php endif; ?>
+                <?php if($product->is_on_sale): ?>
+                    <div class="absolute top-2 left-2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg animate-pulse">
+                        -<?php echo e($product->discount_percent); ?>% OFF
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -41,7 +46,13 @@
             </div>
 
             <div class="text-center pt-1">
-                <p class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 tracking-tight"><?php echo e(rupiah($product->price)); ?></p>
+                <?php if($product->is_on_sale): ?>
+                    <p class="text-lg text-gray-400 line-through"><?php echo e(rupiah($product->price)); ?></p>
+                    <p class="text-3xl font-extrabold text-red-500 tracking-tight"><?php echo e(rupiah($product->final_price)); ?></p>
+                    <p class="text-xs text-red-500 font-medium">Hemat <?php echo e(rupiah($product->price - $product->final_price)); ?>!</p>
+                <?php else: ?>
+                    <p class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 tracking-tight"><?php echo e(rupiah($product->price)); ?></p>
+                <?php endif; ?>
             </div>
 
             <?php if($product->description): ?>
@@ -53,4 +64,5 @@
         </div>
     </div>
 </section>
+
 <?php /**PATH C:\laragon\www\thrif\resources\views/landing/sections/checkout/product-info.blade.php ENDPATH**/ ?>

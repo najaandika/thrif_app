@@ -67,9 +67,9 @@
               target="_blank"
               rel="noopener noreferrer"
               class="group inline-flex items-center gap-2.5 rounded-2xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-slate-50 font-semibold shadow-lg shadow-slate-950/40 transition-all duration-300 hover:scale-[1.02] hover:bg-slate-800 hover:opacity-90">
-            <div class="h-8 w-8 rounded-lg bg-gradient-to-br from-black via-gray-700 to-pink-600 flex items-center justify-center text-white">
+            <div class="h-8 w-8 rounded-lg bg-black flex items-center justify-center text-white">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12.5 2v14.5a3.5 3.5 0 11-3.5-3.5c.2 0 .4.02.6.05V13a2 2 0 10-2 2c0 1.1.9 2 2 2a2 2 0 002-2V2h1zm4 2v8.5a5.5 5.5 0 11-5.5-5.5c.2 0 .4.02.6.05V7a3 3 0 10-3 3c0 1.7 1.3 3 3 3a3 3 0 003-3V4h1z"/>
+                    <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-5.394 10.692 6.33 6.33 0 0 0 10.857-4.424V8.687a8.165 8.165 0 0 0 4.773 1.526V6.79a4.831 4.831 0 0 1-1.003-.104z"/>
                 </svg>
             </div>
             <div class="flex-1 text-left">

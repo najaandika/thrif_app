@@ -23,17 +23,18 @@
             </div>
         </div>
     </div>
-    {{-- Modal removed as per request --}}
+    {{-- Modal for Receipt --}}
+    @include('livewire.orders._modal')
     <style>
         div.swal2-popup.swal-mobile-compact {
-            width: 260px !important;
+            width: 280px !important;
             padding: 1rem !important;
         }
         div.swal2-popup.swal-mobile-compact .swal2-title {
-            font-size: 14px !important;
+            font-size: 16px !important;
         }
         div.swal2-popup.swal-mobile-compact .swal2-html-container {
-            font-size: 12px !important;
+            font-size: 13px !important;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -44,19 +45,27 @@
                     title: 'Sukses!',
                     text: event.message,
                     imageUrl: "{{ asset('images/success-icon.svg') }}",
-                    imageWidth: 40,
-                    imageHeight: 40,
+                    imageWidth: 50,
+                    imageHeight: 50,
                     imageAlt: 'Success',
-                    confirmButtonText: 'OK',
+                    showDenyButton: true,
+                    confirmButtonText: 'OK (Transaksi Baru)',
+                    denyButtonText: 'Cetak Struk',
                     confirmButtonColor: '#10b981',
-                    width: '260px',
-                    padding: '1rem',
+                    denyButtonColor: '#3b82f6',
+                    width: '300px',
+                    padding: '1.25rem',
                     customClass: {
                         popup: 'rounded-2xl swal-mobile-compact',
-                        confirmButton: 'rounded-lg px-4 py-1.5 text-xs font-semibold',
-                        image: 'mb-2',
-                        title: 'text-sm font-bold',
-                        htmlContainer: 'text-xs'
+                        confirmButton: 'rounded-lg px-4 py-2 text-xs font-semibold',
+                        denyButton: 'rounded-lg px-4 py-2 text-xs font-semibold',
+                        title: 'font-bold',
+                        htmlContainer: 'text-sm'
+                    }
+                }).then((result) => {
+                    if (result.isDenied) {
+                        // Trigger show receipt modal
+                         @this.call('showLastReceipt', event.orderId);
                     }
                 });
             });

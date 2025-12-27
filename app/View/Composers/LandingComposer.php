@@ -36,6 +36,8 @@ class LandingComposer
             'shopEmail' => Setting::get('shop_email', 'contact@thrif.com'),
             'shopPhone' => Setting::get('shop_phone'),
             'shopAddress' => Setting::get('shop_address'),
+            'shopLocationName' => Setting::get('shop_location_name'),
+            'shopMapsUrl' => Setting::get('shop_maps_url'),
             
             // About Section
             'aboutTitle' => Setting::get('about_title', 'Tentang Kami'),

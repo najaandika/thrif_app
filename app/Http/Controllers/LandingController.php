@@ -9,7 +9,7 @@ class LandingController extends Controller
 {
     public function __invoke()
     {
-        $limit = 6;
+        $limit = 8;
 
         $baseQuery = Product::query()
             ->where('is_available', true)

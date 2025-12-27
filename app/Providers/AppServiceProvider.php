@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
     {
         \Illuminate\Support\Facades\Blade::include('components.test', 'test');
         
-        // Force HTTPS for Ngrok
+        // Force HTTPS for Ngrok (Optional: Keep it if you use Ngrok often, or remove it entirely)
         if (str_contains(config('app.url'), 'ngrok')) {
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }

@@ -3,6 +3,7 @@
 namespace App\Livewire\Products;
 
 use App\Models\Product;
+use App\Models\Category;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Storage;
@@ -15,14 +16,20 @@ class Index extends Component
     use WithPagination;
 
     public $search = '';
+    public $category = '';
 
-    protected $queryString = ['search'];
+    protected $queryString = ['search', 'category'];
 
     protected $listeners = [
         'delete' => 'deleteProduct',
     ];
 
     public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingCategory()
     {
         $this->resetPage();
     }
@@ -48,11 +55,17 @@ class Index extends Component
                     ->orWhere('description', 'like', '%' . $this->search . '%')
                     ->orWhere('category', 'like', '%' . $this->search . '%');
             })
+            ->when($this->category, function ($query) {
+                $query->where('category', $this->category);
+            })
             ->latest()
             ->paginate(10);
 
+        $categories = Category::orderBy('name')->get();
+
         return view('livewire.products.index', [
             'products' => $products,
+            'categories' => $categories,
         ]);
     }
 }

@@ -8,7 +8,9 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/js/app.js',
                 'resources/css/landing.css',
-                'resources/js/landing-checkout.js'
+                'resources/js/landing-checkout.js',
+                'resources/js/swal.js',
+                'resources/js/cart-checkout.js',
             ],
             refresh: true,
         }),

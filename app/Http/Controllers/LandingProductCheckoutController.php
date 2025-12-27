@@ -20,7 +20,7 @@ class LandingProductCheckoutController extends Controller
 
 
         $quantity = max(1, (int) old('quantity', 1));
-        $grossAmount = $quantity * $product->price;
+        $grossAmount = (int) ($quantity * $product->final_price);
 
         $params = [
             'transaction_details' => [
@@ -39,6 +39,11 @@ class LandingProductCheckoutController extends Controller
         $inputClass = 'w-full rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-sm text-gray-900 dark:text-gray-100 transition-all duration-300 focus:border-slate-900 dark:focus:border-slate-500 focus:ring-4 focus:ring-slate-900/20 dark:focus:ring-slate-500/20 hover:border-gray-300 dark:hover:border-gray-600 focus:outline-none';
         $labelClass = 'text-[11px] font-semibold tracking-[0.2em] text-gray-500 dark:text-gray-400 uppercase';
 
+        // Determine back URL based on where user came from
+        $from = $request->query('from', 'catalog');
+        $backUrl = $from === 'home' ? route('landing.home') : route('landing.products.index');
+        $backLabel = $from === 'home' ? 'Home' : 'Catalog';
+
         return view('landing.checkout', [
             'product' => $product,
             'snapToken' => $snapToken,
@@ -49,6 +54,8 @@ class LandingProductCheckoutController extends Controller
             'subtotal' => $grossAmount,
             'shopName' => \App\Models\Setting::get('shop_name', 'Thrif Studio'),
             'shopAddress' => \App\Models\Setting::get('shop_address', 'Alamat belum diatur'),
+            'backUrl' => $backUrl,
+            'backLabel' => $backLabel,
             'prefill' => [
                 'buyer_name' => old('buyer_name', $user->name),
                 'buyer_contact' => old('buyer_contact', $user->phone ?? $user->email),

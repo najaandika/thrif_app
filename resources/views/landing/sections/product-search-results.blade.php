@@ -12,12 +12,26 @@
     @if($products->count())
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             @foreach($products as $product)
-                <div class="border rounded-xl p-4 bg-white dark:bg-gray-900 shadow">
+                <div class="border rounded-xl p-4 bg-white dark:bg-gray-900 shadow relative overflow-hidden">
                     <a href="{{ route('landing.products.checkout', $product) }}" class="block">
-                        <img src="{{ $product->image ? Storage::url($product->image) : 'https://via.placeholder.com/200x150?text=No+Image' }}" alt="{{ $product->name }}" class="w-full h-36 object-cover rounded mb-2">
+                        <div class="relative">
+                            <img src="{{ $product->image ? Storage::url($product->image) : 'https://via.placeholder.com/200x150?text=No+Image' }}" alt="{{ $product->name }}" class="w-full h-36 object-cover rounded mb-2">
+                            @if($product->is_on_sale)
+                                <div class="absolute top-2 left-2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
+                                    -{{ $product->discount_percent }}%
+                                </div>
+                            @endif
+                        </div>
                         <div class="font-bold text-lg text-gray-900 dark:text-gray-100">{{ $product->name }}</div>
                         <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Kategori: {{ $product->category }}</div>
-                        <div class="text-emerald-600 dark:text-emerald-400 font-semibold">{{ rupiah($product->price) }}</div>
+                        @if($product->is_on_sale)
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm text-gray-400 line-through">{{ rupiah($product->price) }}</span>
+                                <span class="text-red-500 font-bold">{{ rupiah($product->final_price) }}</span>
+                            </div>
+                        @else
+                            <div class="text-emerald-600 dark:text-emerald-400 font-semibold">{{ rupiah($product->price) }}</div>
+                        @endif
                     </a>
                 </div>
             @endforeach
@@ -28,3 +42,4 @@
     @endif
 </div>
 @endsection
+

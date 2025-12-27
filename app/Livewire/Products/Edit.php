@@ -26,6 +26,11 @@ class Edit extends Component
 
     public $size;
 
+    // Discount fields
+    public $discount_percentage;
+    public $discount_start;
+    public $discount_end;
+
     // Additional Images
     public $newAdditionalImages = []; // For input
     public $additionalImages = []; // Accumulator
@@ -37,6 +42,9 @@ class Edit extends Component
         'name' => 'required|string|max:255',
         'description' => 'nullable|string',
         'price' => 'required|numeric|min:0',
+        'discount_percentage' => 'nullable|numeric|min:0|max:100',
+        'discount_start' => 'nullable|date',
+        'discount_end' => 'nullable|date|after_or_equal:discount_start',
         'condition' => 'required|in:new,like-new,good,fair,poor',
         'category' => 'nullable|string|max:255',
         'image' => 'nullable|image|max:2048',
@@ -61,7 +69,11 @@ class Edit extends Component
         $this->is_available = $product->is_available;
 
         $this->size = $product->size;
-        // Stock dihapus, tidak perlu di-set
+        
+        // Load discount fields
+        $this->discount_percentage = $product->discount_percentage;
+        $this->discount_start = $product->discount_start?->format('Y-m-d\TH:i');
+        $this->discount_end = $product->discount_end?->format('Y-m-d\TH:i');
     }
 
 
@@ -117,6 +129,9 @@ class Edit extends Component
             'name' => $this->name,
             'description' => $this->description,
             'price' => $this->price,
+            'discount_percentage' => $this->discount_percentage ?: null,
+            'discount_start' => $this->discount_start ?: null,
+            'discount_end' => $this->discount_end ?: null,
             'condition' => $this->condition,
             'category' => $this->category,
             'is_available' => $this->is_available ?? true,

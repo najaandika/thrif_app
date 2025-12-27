@@ -15,10 +15,11 @@ class Index extends Component
 
     public $search = '';
     public $category = '';
+    public $promo = false;
 
     public $categories = [];
 
-    protected $queryString = ['search', 'category'];
+    protected $queryString = ['search', 'category', 'promo'];
 
     public function updatingSearch()
     {
@@ -30,12 +31,33 @@ class Index extends Component
         $this->resetPage();
     }
 
+    public function updatingPromo()
+    {
+        $this->resetPage();
+    }
+
+    public function resetFilters()
+    {
+        $this->promo = false;
+        $this->category = '';
+        $this->resetPage();
+    }
+
+    public function togglePromo()
+    {
+        $this->promo = !$this->promo;
+        $this->resetPage();
+    }
+
     public function mount(): void
     {
         $this->categories = Category::query()
             ->orderBy('name')
             ->pluck('name', 'name')
             ->toArray();
+        
+        // Initialize promo from query string
+        $this->promo = request()->boolean('promo');
     }
 
     public function render()
@@ -50,6 +72,18 @@ class Index extends Component
             })
             ->when($this->category, function ($query) {
                 $query->where('category', $this->category);
+            })
+            ->when($this->promo, function ($query) {
+                // Filter products with active discount
+                $query->where('discount_percentage', '>', 0)
+                    ->where(function ($q) {
+                        $q->whereNull('discount_start')
+                            ->orWhere('discount_start', '<=', now());
+                    })
+                    ->where(function ($q) {
+                        $q->whereNull('discount_end')
+                            ->orWhere('discount_end', '>=', now());
+                    });
             })
             ->where('is_available', true)
             ->latest()

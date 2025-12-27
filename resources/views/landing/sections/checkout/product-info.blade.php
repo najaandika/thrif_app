@@ -19,6 +19,11 @@
                         Foto produk menyusul
                     </div>
                 @endif
+                @if ($product->is_on_sale)
+                    <div class="absolute top-2 left-2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg animate-pulse">
+                        -{{ $product->discount_percent }}% OFF
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -39,7 +44,13 @@
             </div>
 
             <div class="text-center pt-1">
-                <p class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 tracking-tight">{{ rupiah($product->price) }}</p>
+                @if ($product->is_on_sale)
+                    <p class="text-lg text-gray-400 line-through">{{ rupiah($product->price) }}</p>
+                    <p class="text-3xl font-extrabold text-red-500 tracking-tight">{{ rupiah($product->final_price) }}</p>
+                    <p class="text-xs text-red-500 font-medium">Hemat {{ rupiah($product->price - $product->final_price) }}!</p>
+                @else
+                    <p class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 tracking-tight">{{ rupiah($product->price) }}</p>
+                @endif
             </div>
 
             @if ($product->description)
@@ -51,3 +62,4 @@
         </div>
     </div>
 </section>
+

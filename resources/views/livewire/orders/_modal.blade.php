@@ -52,10 +52,27 @@
                 <!-- Items -->
                 <div class="space-y-3 mb-4">
                     @foreach($selectedOrder->items as $item)
+                    @php
+                        $originalPrice = $item->product->price ?? $item->price;
+                        $wasDiscounted = $originalPrice > $item->price;
+                    @endphp
                     <div class="text-sm">
-                        <div class="font-medium text-gray-900">{{ $item->product->name ?? 'Produk dihapus' }}</div>
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="font-medium text-gray-900">{{ $item->product->name ?? 'Produk dihapus' }}</div>
+                            @if($wasDiscounted && $item->product && $item->product->discount_percentage)
+                                <span class="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold shrink-0">-{{ round($item->product->discount_percentage) }}%</span>
+                            @endif
+                        </div>
                         <div class="flex justify-between text-xs text-gray-500 mt-1">
-                            <span>{{ $item->quantity }} x {{ number_format($item->price, 0, ',', '.') }}</span>
+                            <span>
+                                {{ $item->quantity }} x 
+                                @if($wasDiscounted)
+                                    <span class="line-through">{{ number_format($originalPrice, 0, ',', '.') }}</span>
+                                    <span class="text-red-500 font-medium">{{ number_format($item->price, 0, ',', '.') }}</span>
+                                @else
+                                    {{ number_format($item->price, 0, ',', '.') }}
+                                @endif
+                            </span>
                             <span class="font-medium text-gray-900">{{ number_format($item->subtotal, 0, ',', '.') }}</span>
                         </div>
                     </div>
@@ -93,14 +110,14 @@
                         </div>
 
                         <!-- Payment -->
-                        @if($selectedOrder->type === 'pos')
+                        @if($selectedOrder->type === 'pos' && $selectedOrder->payment_method === 'cash')
                         <div class="flex justify-between text-xs text-gray-500 pt-2">
                             <span>Uang Diterima</span>
                             <span>{{ number_format($selectedOrder->amount_received, 0, ',', '.') }}</span>
                         </div>
                         <div class="flex justify-between text-xs text-gray-500 pt-1">
                             <span>Kembalian</span>
-                            <span>{{ number_format($selectedOrder->amount_received - $selectedOrder->total_price, 0, ',', '.') }}</span>
+                            <span class="text-green-600 font-bold">{{ number_format($selectedOrder->amount_received - $selectedOrder->total_price, 0, ',', '.') }}</span>
                         </div>
                         @endif
 
@@ -125,22 +142,22 @@
                         </div>
                     @endif
                     
-                    @if($selectedOrder->type !== 'pos')
                     <div class="flex justify-between text-xs text-gray-500 pt-2">
                         <span>Metode Bayar</span>
-                        <span>
-                            @if($selectedOrder->payment_method === 'cash')
+                        <span class="font-bold text-gray-900 uppercase">
+                            @if($selectedOrder->type === 'pos' && $selectedOrder->payment_method === 'cash')
+                                Tunai
+                            @elseif($selectedOrder->payment_method === 'cash')
                                 @if($selectedOrder->shipping_address === 'AMBIL DI TOKO')
                                     Bayar di Kasir
                                 @else
                                     COD
                                 @endif
                             @else
-                                {{ ucfirst($selectedOrder->payment_method ?? 'Non-Tunai') }}
+                                {{ $selectedOrder->payment_method === 'qris' || $selectedOrder->payment_method === 'ewallet' ? 'QRIS' : ucfirst($selectedOrder->payment_method ?? 'Non-Tunai') }}
                             @endif
                         </span>
                     </div>
-                    @endif
                     
                     @if($selectedOrder->type !== 'pos')
                     <div class="flex justify-between text-xs text-gray-500 pt-1">

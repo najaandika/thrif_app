@@ -17,12 +17,17 @@
                     <ul class="divide-y divide-gray-100 dark:divide-gray-800">
                         <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $cartItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <li class="flex py-4 first:pt-0 last:pb-0 gap-4">
-                                <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+                                <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 relative">
                                     <!--[if BLOCK]><![endif]--><?php if(isset($item['image']) && $item['image']): ?>
                                         <img src="<?php echo e(Storage::url($item['image'])); ?>" alt="<?php echo e($item['name']); ?>" class="h-full w-full object-cover object-center">
                                     <?php else: ?>
                                         <div class="h-full w-full flex items-center justify-center text-xs text-gray-400">
                                             No Img
+                                        </div>
+                                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                                    <!--[if BLOCK]><![endif]--><?php if(isset($item['is_on_sale']) && $item['is_on_sale']): ?>
+                                        <div class="absolute top-1 left-1 bg-gradient-to-r from-red-500 to-orange-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full shadow">
+                                            -<?php echo e($item['discount_percent']); ?>%
                                         </div>
                                     <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                 </div>
@@ -37,7 +42,14 @@
                                         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Size: <?php echo e($item['size'] ?? '-'); ?></p>
                                     </div>
                                     <div class="flex items-end justify-between text-sm">
-                                        <p class="font-bold text-emerald-600 dark:text-emerald-400 font-mono"><?php echo e(rupiah($item['price'])); ?></p>
+                                        <div>
+                                            <!--[if BLOCK]><![endif]--><?php if(isset($item['is_on_sale']) && $item['is_on_sale']): ?>
+                                                <p class="text-xs text-gray-400 line-through"><?php echo e(rupiah($item['original_price'])); ?></p>
+                                                <p class="font-bold text-red-500 font-mono"><?php echo e(rupiah($item['price'])); ?></p>
+                                            <?php else: ?>
+                                                <p class="font-bold text-emerald-600 dark:text-emerald-400 font-mono"><?php echo e(rupiah($item['price'])); ?></p>
+                                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                                        </div>
 
                                         <div class="flex items-center gap-3">
                                             <p class="text-gray-500 dark:text-gray-400">Qty <?php echo e($item['quantity']); ?></p>
@@ -249,8 +261,20 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
                     
                             <div class="flex items-center justify-between pt-1">
                                 <span class="font-medium">Total Harga</span>
-                                <span class="font-bold text-lg text-emerald-600 dark:text-emerald-400"><?php echo e(rupiah($total)); ?></span>
+                                <!--[if BLOCK]><![endif]--><?php if($originalTotal > $total): ?>
+                                    <div class="text-right">
+                                        <span class="text-xs text-gray-400 line-through block"><?php echo e(rupiah($originalTotal)); ?></span>
+                                        <span class="font-bold text-lg text-red-500"><?php echo e(rupiah($total)); ?></span>
+                                    </div>
+                                <?php else: ?>
+                                    <span class="font-bold text-lg text-emerald-600 dark:text-emerald-400"><?php echo e(rupiah($total)); ?></span>
+                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                             </div>
+                            <!--[if BLOCK]><![endif]--><?php if($originalTotal > $total): ?>
+                                <div class="text-right mt-1">
+                                    <span class="text-xs text-red-500 font-medium">Kamu hemat <?php echo e(rupiah($originalTotal - $total)); ?>!</span>
+                                </div>
+                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                         </div>
                     </div>
 
@@ -274,7 +298,7 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
         <input type="hidden" name="notes" value="<?php echo e($notes); ?>">
         <input type="hidden" name="payment_result" id="payment-result-input">
     </form>
-</div>
 
-<?php echo app('Illuminate\Foundation\Vite')(['resources/js/cart-checkout.js']); ?>
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/js/cart-checkout.js']); ?>
+</div>
 <?php /**PATH C:\laragon\www\thrif\resources\views/livewire/landing/cart.blade.php ENDPATH**/ ?>

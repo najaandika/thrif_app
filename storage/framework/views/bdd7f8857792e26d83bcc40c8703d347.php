@@ -30,11 +30,12 @@
         <header class="bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800 backdrop-blur">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-end">
                 <nav class="text-xs font-medium text-gray-600 dark:text-gray-300 flex items-center gap-3">
-                    <a href="/" class="hover:text-slate-900 dark:hover:text-slate-100 inline-flex items-center gap-1">
+                    <a href="<?php echo e($backUrl); ?>" class="hover:text-slate-900 dark:hover:text-slate-100 inline-flex items-center gap-1">
                         <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        Home
+                        <?php echo e($backLabel); ?>
+
                     </a>
                     <span class="text-gray-300 dark:text-gray-700">•</span>
                     <span class="text-gray-400 cursor-not-allowed">Checkout</span>
@@ -255,8 +256,8 @@ unset($__errorArgs, $__bag); ?>
                                     <?php echo $__env->make('landing.components.order-summary', ['product' => $product, 'prefilledQuantity' => $prefilledQuantity], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
                             </div>
 
-                            <div class="flex flex-col sm:flex-row sm:items-center gap-3 pt-1">
-                                <button type="submit" id="submit-order-btn" aria-live="polite" class="inline-flex items-center justify-center gap-2 flex-1 rounded-2xl bg-gray-800 px-6 py-3.5 text-sm font-semibold text-white shadow-xl shadow-gray-900/40 transition-all duration-300 hover:bg-gray-700 hover:scale-105 hover:shadow-2xl hover:shadow-gray-900/60 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+                            <div class="pt-1">
+                                <button type="submit" id="submit-order-btn" aria-live="polite" class="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gray-800 px-6 py-3.5 text-sm font-semibold text-white shadow-xl shadow-gray-900/40 transition-all duration-300 hover:bg-gray-700 hover:scale-105 hover:shadow-2xl hover:shadow-gray-900/60 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
                                     <svg class="w-5 h-5 submit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
@@ -266,12 +267,6 @@ unset($__errorArgs, $__bag); ?>
                                     </svg>
                                     <span class="submit-text">Kirim Order</span>
                                 </button>
-                                <a href="/" class="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-gray-200 dark:border-gray-700 px-5 py-3.5 text-sm font-semibold text-gray-700 dark:text-gray-100 transition-all duration-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                    </svg>
-                                    Batalkan
-                                </a>
                             </div>
                         </form>
                     </section>

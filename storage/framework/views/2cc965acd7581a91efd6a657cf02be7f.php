@@ -53,10 +53,28 @@
                     <!-- Items -->
                     <div class="space-y-3 mb-4">
                         <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $order->items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php
+                            $originalPrice = $item->product->price ?? $item->price;
+                            $wasDiscounted = $originalPrice > $item->price;
+                        ?>
                         <div class="text-sm">
-                            <div class="font-medium text-gray-900"><?php echo e($item->product->name); ?></div>
+                            <div class="flex items-start justify-between gap-2">
+                                <div class="font-medium text-gray-900"><?php echo e($item->product->name); ?></div>
+                                <!--[if BLOCK]><![endif]--><?php if($wasDiscounted && $item->product->discount_percentage): ?>
+                                    <span class="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold shrink-0">-<?php echo e(round($item->product->discount_percentage)); ?>%</span>
+                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                            </div>
                             <div class="flex justify-between text-xs text-gray-500 mt-1">
-                                <span><?php echo e($item->quantity); ?> x <?php echo e(number_format($item->price, 0, ',', '.')); ?></span>
+                                <span>
+                                    <?php echo e($item->quantity); ?> x 
+                                    <!--[if BLOCK]><![endif]--><?php if($wasDiscounted): ?>
+                                        <span class="line-through"><?php echo e(number_format($originalPrice, 0, ',', '.')); ?></span>
+                                        <span class="text-red-500 font-medium"><?php echo e(number_format($item->price, 0, ',', '.')); ?></span>
+                                    <?php else: ?>
+                                        <?php echo e(number_format($item->price, 0, ',', '.')); ?>
+
+                                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                                </span>
                                 <span class="font-medium text-gray-900"><?php echo e(number_format($item->subtotal, 0, ',', '.')); ?></span>
                             </div>
                         </div>

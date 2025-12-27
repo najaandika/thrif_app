@@ -32,6 +32,7 @@
                                 <thead class="admin-thead">
                                     <tr>
                                         <th class="admin-th">Name</th>
+                                        <th class="admin-th text-center">Jumlah Produk</th>
                                         <th class="admin-th-right">Actions</th>
                                     </tr>
                                 </thead>
@@ -40,6 +41,11 @@
                                         <tr class="admin-tr">
                                             <td class="admin-td">
                                                 <div class="text-primary">{{ $category->name }}</div>
+                                            </td>
+                                            <td class="admin-td text-center">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-200">
+                                                    {{ $category->products_count }} produk
+                                                </span>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
                                                 <a href="{{ route('categories.edit', $category) }}" class="btn-action-edit">
@@ -58,7 +64,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="2" class="empty-state">
+                                            <td colspan="3" class="empty-state">
                                                 No categories found.
                                             </td>
                                         </tr>

@@ -76,16 +76,15 @@ document.addEventListener('livewire:initialized', () => {
             },
             onPending: function (result) {
                 console.log('Payment Pending', result);
-                document.getElementById('payment-result-input').value = JSON.stringify(result);
 
-                // Show pending alert
+                // DO NOT submit form - payment is not complete yet
                 Swal.fire({
-                    title: 'Menunggu',
-                    text: 'Pembayaran sedang diproses.',
+                    title: 'Menunggu Pembayaran',
+                    text: 'Pembayaran belum selesai. Silakan selesaikan pembayaran untuk melanjutkan pesanan.',
                     icon: 'info',
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#3b82f6',
-                    width: '260px',
+                    width: '280px',
                     padding: '1rem',
                     customClass: {
                         popup: 'rounded-2xl swal-mobile-compact',
@@ -93,9 +92,8 @@ document.addEventListener('livewire:initialized', () => {
                         title: 'text-sm font-bold',
                         htmlContainer: 'text-xs'
                     }
-                }).then(() => {
-                    document.getElementById('finalize-form').submit();
                 });
+                // Form NOT submitted - order will NOT be created
             },
             onError: function (result) {
                 console.error('Payment Error', result);
@@ -107,7 +105,24 @@ document.addEventListener('livewire:initialized', () => {
                 });
             },
             onClose: function () {
-                console.log('Payment popup closed. No order created.');
+                console.log('Payment popup closed without completing payment');
+
+                // Show message that payment was cancelled
+                Swal.fire({
+                    title: 'Pembayaran Dibatalkan',
+                    text: 'Anda menutup halaman pembayaran. Pesanan tidak dibuat.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#f59e0b',
+                    width: '280px',
+                    padding: '1rem',
+                    customClass: {
+                        popup: 'rounded-2xl swal-mobile-compact',
+                        confirmButton: 'rounded-lg px-4 py-1.5 text-xs font-semibold',
+                        title: 'text-sm font-bold',
+                        htmlContainer: 'text-xs'
+                    }
+                });
             }
         });
     });
