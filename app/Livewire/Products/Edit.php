@@ -56,7 +56,7 @@ class Edit extends Component
 
     public function mount(Product $product)
     {
-        if ($product->user_id !== Auth::id()) {
+        if (!Auth::user()->isAdmin() && $product->user_id !== Auth::id()) {
             abort(403);
         }
 

@@ -17,7 +17,7 @@
             <a href="{{ route('landing.products.index') }}" class="hover:text-gray-900 dark:hover:text-gray-100 hover:opacity-80 transition-opacity">Catalog</a>
 
             <a href="{{ route('landing.products.index', ['promo' => 1]) }}" class="smooth-scroll hover:text-gray-900 dark:hover:text-gray-100 inline-flex items-center gap-1">
-                <span class="text-orange-500">🔥</span> Flash Sale
+                Flash Sale <span class="text-orange-500">🔥</span>
             </a>
         </nav>
 
@@ -51,7 +51,9 @@
             <!-- Cart Button (Visible on Mobile & Desktop) -->
             <a href="{{ route('landing.cart.index') }}" class="flex h-9 w-9 lg:h-10 lg:w-10 items-center justify-center rounded-2xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 relative transition-transform hover:scale-105 active:scale-95 hover:opacity-80 transition-all" aria-label="Cart">
                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round" stroke-linejoin="round" />
+                    <circle cx="9" cy="21" r="1" />
+                    <circle cx="20" cy="21" r="1" />
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
                 <span data-cart-count class="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-[10px] font-bold text-white flex items-center justify-center {{ session('cart_count', 0) > 0 ? '' : 'hidden' }}">{{ session('cart_count', 0) }}</span>
             </a>
@@ -103,7 +105,7 @@
                 <a href="#tentang">Home</a>
                 <a href="{{ route('landing.products.index') }}">Catalog</a>
 
-                <a href="{{ route('landing.products.index', ['promo' => 1]) }}" class="flex items-center gap-1"><span class="text-orange-500">🔥</span> Flash Sale</a>
+                <a href="{{ route('landing.products.index', ['promo' => 1]) }}" class="flex items-center gap-1">Flash Sale <span class="text-orange-500">🔥</span></a>
                 
                 <!-- Theme Toggle -->
                 <button type="button" @click="$store.darkMode.toggle()" class="flex items-center justify-between text-left hover:text-emerald-600 dark:hover:text-emerald-400 transition py-0.5" aria-label="Toggle theme">
@@ -161,7 +163,9 @@
                         </a>
                         <a href="{{ route('landing.cart.index') }}" class="group inline-flex items-center justify-center gap-1.5 h-10 px-2.5 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-md shadow-emerald-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/40 active:scale-95">
                             <svg class="h-4 w-4 text-white drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round" stroke-linejoin="round" />
+                                <circle cx="9" cy="21" r="1" />
+                                <circle cx="20" cy="21" r="1" />
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                             <span class="text-white font-medium text-xs">Cart ({{ session('cart_count') ?? 0 }})</span>
                         </a>

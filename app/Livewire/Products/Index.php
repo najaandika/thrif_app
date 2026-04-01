@@ -38,7 +38,7 @@ class Index extends Component
     {
         $product = Product::find($id);
 
-        if ($product && $product->user_id === Auth::id()) {
+        if ($product && (Auth::user()->isAdmin() || $product->user_id === Auth::id())) {
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
             }

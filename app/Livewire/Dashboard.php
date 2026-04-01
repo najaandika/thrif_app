@@ -22,17 +22,14 @@ class Dashboard extends Component
 
     public function render()
     {
-        $userId = Auth::id();
+        $stats = $this->metrics->buildStats();
 
-        $stats = $this->metrics->buildStats($userId);
-
-        $recent_products = Product::where('user_id', $userId)
-            ->latest()
+        $recent_products = Product::latest()
             ->take(5)
             ->get();
 
         // Sales data for chart based on selected range
-        $chart_data = $this->metrics->buildSalesChartData($userId, $this->salesRange);
+        $chart_data = $this->metrics->buildSalesChartData($this->salesRange);
         $chart_max = $chart_data->max() ?: 1; // Prevent division by zero
 
         return view('livewire.dashboard', [
@@ -43,5 +40,4 @@ class Dashboard extends Component
             'salesRange' => $this->salesRange,
         ]);
     }
-
 }
