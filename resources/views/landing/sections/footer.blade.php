@@ -51,7 +51,7 @@
             
             <!-- Column 2: Navigation -->
             <div class="space-y-3">
-                <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100">Navigasi</h4>
+                <h3 class="text-sm font-bold text-gray-900 dark:text-gray-100">Navigasi</h3>
                 <ul class="space-y-2 text-xs text-gray-600 dark:text-gray-400 font-medium">
                     <li>
                         <a href="#tentang" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-2 hover:opacity-80">
@@ -99,7 +99,7 @@
             
             <!-- Column 3: Contact -->
             <div class="space-y-3">
-                <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100">Kontak Kami</h4>
+                <h3 class="text-sm font-bold text-gray-900 dark:text-gray-100">Kontak Kami</h3>
                 <div class="space-y-2.5 text-xs">
                     @if($shopEmail)
                     <a href="mailto:{{ $shopEmail }}" class="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
