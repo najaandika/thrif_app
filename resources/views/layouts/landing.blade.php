@@ -21,6 +21,29 @@
 
         <!-- Fonts: self-hosted via app.css @font-face -->
 
+        <!-- AI Search Engine Optimization (JSON-LD Schema Markup) -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebSite",
+              "name": "Mr Crab Shop",
+              "url": "{{ url('/') }}",
+              "description": "Toko thrift online terpercaya. Koleksi pakaian secondhand berkualitas, dikurasi manual, difoto apa adanya."
+            },
+            {
+              "@type": "Store",
+              "name": "Mr Crab Shop",
+              "image": "{{ isset($ogImage) ? $ogImage : url('/images/logo.png') }}",
+              "description": "Thrift store online menyediakan pakaian preloved berkualitas.",
+              "url": "{{ url('/') }}",
+              "priceRange": "$$"
+            }
+          ]
+        }
+        </script>
+
         <meta name="theme-color" content="#f3f4f6">
         <!-- Dark Mode Script (Prevent FOUC) -->
         <script>
