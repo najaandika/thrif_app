@@ -149,7 +149,7 @@ class Edit extends Component
             $imageName = 'products/' . uniqid() . '.webp';
             
             $img = $manager->read($this->image->getRealPath());
-            $img->scaleDown(width: 800);
+            $img->scaleDown(width: 480);
             
             $encoded = $img->toWebp(80);
             Storage::disk('public')->put($imageName, (string) $encoded);
@@ -179,7 +179,7 @@ class Edit extends Component
             foreach ($this->additionalImages as $index => $additionalImage) {
                 $additionalImageName = 'products/' . uniqid() . '.webp';
                 $img = $manager->read($additionalImage->getRealPath());
-                $img->scaleDown(width: 800);
+                $img->scaleDown(width: 480);
                 
                 $encoded = $img->toWebp(80);
                 Storage::disk('public')->put($additionalImageName, (string) $encoded);

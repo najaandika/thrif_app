@@ -37,7 +37,7 @@ $shopName = computed(fn() => cache()->remember('shop_name', 3600, fn() => Settin
                 <div class="shrink-0 hidden sm:flex items-center">
                     <a href="{{ $this->homeUrl }}" class="flex items-center gap-2 text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                         @if($this->shopLogo)
-                            <img src="{{ media_url($this->shopLogo) }}" alt="{{ $this->shopName }}" class="w-8 h-8 rounded-lg object-cover shadow-lg">
+                            <img src="{{ media_url($this->shopLogo) }}" alt="{{ $this->shopName }}" width="32" height="32" class="w-8 h-8 rounded-lg object-cover shadow-lg">
                         @else
                             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
                                 {{ strtoupper(substr($this->shopName, 0, 1)) }}
