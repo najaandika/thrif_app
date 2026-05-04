@@ -18,9 +18,7 @@
         <meta property="og:image" content="{{ $ogImage }}">
         @endif
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
-        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+        <!-- Fonts: self-hosted via app.css @font-face -->
 
         <meta name="theme-color" content="#f3f4f6">
         <!-- Dark Mode Script (Prevent FOUC) -->
