@@ -152,4 +152,16 @@ class Product extends Model
             default => 'bg-gray-500'
         };
     }
+
+    public function getConditionColorAttribute(): string
+    {
+        return match ($this->condition) {
+            'new' => '#4338ca', // indigo-700
+            'like-new', 'like_new' => '#1d4ed8', // blue-700
+            'good' => '#047857', // emerald-700
+            'fair' => '#a16207', // yellow-700
+            'poor', 'defect' => '#b91c1c', // red-700
+            default => '#4b5563' // gray-600
+        };
+    }
 }

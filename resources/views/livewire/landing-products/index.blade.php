@@ -134,7 +134,8 @@
                                     {{ $product->condition === 'new' ? 'bg-blue-500' : 
                                       ($product->condition === 'like-new' ? 'bg-indigo-500' : 
                                       ($product->condition === 'good' ? 'bg-emerald-500' : 
-                                      ($product->condition === 'fair' ? 'bg-yellow-500' : 'bg-orange-500'))) }}">
+                                      ($product->condition === 'fair' ? 'bg-yellow-500' : 'bg-orange-500'))) }}"
+                                    style="background-color: {{ $product->condition_color }};">
                                     {{ $product->condition_label }}
                                 </span>
                             @endif
