@@ -9,6 +9,8 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 #[Layout('layouts.app')]
 class Edit extends Component
@@ -142,7 +144,17 @@ class Edit extends Component
             if ($this->product->image) {
                 Storage::disk('public')->delete($this->product->image);
             }
-            $data['image'] = $this->image->store('products', 'public');
+            
+            $manager = new ImageManager(new Driver());
+            $imageName = 'products/' . uniqid() . '.webp';
+            
+            $img = $manager->read($this->image->getRealPath());
+            $img->scaleDown(width: 800);
+            
+            $encoded = $img->toWebp(80);
+            Storage::disk('public')->put($imageName, (string) $encoded);
+            
+            $data['image'] = $imageName;
         }
 
         // Process deferred deletions
@@ -162,10 +174,18 @@ class Edit extends Component
             // Get current max sort order
             $currentMaxSort = $this->product->images()->max('sort_order') ?? 0;
             
+            $manager = new ImageManager(new Driver());
+            
             foreach ($this->additionalImages as $index => $additionalImage) {
-                $additionalImagePath = $additionalImage->store('products', 'public');
+                $additionalImageName = 'products/' . uniqid() . '.webp';
+                $img = $manager->read($additionalImage->getRealPath());
+                $img->scaleDown(width: 800);
+                
+                $encoded = $img->toWebp(80);
+                Storage::disk('public')->put($additionalImageName, (string) $encoded);
+                
                 $this->product->images()->create([
-                    'image_path' => $additionalImagePath,
+                    'image_path' => $additionalImageName,
                     'sort_order' => $currentMaxSort + $index + 1,
                 ]);
             }

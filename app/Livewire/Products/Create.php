@@ -9,6 +9,9 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Features\SupportFileUploads\FileNotPreviewableException;
 use Livewire\Attributes\Layout;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Facades\Storage;
 
 #[Layout('layouts.app')]
 class Create extends Component
@@ -109,7 +112,16 @@ class Create extends Component
 
         $imagePath = null;
         if ($this->image) {
-            $imagePath = $this->image->store('products', 'public');
+            $manager = new ImageManager(new Driver());
+            $imageName = 'products/' . uniqid() . '.webp';
+            
+            $img = $manager->read($this->image->getRealPath());
+            $img->scaleDown(width: 800);
+            
+            $encoded = $img->toWebp(80);
+            Storage::disk('public')->put($imageName, (string) $encoded);
+            
+            $imagePath = $imageName;
         }
 
         $product = Product::create([
@@ -128,10 +140,17 @@ class Create extends Component
 
         // Save additional images
         if (!empty($this->additionalImages)) {
+            $manager = new ImageManager(new Driver());
             foreach ($this->additionalImages as $index => $additionalImage) {
-                $additionalImagePath = $additionalImage->store('products', 'public');
+                $additionalImageName = 'products/' . uniqid() . '.webp';
+                $img = $manager->read($additionalImage->getRealPath());
+                $img->scaleDown(width: 800);
+                
+                $encoded = $img->toWebp(80);
+                Storage::disk('public')->put($additionalImageName, (string) $encoded);
+                
                 $product->images()->create([
-                    'image_path' => $additionalImagePath,
+                    'image_path' => $additionalImageName,
                     'sort_order' => $index + 1,
                 ]);
             }
