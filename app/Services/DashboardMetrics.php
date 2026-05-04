@@ -15,7 +15,9 @@ class DashboardMetrics
         $availableProducts = Product::where('is_available', true)->count();
 
         // Calculate sold products using OrderItem via Order
-        $soldProducts = \App\Models\OrderItem::sum('quantity');
+        $soldProducts = \App\Models\OrderItem::whereHas('order', function ($query) {
+            $query->whereIn('status', ['paid', 'shipped', 'completed']);
+        })->sum('quantity');
 
         $totalValue = Product::where('is_available', true)->sum('price');
 
@@ -29,7 +31,7 @@ class DashboardMetrics
 
     public function buildSalesChartData(string $range): Collection
     {
-        $ordersQuery = Order::query();
+        $ordersQuery = Order::whereIn('status', ['paid', 'shipped', 'completed']);
 
         $data = collect();
 

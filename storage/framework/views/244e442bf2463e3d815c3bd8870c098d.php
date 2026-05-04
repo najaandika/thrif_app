@@ -33,7 +33,7 @@
                 </div>
             </div>
 
-            <div class="w-40 h-40 flex-shrink-0 relative">
+            <div class="w-40 h-40 flex-shrink-0 relative" wire:ignore>
                 <canvas id="statusChart"
                         data-available="<?php echo e($stats['available_products']); ?>"
                         data-sold="<?php echo e($stats['sold_products']); ?>"></canvas>

@@ -153,7 +153,6 @@ class Index extends Component
     public function render()
     {
         $orders = Order::with(['items.product', 'customer'])
-            ->where('user_id', Auth::id())
             ->when($this->search, function ($query) {
                 $term = '%' . $this->search . '%';
                 $query->where(function ($subQuery) use ($term) {
