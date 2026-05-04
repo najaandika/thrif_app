@@ -18,7 +18,6 @@ import './ripple-effect';       // Material Design ripple effects
 import './pos';                 // POS page input formatting & Livewire helpers
 import './swal';                // SweetAlert helpers (confirmDelete, etc)
 import './products';            // Admin products delete helper (SweetAlert wrapper)
-import Chart from 'chart.js/auto';  // Chart.js for data visualization
 import { initHeader } from './landing/header';
 import { initProducts } from './landing/products';
 import { initLoginModal } from './landing/login-modal';
@@ -97,9 +96,12 @@ document.addEventListener('livewire:init', () => {
  * Renders a donut chart showing Available vs Sold products
  * Uses Chart.js library for visualization
  */
-function renderStatusChart() {
+async function renderStatusChart() {
     const canvas = document.getElementById('statusChart');
     if (!canvas) return; // Exit if chart canvas not found on page
+
+    // Dynamically import Chart.js ONLY when needed (saves ~200kb on landing page)
+    const { default: Chart } = await import('chart.js/auto');
 
     // Get data from canvas data attributes (set by Blade template)
     const available = Number(canvas.dataset.available || 0);
