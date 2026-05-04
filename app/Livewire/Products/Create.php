@@ -65,7 +65,7 @@ class Create extends Component
         }
 
         try {
-            $this->imagePreviewUrl = $this->image->temporaryUrl();
+            $this->imagePreviewUrl = Storage::disk('public')->url('livewire-tmp/' . $this->image->getFilename());
         } catch (FileNotPreviewableException $exception) {
             $this->addError('image', 'File tidak bisa dipratinjau. Gunakan gambar dengan format JPG, PNG, atau WebP.');
         }
@@ -91,8 +91,8 @@ class Create extends Component
         $this->additionalImagePreviews = [];
         foreach ($this->additionalImages as $key => $image) {
             try {
-                $this->additionalImagePreviews[$key] = $image->temporaryUrl();
-            } catch (\Livewire\Features\SupportFileUploads\FileNotPreviewableException $exception) {
+                $this->additionalImagePreviews[$key] = Storage::disk('public')->url('livewire-tmp/' . $image->getFilename());
+            } catch (\Exception $exception) {
                 // Skip preview
             }
         }

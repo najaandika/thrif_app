@@ -187,7 +187,7 @@
                                 @if ($image)
                                     <div class="mt-3">
                                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">New main image preview:</p>
-                                        <img src="{{ $image->temporaryUrl() }}" alt="Preview" class="h-40 w-40 object-cover rounded-lg border-2 border-gray-200 dark:border-gray-600">
+                                        <img src="{{ Storage::disk('public')->url('livewire-tmp/' . $image->getFilename()) }}" alt="Preview" class="h-40 w-40 object-cover rounded-lg border-2 border-gray-200 dark:border-gray-600">
                                     </div>
                                 @endif
                             </div>

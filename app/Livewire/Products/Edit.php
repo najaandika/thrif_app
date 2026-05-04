@@ -100,8 +100,8 @@ class Edit extends Component
         $this->additionalImagePreviews = [];
         foreach ($this->additionalImages as $key => $image) {
             try {
-                $this->additionalImagePreviews[$key] = $image->temporaryUrl();
-            } catch (\Livewire\Features\SupportFileUploads\FileNotPreviewableException $exception) {
+                $this->additionalImagePreviews[$key] = Storage::disk('public')->url('livewire-tmp/' . $image->getFilename());
+            } catch (\Exception $exception) {
                 // Skip preview
             }
         }

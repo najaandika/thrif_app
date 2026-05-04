@@ -1,14 +1,33 @@
 <div class="py-12">
     <div>
         <div class="flex flex-col lg:flex-row gap-6">
-            <x-sidebar />
+            <?php if (isset($component)) { $__componentOriginal2880b66d47486b4bfeaf519598a469d6 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal2880b66d47486b4bfeaf519598a469d6 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.sidebar','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('sidebar'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal2880b66d47486b4bfeaf519598a469d6)): ?>
+<?php $attributes = $__attributesOriginal2880b66d47486b4bfeaf519598a469d6; ?>
+<?php unset($__attributesOriginal2880b66d47486b4bfeaf519598a469d6); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal2880b66d47486b4bfeaf519598a469d6)): ?>
+<?php $component = $__componentOriginal2880b66d47486b4bfeaf519598a469d6; ?>
+<?php unset($__componentOriginal2880b66d47486b4bfeaf519598a469d6); ?>
+<?php endif; ?>
 
             <!-- Main Content -->
             <div class="flex-1 min-w-0 px-4 sm:px-6 lg:px-8">
                 <!-- Page Header -->
                 <div class="mb-6">
                     <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
-                        <a href="{{ route('products.index') }}" class="hover:text-gray-700 dark:hover:text-gray-300 transition-colors">Products</a>
+                        <a href="<?php echo e(route('products.index')); ?>" class="hover:text-gray-700 dark:hover:text-gray-300 transition-colors">Products</a>
                         <svg class="w-4 h-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
@@ -64,21 +83,35 @@
                                     </div>
                                 </label>
                                 <input wire:model="name" name="name" autocomplete="name" type="text" id="name" class="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all">
-                                @error('name') <span class="text-xs text-red-600 dark:text-red-400 mt-2 flex items-center"><svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>{{ $message }}</span> @enderror
+                                <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 dark:text-red-400 mt-2 flex items-center"><svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg><?php echo e($message); ?></span> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
 
                             <!-- Description -->
                             <div>
                                 <label for="description" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Description</label>
                                 <textarea wire:model="description" name="description" autocomplete="off" id="description" rows="4" class="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all"></textarea>
-                                @error('description') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
+                                <?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 dark:text-red-400 mt-1"><?php echo e($message); ?></span> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <!-- Price -->
                                 <div>
                                     <label for="price" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Price (Rp) <span class="text-red-500">*</span></label>
-                                    <div x-data="currencyInput('{{ $price ?? 0 }}', 'price')">
+                                    <div x-data="currencyInput('<?php echo e($price ?? 0); ?>', 'price')">
                                         <input 
                                             type="text" 
                                             id="price" 
@@ -89,7 +122,14 @@
                                             placeholder="0"
                                         >
                                     </div>
-                                    @error('price') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
+                                    <?php $__errorArgs = ['price'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 dark:text-red-400 mt-1"><?php echo e($message); ?></span> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
 
                                 <!-- Condition -->
@@ -102,7 +142,14 @@
                                         <option value="fair">Fair</option>
                                         <option value="poor">Poor</option>
                                     </select>
-                                    @error('condition') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
+                                    <?php $__errorArgs = ['condition'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 dark:text-red-400 mt-1"><?php echo e($message); ?></span> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
 
@@ -111,11 +158,18 @@
                                 <label for="category" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Category</label>
                                 <select wire:model="category" name="category" id="category" class="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all">
                                     <option value="">Select a category</option>
-                                    @foreach($categories as $cat)
-                                        <option value="{{ $cat->name }}">{{ $cat->name }}</option>
-                                    @endforeach
+                                    <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($cat->name); ?>"><?php echo e($cat->name); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
-                                @error('category') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
+                                <?php $__errorArgs = ['category'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 dark:text-red-400 mt-1"><?php echo e($message); ?></span> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
 
                             <!-- Size & Stock (Single) -->
@@ -123,7 +177,14 @@
                                 <label for="size" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Size</label>
                                 <div>
                                     <input wire:model="size" name="size" id="size" type="text" placeholder="Input Size" class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500">
-                                    @error('size') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
+                                    <?php $__errorArgs = ['size'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 dark:text-red-400 mt-1"><?php echo e($message); ?></span> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
 
@@ -144,7 +205,14 @@
                                                 placeholder="0">
                                             <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">%</span>
                                         </div>
-                                        @error('discount_percentage') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
+                                        <?php $__errorArgs = ['discount_percentage'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 dark:text-red-400 mt-1"><?php echo e($message); ?></span> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                     </div>
                                     <div>
                                         <label for="discount_start" class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Mulai Diskon</label>
@@ -153,7 +221,14 @@
                                                 class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all placeholder-gray-400"
                                                 placeholder="Pilih Tanggal...">
                                         </div>
-                                        @error('discount_start') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
+                                        <?php $__errorArgs = ['discount_start'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 dark:text-red-400 mt-1"><?php echo e($message); ?></span> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                     </div>
                                     <div>
                                         <label for="discount_end" class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Berakhir Diskon</label>
@@ -162,7 +237,14 @@
                                                 class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all placeholder-gray-400"
                                                 placeholder="Pilih Tanggal...">
                                         </div>
-                                        @error('discount_end') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
+                                        <?php $__errorArgs = ['discount_end'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 dark:text-red-400 mt-1"><?php echo e($message); ?></span> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                     </div>
                                 </div>
                                 <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Kosongkan tanggal untuk diskon tanpa batas waktu.</p>
@@ -179,15 +261,22 @@
                                     hover:file:bg-gray-200
                                     dark:file:bg-gray-700 dark:file:text-gray-200
                                     cursor-pointer">
-                                @error('image') <span class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $message }}</span> @enderror
+                                <?php $__errorArgs = ['image'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 dark:text-red-400 mt-1"><?php echo e($message); ?></span> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 
-                                @if ($imagePreviewUrl)
+                                <?php if($imagePreviewUrl): ?>
                                     <div class="mt-3">
-                                        <img src="{{ Storage::disk('public')->url('livewire-tmp/' . $image->getFilename()) }}" alt="Preview" class="h-40 w-40 object-cover rounded-lg border-2 border-gray-200 dark:border-gray-600">
+                                        <img src="<?php echo e($imagePreviewUrl); ?>" alt="Preview" class="h-40 w-40 object-cover rounded-lg border-2 border-gray-200 dark:border-gray-600">
                                     </div>
-                                @elseif($image)
+                                <?php elseif($image): ?>
                                     <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Preview tidak tersedia untuk file ini, tetapi file tetap bisa diunggah saat disimpan.</p>
-                                @endif
+                                <?php endif; ?>
                             </div>
 
                             <!-- Additional Images (Unified Gallery) -->
@@ -199,35 +288,49 @@
 
                                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                                     <!-- New Images Preview -->
-                                    @foreach ($additionalImagePreviews as $index => $preview)
+                                    <?php $__currentLoopData = $additionalImagePreviews; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $preview): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <div class="relative group aspect-square">
-                                            <img src="{{ $preview }}" class="h-full w-full object-cover rounded-xl border-2 border-indigo-500 dark:border-indigo-400">
+                                            <img src="<?php echo e($preview); ?>" class="h-full w-full object-cover rounded-xl border-2 border-indigo-500 dark:border-indigo-400">
                                             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
-                                                <button type="button" wire:click="removeAdditionalImage({{ $index }})" 
+                                                <button type="button" wire:click="removeAdditionalImage(<?php echo e($index); ?>)" 
                                                     class="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition shadow-sm"
                                                     title="Remove Upload">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                                 </button>
                                             </div>
                                         </div>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                                     <!-- Add Image Button (Hidden Input Trigger) -->
                                     <div class="aspect-square">
-                                        <label for="additionalImages-{{ $uploadIteration }}" class="flex flex-col items-center justify-center h-full w-full border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group">
+                                        <label for="additionalImages-<?php echo e($uploadIteration); ?>" class="flex flex-col items-center justify-center h-full w-full border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group">
                                             <div class="p-3 rounded-full bg-gray-100 dark:bg-gray-700 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/30 transition-colors">
                                                 <svg class="w-6 h-6 text-gray-400 dark:text-gray-500 group-hover:text-indigo-500 dark:group-hover:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                                 </svg>
                                             </div>
                                             <span class="mt-2 text-xs font-medium text-gray-500 dark:text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Add Image</span>
-                                            <input wire:model="newAdditionalImages" name="newAdditionalImages[]" type="file" id="additionalImages-{{ $uploadIteration }}" multiple accept="image/*" class="hidden">
+                                            <input wire:model="newAdditionalImages" name="newAdditionalImages[]" type="file" id="additionalImages-<?php echo e($uploadIteration); ?>" multiple accept="image/*" class="hidden">
                                         </label>
                                     </div>
                                 </div>
                                 <div class="mt-2">
-                                    @error('additionalImages.*') <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span> @enderror
-                                    @error('newAdditionalImages.*') <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span> @enderror
+                                    <?php $__errorArgs = ['additionalImages.*'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 dark:text-red-400"><?php echo e($message); ?></span> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                    <?php $__errorArgs = ['newAdditionalImages.*'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <span class="text-xs text-red-600 dark:text-red-400"><?php echo e($message); ?></span> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -236,7 +339,7 @@
 
                     <!-- Card Footer -->
                     <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-200 dark:border-gray-700 flex items-center justify-end gap-3">
-                        <a href="{{ route('products.index') }}" class="inline-flex items-center px-5 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg font-medium text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
+                        <a href="<?php echo e(route('products.index')); ?>" class="inline-flex items-center px-5 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg font-medium text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
                             Cancel
                         </a>
                         <button type="submit" form="productForm" class="inline-flex items-center px-5 py-2.5 bg-gray-900 dark:bg-gray-700 border border-transparent rounded-lg font-semibold text-sm text-white uppercase tracking-wider hover:bg-gray-800 dark:hover:bg-gray-600 transition-all shadow-lg hover:shadow-xl">
@@ -250,4 +353,4 @@
             </div>
         </div>
     </div>
-</div>
+</div><?php /**PATH C:\laragon\www\thrif\resources\views\livewire\products\create.blade.php ENDPATH**/ ?>
