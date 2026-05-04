@@ -98,7 +98,8 @@
                             <h3 data-product-name class="text-sm font-bold text-gray-900 dark:text-gray-100 line-clamp-2 leading-tight min-h-[2.5rem]">{{ \Illuminate\Support\Str::title($product->name) }}</h3>
                             <div class="flex items-center gap-2 text-[11px]">
                                 <span class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-white font-bold shadow-sm
-                                    {{ $product->condition_class }}">
+                                    {{ $product->condition_class }}"
+                                    style="background-color: {{ $product->condition_color }};">
                                     {{ $product->condition_label }}
                                 </span>
                             </div>
