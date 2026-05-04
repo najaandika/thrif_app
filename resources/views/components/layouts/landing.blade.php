@@ -24,16 +24,16 @@
         <!-- AI Search Engine Optimization (JSON-LD Schema Markup) -->
         <script type="application/ld+json">
         {
-          "@context": "https://schema.org",
-          "@graph": [
+          "@@context": "https://schema.org",
+          "@@graph": [
             {
-              "@type": "WebSite",
+              "@@type": "WebSite",
               "name": "Mr Crab Shop",
               "url": "{{ url('/') }}",
               "description": "Toko thrift online terpercaya. Koleksi pakaian secondhand berkualitas, dikurasi manual, difoto apa adanya."
             },
             {
-              "@type": "Store",
+              "@@type": "Store",
               "name": "Mr Crab Shop",
               "image": "{{ isset($ogImage) ? $ogImage : url('/images/logo.png') }}",
               "description": "Thrift store online menyediakan pakaian preloved berkualitas.",
