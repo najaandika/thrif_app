@@ -144,12 +144,12 @@ class Product extends Model
     public function getConditionClassAttribute(): string
     {
         return match ($this->condition) {
-            'new' => 'bg-indigo-500',
-            'like-new', 'like_new' => 'bg-blue-500',
-            'good' => 'bg-emerald-500',
-            'fair' => 'bg-yellow-500',
-            'poor', 'defect' => 'bg-red-500',
-            default => 'bg-gray-500'
+            'new' => 'bg-indigo-700',
+            'like-new', 'like_new' => 'bg-blue-700',
+            'good' => 'bg-emerald-700',
+            'fair' => 'bg-yellow-700',
+            'poor', 'defect' => 'bg-red-700',
+            default => 'bg-gray-600'
         };
     }
 }
