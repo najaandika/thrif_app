@@ -131,10 +131,10 @@
                                 <span class="badge-out-of-stock">Out of Stock</span>
                             @else
                                 <span class="absolute top-1.5 left-1.5 px-2 py-0.5 rounded text-[10px] font-bold text-white shadow-sm
-                                    {{ $product->condition === 'new' ? 'bg-blue-700' : 
-                                      ($product->condition === 'like-new' ? 'bg-indigo-700' : 
-                                      ($product->condition === 'good' ? 'bg-emerald-700' : 
-                                      ($product->condition === 'fair' ? 'bg-yellow-700' : 'bg-orange-700'))) }}">
+                                    {{ $product->condition === 'new' ? 'bg-blue-500' : 
+                                      ($product->condition === 'like-new' ? 'bg-indigo-500' : 
+                                      ($product->condition === 'good' ? 'bg-emerald-500' : 
+                                      ($product->condition === 'fair' ? 'bg-yellow-500' : 'bg-orange-500'))) }}">
                                     {{ $product->condition_label }}
                                 </span>
                             @endif
