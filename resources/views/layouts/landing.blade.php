@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <meta name="google-site-verification" content="O2SB5f86omCMI4ga40t9GFKcbyIrksri6XEHdxy5adk" />
         <title>{{ $title ?? 'Mr Crab Shop - Thrift Store Terpercaya' }}</title>
         <meta name="description" content="{{ $metaDescription ?? 'Mr Crab Shop - Toko thrift online terpercaya. Koleksi pakaian secondhand berkualitas, dikurasi manual, difoto apa adanya. Pengiriman cepat ke seluruh Indonesia.' }}">
         <link rel="canonical" href="{{ url()->current() }}">
