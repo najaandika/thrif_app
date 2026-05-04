@@ -193,6 +193,8 @@ class Edit extends Component
 
         $this->product->update($data);
 
+        \Illuminate\Support\Facades\Cache::forget('landing_page_data');
+
         session()->flash('message', 'Product updated successfully.');
         return redirect()->route('products.index');
     }

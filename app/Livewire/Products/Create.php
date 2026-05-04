@@ -156,6 +156,8 @@ class Create extends Component
             }
         }
 
+        \Illuminate\Support\Facades\Cache::forget('landing_page_data');
+
         session()->flash('message', 'Product created successfully.');
         return redirect()->route('products.index');
     }

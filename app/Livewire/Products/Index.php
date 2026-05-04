@@ -43,6 +43,7 @@ class Index extends Component
                 Storage::disk('public')->delete($product->image);
             }
             $product->delete();
+            \Illuminate\Support\Facades\Cache::forget('landing_page_data');
             session()->flash('message', 'Product deleted successfully.');
         }
     }
