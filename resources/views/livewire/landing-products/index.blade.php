@@ -126,7 +126,7 @@
                 <div class="product-card">
                     <a href="{{ route('landing.products.checkout', ['product' => $product, 'from' => 'catalog']) }}" class="block">
                         <div class="relative">
-                            <img src="{{ $product->image ? Storage::url($product->image) : 'https://via.placeholder.com/200x150?text=No+Image' }}" alt="{{ $product->name }}" class="product-image">
+                            <img src="{{ $product->image ? media_url($product->image) : 'https://via.placeholder.com/200x150?text=No+Image' }}" alt="{{ $product->name }}" class="product-image">
                             @if($product->stock === 0)
                                 <span class="badge-out-of-stock">Out of Stock</span>
                             @else

@@ -17,7 +17,7 @@
                 <tr class="admin-tr">
                     <td class="admin-td">
                         @if ($product->image)
-                            <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="h-14 w-14 rounded-xl object-cover shadow-md ring-2 ring-indigo-100 dark:ring-indigo-900 hover:scale-110 transition-transform duration-200">
+                            <img src="{{ media_url($product->image) }}" alt="{{ $product->name }}" class="h-14 w-14 rounded-xl object-cover shadow-md ring-2 ring-indigo-100 dark:ring-indigo-900 hover:scale-110 transition-transform duration-200">
                         @else
                             <div class="h-14 w-14 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-xl flex items-center justify-center shadow-md">
                                 <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

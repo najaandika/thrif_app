@@ -5,7 +5,7 @@
             <div class="space-y-4">
                 <div class="flex items-center gap-3">
                     @if($shopLogo)
-                        <img src="{{ Storage::url($shopLogo) }}" alt="{{ $shopName }}" class="h-10 w-10 rounded-2xl object-cover shadow-lg flex-shrink-0">
+                        <img src="{{ media_url($shopLogo) }}" alt="{{ $shopName }}" class="h-10 w-10 rounded-2xl object-cover shadow-lg flex-shrink-0">
                     @else
                         <div class="h-10 w-10 rounded-2xl bg-blue-600 text-white font-bold flex items-center justify-center shadow-lg flex-shrink-0">
                             {{ strtoupper(substr($shopName, 0, 1)) }}

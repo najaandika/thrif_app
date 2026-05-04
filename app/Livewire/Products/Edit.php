@@ -49,11 +49,11 @@ class Edit extends Component
         'discount_end' => 'nullable|date|after_or_equal:discount_start',
         'condition' => 'required|in:new,like-new,good,fair,poor',
         'category' => 'nullable|string|max:255',
-        'image' => 'nullable|image|max:2048',
+        'image' => 'nullable|image|max:10240',
         'is_available' => 'boolean',
         'size' => 'required|string|max:100',
-        'additionalImages.*' => 'nullable|image|max:2048',
-        'newAdditionalImages.*' => 'nullable|image|max:2048',
+        'additionalImages.*' => 'nullable|image|max:10240',
+        'newAdditionalImages.*' => 'nullable|image|max:10240',
     ];
 
     public function mount(Product $product)

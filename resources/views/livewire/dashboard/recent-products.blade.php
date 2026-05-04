@@ -16,7 +16,7 @@
         @forelse($recent_products as $product)
             <div class="product-item">
                 @if($product->image)
-                    <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="product-image-sm" />
+                    <img src="{{ media_url($product->image) }}" alt="{{ $product->name }}" class="product-image-sm" />
                 @else
                     <div class="product-placeholder">
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

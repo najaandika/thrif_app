@@ -19,7 +19,7 @@
                             <li class="flex py-4 first:pt-0 last:pb-0 gap-4">
                                 <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 relative">
                                     @if(isset($item['image']) && $item['image'])
-                                        <img src="{{ Storage::url($item['image']) }}" alt="{{ $item['name'] }}" class="h-full w-full object-cover object-center">
+                                        <img src="{{ media_url($item['image']) }}" alt="{{ $item['name'] }}" class="h-full w-full object-cover object-center">
                                     @else
                                         <div class="h-full w-full flex items-center justify-center text-xs text-gray-400">
                                             No Img

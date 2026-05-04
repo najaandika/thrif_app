@@ -29,7 +29,7 @@
                 <!-- Header -->
                 <div class="text-center mb-6">
                     @if(\App\Models\Setting::get('shop_logo'))
-                        <img src="{{ Storage::url(\App\Models\Setting::get('shop_logo')) }}" alt="Shop Logo" class="h-16 mx-auto mb-2 object-contain">
+                        <img src="{{ media_url(\App\Models\Setting::get('shop_logo')) }}" alt="Shop Logo" class="h-16 mx-auto mb-2 object-contain">
                     @endif
                     
                     <h2 class="text-xl font-bold text-gray-900 tracking-tight">{{ \App\Models\Setting::get('shop_name') ?? 'Thrif Studio' }}</h2>

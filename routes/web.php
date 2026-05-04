@@ -14,6 +14,7 @@ if ((isset($_GET['email']) && $_GET['email'] !== '') || (isset($_GET['password']
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
 use App\Services\MidtransService;
 
@@ -41,6 +42,7 @@ use App\Livewire\Transactions\Index as TransactionsIndex;
 // --------------------------------------------------
 Route::get('/', LandingController::class)->name('landing.home');
 Route::get('/landing/products', LandingProductsIndex::class)->name('landing.products.index');
+
 Route::get('/sitemap.xml', [App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
 
 // Midtrans Sandbox test route

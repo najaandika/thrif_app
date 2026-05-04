@@ -167,7 +167,7 @@
                             @if ($product->image)
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Current Image</label>
-                                    <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="h-40 w-40 object-cover rounded-lg border-2 border-gray-200 dark:border-gray-600">
+                                    <img src="{{ media_url($product->image) }}" alt="{{ $product->name }}" class="h-40 w-40 object-cover rounded-lg border-2 border-gray-200 dark:border-gray-600">
                                 </div>
                             @endif
 
@@ -201,7 +201,7 @@
                                     @foreach($product->images as $img)
                                         @if(in_array($img->id, $imagesToDelete)) @continue @endif
                                         <div class="relative group aspect-square">
-                                            <img src="{{ Storage::url($img->image_path) }}" class="h-full w-full object-cover rounded-xl border border-gray-200 dark:border-gray-600">
+                                            <img src="{{ media_url($img->image_path) }}" class="h-full w-full object-cover rounded-xl border border-gray-200 dark:border-gray-600">
                                             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
                                                 <button type="button" wire:click="deleteExistingImage({{ $img->id }})" 
                                                     class="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition shadow-sm"

@@ -6,7 +6,7 @@
         <label for="new_logo" class="form-label">Logo Toko</label>
         @if($shop_logo)
             <div class="logo-preview">
-                <img src="{{ Storage::url($shop_logo) }}" alt="Shop Logo" class="logo-image">
+                <img src="{{ media_url($shop_logo) }}" alt="Shop Logo" class="logo-image">
                 <button type="button" wire:click="removeLogo" class="remove-logo-btn">Hapus Logo</button>
             </div>
         @endif

@@ -9,7 +9,7 @@
                 @if ($gallery->isNotEmpty())
                     <div class="flex overflow-x-auto snap-x snap-mandatory h-full w-full no-scrollbar">
                         @foreach($gallery as $img)
-                            <img src="{{ Storage::url($img->image_path) }}" 
+                            <img src="{{ media_url($img->image_path) }}" 
                                  alt="{{ $product->name }}" 
                                  class="w-full h-full object-cover flex-shrink-0 snap-center">
                         @endforeach

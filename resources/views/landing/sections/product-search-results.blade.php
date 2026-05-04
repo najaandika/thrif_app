@@ -15,7 +15,7 @@
                 <div class="border rounded-xl p-4 bg-white dark:bg-gray-900 shadow relative overflow-hidden">
                     <a href="{{ route('landing.products.checkout', $product) }}" class="block">
                         <div class="relative">
-                            <img src="{{ $product->image ? Storage::url($product->image) : 'https://via.placeholder.com/200x150?text=No+Image' }}" alt="{{ $product->name }}" class="w-full h-36 object-cover rounded mb-2">
+                            <img src="{{ $product->image ? media_url($product->image) : 'https://via.placeholder.com/200x150?text=No+Image' }}" alt="{{ $product->name }}" class="w-full h-36 object-cover rounded mb-2">
                             @if($product->is_on_sale)
                                 <div class="absolute top-2 left-2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
                                     -{{ $product->discount_percent }}%

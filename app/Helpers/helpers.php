@@ -35,3 +35,20 @@ if (!function_exists('rupiah_short')) {
         return rupiah($amount);
     }
 }
+
+if (!function_exists('media_url')) {
+    /**
+     * Build a URL for files stored on the public disk.
+     *
+     * This avoids depending on the web server's /storage symlink.
+     */
+    function media_url(?string $path, ?string $fallback = null): ?string
+    {
+        if (!$path) {
+            return $fallback;
+        }
+
+        // Gunakan symlink storage standar Laravel agar Nginx/Apache di production bisa serve file statis secara langsung
+        return asset('storage/' . ltrim($path, '/'));
+    }
+}

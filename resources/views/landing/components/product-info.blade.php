@@ -3,7 +3,7 @@
     <div class="space-y-4">
         <div class="relative rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800">
             @if ($product->image)
-                <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-44 object-cover">
+                <img src="{{ media_url($product->image) }}" alt="{{ $product->name }}" class="w-full h-44 object-cover">
             @else
                 <div class="w-full h-44 bg-gradient-to-br from-slate-200 via-slate-100 to-slate-300 dark:from-slate-800 dark:via-slate-700 dark:to-slate-900 flex items-center justify-center text-xs text-gray-500 dark:text-gray-300">
                     Foto produk menyusul

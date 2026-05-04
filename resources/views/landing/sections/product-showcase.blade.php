@@ -77,7 +77,7 @@
                 <div data-product-card data-product-category="{{ $product->category }}" data-product-link="{{ $product->getActionLink() }}" class="group rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden flex flex-col min-w-[240px] max-w-[240px] snap-center transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/20 hover:scale-[1.02] hover:border-indigo-300 dark:hover:border-indigo-600" data-carousel-item>
                     <div class="relative w-full aspect-[4/3] overflow-hidden flex-shrink-0">
                         @if ($product->image)
-                            <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" loading="lazy" width="240" height="180" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <img src="{{ media_url($product->image) }}" alt="{{ $product->name }}" loading="lazy" width="240" height="180" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
                         @else
                             <div class="absolute inset-0 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 dark:from-indigo-900/30 dark:via-purple-900/30 dark:to-pink-900/30 flex items-center justify-center text-[10px] text-gray-600 dark:text-gray-300">
                                 <svg class="h-12 w-12 opacity-40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">

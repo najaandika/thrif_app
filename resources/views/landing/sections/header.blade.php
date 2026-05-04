@@ -2,7 +2,7 @@
     <div class="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 h-14 lg:h-16 flex items-center justify-between">
         <a href="/" class="flex items-center gap-2 lg:gap-3">
             @if($shopLogo)
-                <img src="{{ Storage::url($shopLogo) }}" alt="{{ $shopName }}" class="h-8 w-8 lg:h-9 lg:w-9 rounded-2xl object-cover shadow-lg">
+                <img src="{{ media_url($shopLogo) }}" alt="{{ $shopName }}" class="h-8 w-8 lg:h-9 lg:w-9 rounded-2xl object-cover shadow-lg">
             @else
                 <div class="h-8 w-8 lg:h-9 lg:w-9 rounded-2xl bg-blue-600 text-white font-bold flex items-center justify-center">{{ strtoupper(substr($shopName, 0, 1)) }}</div>
             @endif
