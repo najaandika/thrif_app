@@ -11,6 +11,7 @@ export default defineConfig({
                 'resources/js/landing-checkout.js',
                 'resources/js/swal.js',
                 'resources/js/cart-checkout.js',
+                'resources/js/ajax-cart.js',
             ],
             refresh: true,
         }),
