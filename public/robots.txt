@@ -1,2 +1,7 @@
 User-agent: *
-Disallow:
+Disallow: /dashboard
+Disallow: /admin/
+Disallow: /profile
+Disallow: /pos
+
+Sitemap: https://mrcrabshop.my.id/sitemap.xml

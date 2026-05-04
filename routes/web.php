@@ -41,6 +41,7 @@ use App\Livewire\Transactions\Index as TransactionsIndex;
 // --------------------------------------------------
 Route::get('/', LandingController::class)->name('landing.home');
 Route::get('/landing/products', LandingProductsIndex::class)->name('landing.products.index');
+Route::get('/sitemap.xml', [App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
 
 // Midtrans Sandbox test route
 Route::get('/midtrans-test', function (MidtransService $midtrans) {

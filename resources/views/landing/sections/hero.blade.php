@@ -36,8 +36,8 @@
                         <path d="M4 7h16M4 12h10M4 17h6" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </div>
-                <p class="text-xs font-semibold tracking-[0.18em] text-gray-400 uppercase">Kurasi asli</p>
-                <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100">Dipilih & dicek manual</h3>
+                <p class="text-xs font-semibold tracking-[0.18em] text-gray-500 dark:text-gray-400 uppercase">Kurasi asli</p>
+                <h2 class="text-base font-semibold text-gray-900 dark:text-gray-100">Dipilih & dicek manual</h2>
                 <p class="text-sm text-gray-500 dark:text-gray-400">Kami pastikan kondisi layak pakai: detail ukuran, noda, dan tekstur dijelaskan sebelum kamu checkout.</p>
             </div>
             <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/70 p-4 space-y-3">
@@ -48,8 +48,8 @@
                         <circle cx="18" cy="19" r="1.5" />
                     </svg>
                 </div>
-                <p class="text-xs font-semibold tracking-[0.18em] text-gray-400 uppercase">Untuk customer</p>
-                <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100">Pengiriman fleksibel</h3>
+                <p class="text-xs font-semibold tracking-[0.18em] text-gray-500 dark:text-gray-400 uppercase">Untuk customer</p>
+                <h2 class="text-base font-semibold text-gray-900 dark:text-gray-100">Pengiriman fleksibel</h2>
                 <p class="text-sm text-gray-500 dark:text-gray-400">Bisa pilih ekspedisi favoritmu, kami bantu packing rapi dan kirim update resi lewat WhatsApp.</p>
             </div>
         </div>

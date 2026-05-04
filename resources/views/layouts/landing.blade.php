@@ -4,10 +4,22 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{{ $title ?? 'Mr Crab Shop' }}</title>
+        <title>{{ $title ?? 'Mr Crab Shop - Thrift Store Terpercaya' }}</title>
+        <meta name="description" content="{{ $metaDescription ?? 'Mr Crab Shop - Toko thrift online terpercaya. Koleksi pakaian secondhand berkualitas, dikurasi manual, difoto apa adanya. Pengiriman cepat ke seluruh Indonesia.' }}">
+        <link rel="canonical" href="{{ url()->current() }}">
+
+        <!-- Open Graph -->
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="{{ $title ?? 'Mr Crab Shop - Thrift Store Terpercaya' }}">
+        <meta property="og:description" content="{{ $metaDescription ?? 'Toko thrift online terpercaya. Koleksi pakaian secondhand berkualitas, dikurasi manual, difoto apa adanya.' }}">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:site_name" content="Mr Crab Shop">
+        @if(isset($ogImage))
+        <meta property="og:image" content="{{ $ogImage }}">
+        @endif
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
 
         <meta name="theme-color" content="#f3f4f6">
