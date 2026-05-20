@@ -12,14 +12,12 @@
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
     </url>
+    @foreach($products as $product)
     <url>
-        <loc>{{ url('/login') }}</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.3</priority>
+        <loc>{{ url('/landing/products/' . $product->id) }}</loc>
+        <lastmod>{{ $product->updated_at->toW3cString() }}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
     </url>
-    <url>
-        <loc>{{ url('/register') }}</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.3</priority>
-    </url>
+    @endforeach
 </urlset>

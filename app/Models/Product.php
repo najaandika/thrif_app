@@ -133,7 +133,7 @@ class Product extends Model
             return route('products.edit', $this);
         }
         
-        return route('landing.products.checkout', $this);
+        return route('landing.products.show', $this);
     }
 
     public function getConditionLabelAttribute(): string

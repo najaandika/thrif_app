@@ -13,7 +13,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             @foreach($products as $product)
                 <div class="border rounded-xl p-4 bg-white dark:bg-gray-900 shadow relative overflow-hidden">
-                    <a href="{{ route('landing.products.checkout', $product) }}" class="block">
+                    <a href="{{ route('landing.products.show', $product) }}" class="block">
                         <div class="relative">
                             <img src="{{ $product->image ? media_url($product->image) : 'https://via.placeholder.com/200x150?text=No+Image' }}" alt="{{ $product->name }}" class="w-full h-36 object-cover rounded mb-2">
                             @if($product->is_on_sale)

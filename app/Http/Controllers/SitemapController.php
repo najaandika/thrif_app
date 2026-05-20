@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Response;
+use App\Models\Product;
 
 class SitemapController extends Controller
 {
     public function index()
     {
-        $content = view('sitemap')->render();
+        $products = Product::where('is_available', true)
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        $content = view('sitemap', compact('products'))->render();
 
         // Remove any leading whitespace/BOM before XML declaration
         $content = ltrim($content);
