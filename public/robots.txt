@@ -3,5 +3,7 @@ Disallow: /dashboard
 Disallow: /admin/
 Disallow: /profile
 Disallow: /pos
+Disallow: /landing/cart
+Disallow: /landing/orders/
 
 Sitemap: https://mrcrabshop.my.id/sitemap.xml
