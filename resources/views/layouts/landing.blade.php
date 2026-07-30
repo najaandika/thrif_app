@@ -84,7 +84,7 @@
         <div class="min-h-screen flex flex-col">
             @include('landing.sections.header')
 
-            <main class="flex-1">
+            <main class="flex-1 pb-24 lg:pb-0">
                 {{ $slot }}
             </main>
 

@@ -181,3 +181,71 @@
         opacity: 1;
     }
 }
+/* ===== Admin Form Polish ===== */
+.admin-form-shell {
+    @apply max-w-3xl;
+}
+
+.admin-form-header {
+    @apply mb-6 flex items-start justify-between gap-5;
+}
+
+.admin-breadcrumb {
+    @apply mb-3 flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400;
+}
+
+.admin-breadcrumb a {
+    @apply font-medium hover:text-gray-900 dark:hover:text-gray-100 transition-colors;
+}
+
+.admin-breadcrumb span {
+    @apply font-semibold text-gray-900 dark:text-gray-100;
+}
+
+.admin-form-title {
+    @apply text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100;
+}
+
+.admin-form-subtitle {
+    @apply mt-1.5 max-w-xl text-sm leading-6 text-gray-600 dark:text-gray-400;
+}
+
+.admin-form-icon {
+    @apply hidden sm:flex size-11 shrink-0 items-center justify-center rounded-xl bg-gray-900 text-white shadow-sm dark:bg-gray-700;
+}
+
+.admin-form-card {
+    @apply overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800;
+}
+
+.admin-form-card form {
+    @apply p-6 sm:p-7;
+}
+
+.admin-field-label {
+    @apply mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200;
+}
+
+.admin-text-input {
+    @apply w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm transition-all placeholder:text-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-gray-300 dark:focus:ring-gray-300/10;
+}
+
+.admin-field-help {
+    @apply mt-2 text-xs leading-5 text-gray-500 dark:text-gray-400;
+}
+
+.admin-field-error {
+    @apply mt-2 flex items-center gap-1.5 text-xs font-medium text-red-600 dark:text-red-400;
+}
+
+.admin-form-actions {
+    @apply flex flex-col-reverse gap-3 border-t border-gray-200 bg-gray-50 px-6 py-4 sm:flex-row sm:justify-end dark:border-gray-700 dark:bg-gray-900/40;
+}
+
+.admin-btn-secondary {
+    @apply inline-flex items-center justify-center rounded-xl border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700;
+}
+
+.admin-btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-transparent bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-gray-800 hover:shadow-md dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white;
+}

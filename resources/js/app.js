@@ -21,6 +21,7 @@ import './products';            // Admin products delete helper (SweetAlert wrap
 import { initHeader } from './landing/header';
 import { initProducts } from './landing/products';
 import { initLoginModal } from './landing/login-modal';
+import { initScrollAnimations } from './scroll-animations';
 import { checkoutFormData } from './checkout-form';  // Checkout form AlpineJS data
 import { initCheckoutAlerts } from './checkout-alerts';  // Checkout success alerts
 import './receipt-modal'; // Receipt Modal logic
@@ -156,6 +157,7 @@ document.addEventListener('livewire:navigated', () => {
     initHeader();
     initProducts();
     initLoginModal();
+    initScrollAnimations();
     initCheckoutAlerts();
 
     // Re-apply dark mode after navigation to prevent flicker
@@ -170,5 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeader();
     initProducts();
     initLoginModal();
+    initScrollAnimations();
     initCheckoutAlerts();
 });

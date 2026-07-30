@@ -70,7 +70,7 @@
                                 {{ $promo ? 'bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/30 dark:to-orange-900/30 text-red-600 dark:text-red-400 font-medium' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700' }}"
                         >
                             <span class="w-4 h-4 rounded-full border-2 {{ $promo ? 'border-red-500 bg-red-500' : 'border-gray-300 dark:border-gray-600' }}"></span>
-                            🔥 Flash Sale
+                            Flash Sale
                         </button>
                     </div>
                 </div>
@@ -107,7 +107,7 @@
         <div class="mt-3 flex items-center gap-2 text-xs">
             @if($promo)
                 <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white">
-                    🔥 Flash Sale
+                    Flash Sale
                     <button type="button" wire:click="$set('promo', false)" class="ml-1 hover:opacity-70">×</button>
                 </span>
             @endif
@@ -128,7 +128,7 @@
                         <div class="relative">
                             <img src="{{ $product->image ? media_url($product->image) : 'https://via.placeholder.com/200x150?text=No+Image' }}" alt="{{ $product->name }}" class="product-image">
                             @if($product->stock === 0)
-                                <span class="badge-out-of-stock">Out of Stock</span>
+                                <span class="badge-out-of-stock">Stok Habis</span>
                             @else
                                 <span class="absolute top-1.5 left-1.5 px-2 py-0.5 rounded text-[10px] font-bold text-white shadow-sm
                                     {{ $product->condition === 'new' ? 'bg-blue-500' : 
