@@ -95,3 +95,4 @@ $resetPassword = function () {
         </div>
     </form>
 </div>
+

@@ -45,34 +45,7 @@
         </script>
 
         <meta name="theme-color" content="#f3f4f6">
-        <!-- Dark Mode Script (Prevent FOUC) -->
-        <script>
-            (function() {
-                try {
-                    const stored = localStorage.getItem('darkMode');
-                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                    const isDark = stored === 'true' || (stored === null && prefersDark);
-                    
-                    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-                    
-                    if (isDark) {
-                        document.documentElement.classList.add('dark');
-                        document.documentElement.style.backgroundColor = '#111827';
-                        if (metaThemeColor) metaThemeColor.setAttribute('content', '#111827');
-                    } else {
-                        document.documentElement.classList.remove('dark');
-                        document.documentElement.style.backgroundColor = '#f9fafb';
-                        if (metaThemeColor) metaThemeColor.setAttribute('content', '#f9fafb');
-                    }
-                } catch (e) {}
-            })();
-        </script>
-        <style>
-            [x-cloak] { display: none !important; }
-            /* Critical CSS to prevent FOUC */
-            html.dark body { background-color: #111827 !important; }
-            html:not(.dark) body { background-color: #f9fafb !important; }
-        </style>
+        <style>[x-cloak] { display: none !important; }</style>
 
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -80,11 +53,11 @@
         @livewireStyles
         @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/ajax-cart.js'])
     </head>
-    <body class="antialiased font-sans bg-gray-50 dark:bg-gray-900" x-data>
+    <body class="antialiased font-sans bg-gray-50" x-data>
         <div class="min-h-screen flex flex-col">
             @include('landing.sections.header')
 
-            <main class="flex-1 pb-24 lg:pb-0">
+            <main class="flex-1 pb-6 lg:pb-0">
                 {{ $slot }}
             </main>
 
@@ -95,3 +68,6 @@
         @livewireScripts
     </body>
 </html>
+
+
+

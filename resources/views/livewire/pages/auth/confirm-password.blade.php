@@ -59,3 +59,4 @@ $confirmPassword = function () {
         </div>
     </form>
 </div>
+

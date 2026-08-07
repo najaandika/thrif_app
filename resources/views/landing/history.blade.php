@@ -3,179 +3,222 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Riwayat Pembelian</title>
-    <script>
-        (function() {
-            try {
-                const stored = localStorage.getItem('darkMode');
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if (stored === 'true' || (stored === null && prefersDark)) {
-                    document.documentElement.classList.add('dark');
-                }
-            } catch (e) {}
-        })();
-    </script>
+    <title>Riwayat Order - {{ config('app.name', 'Mr Crab Shop') }}</title>
     @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        html, body { touch-action: pan-x pan-y; overscroll-behavior: none; overflow-x: hidden; }
-    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 </head>
-<body class="antialiased bg-gray-50 dark:bg-gray-900 font-sans" x-data>
-    <div class="min-h-screen">
-        <header class="bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800 backdrop-blur">
-            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                <nav class="text-xs font-medium text-gray-600 dark:text-gray-300 flex items-center gap-3">
-                    <a href="/" class="hover:text-indigo-600 inline-flex items-center gap-1">
-                        <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        Home
-                    </a>
-                    <span class="text-gray-300 dark:text-gray-700">•</span>
-                    <span class="text-indigo-600">Riwayat</span>
-                </nav>
+<body class="bg-[#f7faf9] font-sans antialiased text-slate-950" x-data>
+    @php
+        $statusTone = [
+            'pending' => 'border-amber-200 bg-amber-50 text-amber-700',
+            'paid' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
+            'completed' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
+            'cancelled' => 'border-red-200 bg-red-50 text-red-700',
+            'failed' => 'border-red-200 bg-red-50 text-red-700',
+            'shipped' => 'border-blue-200 bg-blue-50 text-blue-700',
+        ];
+    @endphp
+
+    <div class="min-h-screen pb-8 lg:pb-12">
+        <header class="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl">
+            <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+                <a href="{{ route('landing.products.index') }}" class="inline-flex h-10 items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-950" aria-label="Kembali ke katalog">
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Katalog
+                </a>
+
+                <div class="text-right leading-tight">
+                    <p class="text-sm font-extrabold tracking-tight text-slate-950">Mr Crab Shop</p>
+                    <p class="text-[11px] font-semibold text-slate-500">Riwayat order</p>
+                </div>
             </div>
         </header>
 
-        <main class="py-12">
-            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-                <div class="space-y-1">
-                    <p class="text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] text-gray-500 dark:text-gray-400 uppercase">Riwayat pembelian</p>
-                    <h1 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-gray-100 leading-tight">Halo, {{ $customer->name }} — ringkasan order kamu.</h1>
+        <main class="mx-auto max-w-6xl px-4 pt-5 sm:px-6 lg:px-8 lg:pt-10">
+            <section class="mb-6 grid gap-4 lg:mb-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
+                <div>
+                    <p class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500 shadow-sm">
+                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                        Order history
+                    </p>
+                    <h1 class="mt-4 max-w-2xl text-3xl font-extrabold leading-[1.03] tracking-[-0.045em] text-slate-950 sm:text-5xl">
+                        Riwayat belanja kamu.
+                    </h1>
+                    <p class="mt-3 max-w-xl text-sm font-medium leading-7 text-slate-600">
+                        Cek status order, total pembayaran, detail item, dan struk pembelian dalam satu tempat.
+                    </p>
                 </div>
 
-                <div class="space-y-4">
-                    @forelse ($orders as $order)
-                        <article class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm p-4 sm:p-5 flex flex-col md:flex-row gap-4 sm:gap-6">
-                            <div class="flex-1 space-y-3">
-                                <div class="flex items-center justify-between text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">
-                                    <span class="font-mono bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded">{{ $order->invoice_number }}</span>
-                                    <span>{{ $order->created_at->translatedFormat('d M Y, H:i') }}</span>
-                                </div>
-                                <div>
-                                    @php
-                                        $firstItem = $order->items->first();
-                                        $originalPrice = $firstItem->product->price ?? $firstItem->price;
-                                        $wasDiscounted = $originalPrice > $firstItem->price;
-                                    @endphp
-                                    <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100 leading-snug">
-                                        {{ $firstItem->product->name ?? 'Produk terhapus' }}
-                                    </h2>
-                                    <div class="flex items-center gap-2 mt-1 flex-wrap">
-                                        <span class="text-xs sm:text-sm text-gray-500">(x{{ $firstItem->quantity }})</span>
-                                        @if($order->items->count() > 1)
-                                            <span class="text-xs sm:text-sm text-gray-500">+{{ $order->items->count() - 1 }} lainnya</span>
-                                        @endif
-                                        @if($wasDiscounted && $firstItem->product && $firstItem->product->discount_percentage)
-                                            <span class="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold">-{{ round($firstItem->product->discount_percentage) }}%</span>
-                                        @endif
-                                    </div>
-                                    @php
-                                        $totalOriginalPrice = $order->items->sum(function($item) {
-                                            return ($item->product->price ?? $item->price) * $item->quantity;
-                                        });
-                                        $hasSavings = $totalOriginalPrice > $order->total_price;
-                                    @endphp
-                                    <div class="pt-2 flex items-center flex-wrap gap-1">
-                                        @if($hasSavings)
-                                            <span class="text-xs text-gray-400 line-through">{{ rupiah($totalOriginalPrice) }}</span>
-                                            <span class="font-bold text-sm sm:text-base text-red-500">{{ rupiah($order->total_price) }}</span>
-                                            <span class="text-[10px] text-red-500 font-medium">Hemat {{ rupiah($totalOriginalPrice - $order->total_price) }}</span>
-                                        @else
-                                            <span class="font-bold text-sm sm:text-base text-emerald-600 dark:text-emerald-400">{{ rupiah($order->total_price) }}</span>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="inline-flex items-center gap-2">
-                                     <!-- Status Logic Same as Before -->
-                                    <span class="px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold border {{ $order->status_class }}">
-                                        {{ $order->status_label }}
-                                    </span>
-                                </div>
-                            </div>
-                            
-                            <!-- Detail Section Refined -->
-                            <div class="md:w-64 pt-4 md:pt-0 md:pl-6 border-t md:border-t-0 md:border-l border-gray-100 dark:border-gray-800 flex flex-col justify-between">
-                                <div class="space-y-3">
-                                    <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2">Info Pengiriman</p>
-                                    
-                                    <div class="grid grid-cols-2 md:grid-cols-1 gap-2">
-                                        <div>
-                                            <p class="text-[10px] text-gray-400 dark:text-gray-500">Penerima</p>
-                                            <p class="text-xs font-medium text-gray-900 dark:text-gray-300 truncate">{{ $order->buyer_name }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-[10px] text-gray-400 dark:text-gray-500">Kontak</p>
-                                            <p class="text-xs font-medium text-gray-900 dark:text-gray-300 truncate">{{ $order->buyer_contact ?? '-' }}</p>
-                                        </div>
-                                    </div>
+                <div class="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-[0_18px_50px_rgba(15,23,42,0.05)]">
+                    <div class="grid grid-cols-3 divide-x divide-slate-100 text-center">
+                        <div class="px-2">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">Order</p>
+                            <p class="mt-1 text-lg font-extrabold text-slate-950">{{ $orders->count() }}</p>
+                        </div>
+                        <div class="px-2">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">Pending</p>
+                            <p class="mt-1 text-lg font-extrabold text-amber-600">{{ $orders->where('status', 'pending')->count() }}</p>
+                        </div>
+                        <div class="px-2">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">Selesai</p>
+                            <p class="mt-1 text-lg font-extrabold text-emerald-700">{{ $orders->whereIn('status', ['paid', 'completed'])->count() }}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-                                    <div>
-                                        <p class="text-[10px] text-gray-400 dark:text-gray-500">Alamat</p>
-                                        @if($order->shipping_address === 'AMBIL DI TOKO')
-                                            <div class="mt-0.5">
-                                                <p class="text-xs font-medium text-gray-900 dark:text-gray-300 leading-snug">{{ \App\Models\Setting::get('shop_address') ?? 'Alamat Toko' }}</p>
-                                                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 mt-1 border border-indigo-100 dark:border-indigo-800/50">
-                                                    Ambil di Toko
-                                                </span>
-                                            </div>
-                                        @else
-                                            <p class="text-xs font-medium text-gray-900 dark:text-gray-300 leading-snug break-words">{{ $order->shipping_address ?? 'Belum diisi' }}</p>
-                                        @endif
-                                    </div>
-                                    
-                                    <div>
-                                        <p class="text-[10px] text-gray-400 dark:text-gray-500">Metode Bayar</p>
-                                        <p class="text-xs font-medium text-gray-900 dark:text-gray-300">
-                                            @if($order->payment_method === 'cash')
-                                                @if($order->shipping_address === 'AMBIL DI TOKO')
-                                                    Bayar di Kasir
-                                                @else
-                                                    COD
-                                                @endif
-                                            @else
-                                                Non-Tunai
-                                            @endif
-                                        </p>
-                                    </div>
-                                    
-                                    @if ($order->notes)
-                                        <div>
-                                            <p class="text-[10px] text-gray-400 dark:text-gray-500">Catatan</p>
-                                            <p class="text-xs text-gray-700 dark:text-gray-400 italic truncate">{{ $order->notes }}</p>
-                                        </div>
+            @if(session('status'))
+                <div class="mb-5 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700 shadow-sm" role="status">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            @forelse ($orders as $order)
+                @php
+                    $firstItem = $order->items->first();
+                    $itemCount = $order->items->sum('quantity');
+                    $totalOriginalPrice = $order->items->sum(function ($item) {
+                        return (float) ($item->product->price ?? $item->price) * $item->quantity;
+                    });
+                    $hasSavings = $totalOriginalPrice > (float) $order->total_price;
+                    $paymentLabel = $order->payment_method === 'cash'
+                        ? ($order->shipping_address === 'AMBIL DI TOKO' ? 'Bayar di toko' : 'COD')
+                        : 'Midtrans';
+                    $deliveryLabel = $order->shipping_address === 'AMBIL DI TOKO' ? 'Ambil toko' : 'Antar';
+                    $badgeClass = $statusTone[$order->status] ?? 'border-slate-200 bg-slate-100 text-slate-700';
+                @endphp
+
+                <article class="mb-4 overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_18px_60px_rgba(15,23,42,0.06)]">
+                    <div class="grid gap-0 lg:grid-cols-[minmax(0,1fr)_320px]">
+                        <div class="p-5 sm:p-6">
+                            <div class="flex flex-wrap items-start justify-between gap-3">
+                                <div>
+                                    <p class="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-extrabold tracking-[0.08em] text-slate-500">
+                                        {{ $order->invoice_number }}
+                                    </p>
+                                    <h2 class="mt-3 text-xl font-extrabold leading-tight tracking-[-0.03em] text-slate-950 sm:text-2xl">
+                                        {{ $firstItem?->product?->name ?? 'Produk terhapus' }}
+                                    </h2>
+                                </div>
+
+                                <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-extrabold {{ $badgeClass }}">
+                                    {{ $order->status_label }}
+                                </span>
+                            </div>
+
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold text-slate-600">{{ $itemCount }} item</span>
+                                <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold text-slate-600">{{ $deliveryLabel }}</span>
+                                <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold text-slate-600">{{ $paymentLabel }}</span>
+                            </div>
+
+                            <div class="mt-5 grid gap-3 sm:grid-cols-3">
+                                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                                    <p class="text-[10px] font-extrabold uppercase tracking-[0.14em] text-slate-400">Tanggal</p>
+                                    <p class="mt-1 text-sm font-bold text-slate-950">{{ $order->created_at->translatedFormat('d M Y') }}</p>
+                                    <p class="text-xs font-semibold text-slate-500">{{ $order->created_at->format('H:i') }}</p>
+                                </div>
+                                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                                    <p class="text-[10px] font-extrabold uppercase tracking-[0.14em] text-slate-400">Penerima</p>
+                                    <p class="mt-1 truncate text-sm font-bold text-slate-950">{{ $order->buyer_name }}</p>
+                                    <p class="truncate text-xs font-semibold text-slate-500">{{ $order->buyer_contact ?? '-' }}</p>
+                                </div>
+                                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                                    <p class="text-[10px] font-extrabold uppercase tracking-[0.14em] text-slate-400">Total</p>
+                                    <p class="mt-1 text-lg font-extrabold text-slate-950">{{ rupiah($order->total_price) }}</p>
+                                    @if($hasSavings)
+                                        <p class="text-xs font-bold text-red-500">Hemat {{ rupiah($totalOriginalPrice - $order->total_price) }}</p>
                                     @endif
                                 </div>
-                                
-                                @if($order->status !== 'pending')
-                                <button 
-                                    x-data 
-                                    x-on:click="Livewire.dispatch('open-receipt-modal', { orderId: {{ $order->id }} })"
-                                    class="w-full mt-4 inline-flex items-center justify-center rounded-lg bg-indigo-50 border border-indigo-100 dark:bg-gray-800 dark:border-gray-700 px-3 py-2 text-xs font-semibold text-indigo-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-gray-700 transition-all active:scale-95"
-                                >
-                                    <svg class="w-3.5 h-3.5 mr-1.5 text-indigo-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                    </svg>
-                                    Lihat Struk
-                                </button>
+                            </div>
+
+                            @if($order->items->count() > 1)
+                                <div class="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+                                    <p class="text-[10px] font-extrabold uppercase tracking-[0.14em] text-slate-400">Item lain</p>
+                                    <div class="mt-2 space-y-2">
+                                        @foreach($order->items->skip(1)->take(3) as $item)
+                                            <div class="flex items-center justify-between gap-3 text-sm">
+                                                <span class="truncate font-bold text-slate-800">{{ $item->product->name ?? 'Produk terhapus' }}</span>
+                                                <span class="shrink-0 font-semibold text-slate-500">x{{ $item->quantity }}</span>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
+                        <aside class="border-t border-slate-100 bg-slate-50/80 p-5 sm:p-6 lg:border-l lg:border-t-0">
+                            <p class="text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Detail order</p>
+
+                            <div class="mt-4 space-y-4">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-400">Alamat</p>
+                                    @if($order->shipping_address === 'AMBIL DI TOKO')
+                                        <p class="mt-1 text-sm font-bold leading-6 text-slate-950">Ambil di toko</p>
+                                        <p class="text-xs font-semibold leading-5 text-slate-500">{{ \App\Models\Setting::get('shop_address') ?? 'Alamat toko' }}</p>
+                                    @else
+                                        <p class="mt-1 text-sm font-semibold leading-6 text-slate-700">{{ $order->shipping_address ?? 'Belum diisi' }}</p>
+                                    @endif
+                                </div>
+
+                                @if ($order->notes)
+                                    <div>
+                                        <p class="text-xs font-bold text-slate-400">Catatan</p>
+                                        <p class="mt-1 text-sm font-semibold leading-6 text-slate-700">{{ $order->notes }}</p>
+                                    </div>
                                 @endif
                             </div>
-                        </article>
-                    @empty
-                        <div class="rounded-3xl border border-dashed border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/60 p-8 text-center text-sm text-gray-500 dark:text-gray-400">
-                            Kamu belum memiliki order. Silakan kembali ke landing dan mulai belanja.
-                        </div>
-                    @endforelse
-                </div>
-            </div>
+
+                            <div class="mt-5 grid gap-2">
+                                @if($order->status !== 'pending')
+                                    <button
+                                        type="button"
+                                        x-on:click="Livewire.dispatch('open-receipt-modal', { orderId: {{ $order->id }} })"
+                                        class="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 py-3 text-sm font-extrabold text-white shadow-lg shadow-slate-950/15 transition hover:-translate-y-0.5 hover:bg-slate-800"
+                                    >
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Lihat struk
+                                    </button>
+                                @else
+                                    <a href="{{ route('landing.cart.index') }}" class="inline-flex min-h-11 items-center justify-center rounded-2xl bg-slate-950 px-4 py-3 text-sm font-extrabold text-white shadow-lg shadow-slate-950/15 transition hover:-translate-y-0.5 hover:bg-slate-800">
+                                        Lanjut bayar
+                                    </a>
+                                @endif
+
+                                <a href="{{ route('landing.products.index') }}" class="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-extrabold text-slate-700 transition hover:bg-slate-50 hover:text-slate-950">
+                                    Belanja lagi
+                                </a>
+                            </div>
+                        </aside>
+                    </div>
+                </article>
+            @empty
+                <section class="rounded-[2rem] border border-slate-200 bg-white p-7 text-center shadow-[0_18px_60px_rgba(15,23,42,0.06)] sm:p-10">
+                    <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl border border-slate-200 bg-slate-50 text-slate-400 shadow-sm">
+                        <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M6 2h12l1 20-7-3-7 3L6 2z" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M9 7h6M9 11h6" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <h2 class="mt-5 text-2xl font-extrabold tracking-[-0.03em] text-slate-950">Belum ada order.</h2>
+                    <p class="mx-auto mt-3 max-w-sm text-sm font-medium leading-7 text-slate-600">Pilih item thrift yang kondisinya cocok dulu. Setelah checkout, status order akan tampil di sini.</p>
+                    <a href="{{ route('landing.products.index') }}" class="mt-6 inline-flex min-h-12 items-center justify-center rounded-2xl bg-slate-950 px-6 py-3 text-sm font-extrabold text-white shadow-xl shadow-slate-950/15 transition hover:-translate-y-0.5 hover:bg-slate-800">
+                        Buka katalog
+                    </a>
+                </section>
+            @endforelse
         </main>
     </div>
+
     <x-toast />
-    
+
     @if(session('status'))
-        <div data-checkout-status="{{ session('status') }}" data-checkout-redirect="{{ route('landing.orders.history') }}" style="display:none;"></div>
+        <div data-checkout-status="{{ session('status') }}" data-checkout-redirect="{{ route('landing.orders.history') }}" class="hidden"></div>
     @endif
 
     @livewire('orders.customer-receipt-modal')

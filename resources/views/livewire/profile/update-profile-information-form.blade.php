@@ -50,59 +50,52 @@ $sendVerification = function () {
 
 ?>
 
-<section>
+<section class="rounded-[1.5rem] border border-slate-200 bg-slate-50/70 p-4 sm:p-5">
     <header>
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ __('Profile Information') }}
-        </h2>
-
-        <p class="profile-section-description">
-            {{ __("Update your account's profile information and email address.") }}
-        </p>
+        <p class="text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Akun</p>
+        <h2 class="mt-1 text-xl font-black tracking-[-0.035em] text-slate-950">Informasi profil.</h2>
+        <p class="mt-2 text-sm font-medium leading-6 text-slate-600">Data ini dipakai untuk checkout dan konfirmasi order.</p>
     </header>
 
-    <form wire:submit="updateProfileInformation" class="profile-form">
+    <form wire:submit="updateProfileInformation" class="mt-5 space-y-4">
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full" required autocomplete="name" />
+            <x-input-label for="name" value="Nama" />
+            <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-2 block w-full rounded-2xl border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-950 shadow-sm focus:border-slate-950 focus:ring-4 focus:ring-slate-950/10" required autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" name="email" type="email" class="mt-1 block w-full" required autocomplete="username" />
+            <x-input-label for="email" value="Email" />
+            <x-text-input wire:model="email" id="email" name="email" type="email" class="mt-2 block w-full rounded-2xl border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-950 shadow-sm focus:border-slate-950 focus:ring-4 focus:ring-slate-950/10" required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if (auth()->user() instanceof MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
-                <div>
-                    <p class="text-sm mt-2 text-gray-800 dark:text-gray-200">
-                        {{ __('Your email address is unverified.') }}
-
-                        <button wire:click.prevent="sendVerification" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 dark:focus:ring-offset-gray-800">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
-                    </p>
+                <div class="mt-3 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm font-medium leading-6 text-amber-800">
+                    Email belum terverifikasi.
+                    <button wire:click.prevent="sendVerification" class="font-extrabold underline decoration-amber-300 underline-offset-4 hover:decoration-amber-700">
+                        Kirim ulang link verifikasi.
+                    </button>
 
                     @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
+                        <p class="mt-2 font-bold text-emerald-700">Link verifikasi baru sudah dikirim.</p>
                     @endif
                 </div>
             @endif
         </div>
 
         <div>
-            <x-input-label for="phone" :value="__('Phone Number (WhatsApp)')" />
-            <x-text-input wire:model="phone" id="phone" name="phone" type="text" class="mt-1 block w-full" placeholder="08..." />
+            <x-input-label for="phone" value="Nomor WhatsApp" />
+            <x-text-input wire:model="phone" id="phone" name="phone" type="text" class="mt-2 block w-full rounded-2xl border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-950 shadow-sm focus:border-slate-950 focus:ring-4 focus:ring-slate-950/10" placeholder="08..." autocomplete="tel" />
             <x-input-error class="mt-2" :messages="$errors->get('phone')" />
         </div>
 
-        <div class="profile-form-actions">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+        <div class="flex flex-wrap items-center gap-3 pt-1">
+            <button type="submit" class="inline-flex min-h-11 items-center justify-center rounded-2xl bg-slate-950 px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-slate-950/15 transition hover:-translate-y-0.5 hover:bg-slate-800">
+                Simpan profil
+            </button>
 
-            <x-action-message class="me-3" on="profile-updated">
-                {{ __('Saved.') }}
+            <x-action-message class="text-sm font-bold text-emerald-700" on="profile-updated">
+                Tersimpan.
             </x-action-message>
         </div>
     </form>

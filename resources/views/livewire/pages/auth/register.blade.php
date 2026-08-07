@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\Daftared;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
@@ -35,7 +35,7 @@ $register = function () {
 
     $validated['password'] = Hash::make($validated['password']);
 
-    event(new Registered($user = User::create($validated)));
+    event(new Daftared($user = User::create($validated)));
 
     // Setelah registrasi, arahkan ke halaman login tanpa auto-login
     $this->redirectRoute('login', navigate: true);
@@ -51,14 +51,14 @@ $register = function () {
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
             </svg>
         </div>
-        <h2 class="auth-title">Create Account</h2>
-        <p class="auth-subtitle">Bergabung untuk akses lengkap belanja thrift</p>
+        <h2 class="auth-title">Buat akun</h2>
+        <p class="auth-subtitle">Simpan alamat, cek riwayat order, dan checkout lebih rapi.</p>
     </div>
 
     <form wire:submit="register" class="auth-form">
         <!-- Name -->
         <div>
-            <x-input-label for="name" value="Name" class="mb-1" />
+            <x-input-label for="name" value="Nama" class="mb-1" />
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,7 +100,7 @@ $register = function () {
 
         <!-- Confirm Password -->
         <div>
-            <x-input-label for="password_confirmation" value="Confirm Password" class="mb-1" />
+            <x-input-label for="password_confirmation" value="Konfirmasi password" class="mb-1" />
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,7 +117,7 @@ $register = function () {
                 <p class="auth-register-text">
                     Sudah punya akun?
                     <a href="{{ route('login') }}" wire:navigate class="auth-register-link">
-                        Login
+                        Masuk
                     </a>
                 </p>
             </div>
@@ -126,10 +126,11 @@ $register = function () {
                 <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                 </svg>
-                Register
+                Daftar
             </button>
         </div>
     </form>
     
 
 </div>
+

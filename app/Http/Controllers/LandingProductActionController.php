@@ -18,21 +18,27 @@ class LandingProductActionController extends Controller
 
         $product = Product::query()
             ->where('is_available', true)
-            ->where('stock', '>', 0)
             ->findOrFail($validated['product_id']);
 
-        $quantity = min($validated['quantity'], $product->stock);
+        $quantity = 1;
 
         if ($validated['action'] === 'cart') {
-            // Reuse simple session-based cart logic
             $cartItems = $request->session()->get('cart_items', []);
             $currentQty = $cartItems[$product->id]['quantity'] ?? 0;
-            $newQty = min($currentQty + $quantity, $product->stock);
+            $newQty = $currentQty + $quantity;
+
+            if ($newQty > 1) {
+                return back()->with('error', 'Produk ini hanya tersedia 1 stok (Thrift).');
+            }
 
             $cartItems[$product->id] = [
                 'product_id' => $product->id,
                 'name' => $product->name,
-                'price' => $product->price,
+                'price' => $product->final_price,
+                'original_price' => $product->price,
+                'is_on_sale' => $product->is_on_sale,
+                'discount_percent' => $product->discount_percent,
+                'size' => $product->size,
                 'quantity' => $newQty,
             ];
 
@@ -43,7 +49,6 @@ class LandingProductActionController extends Controller
             return back()->with('message', 'Produk ditambahkan ke keranjang.');
         }
 
-        // For checkout, store the desired quantity in session and redirect
         $request->session()->put('landing_checkout', [
             'product_id' => $product->id,
             'quantity' => $quantity,

@@ -40,12 +40,6 @@
     }
     window.confirmDelete = confirmDelete;
     </script>
-    <script>
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.remove('dark');
-    }
-    </script>
 </body>
 </html>
+

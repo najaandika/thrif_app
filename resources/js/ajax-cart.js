@@ -80,23 +80,73 @@ function updateCartCounter(count) {
 }
 
 function showToast(message, type = 'success') {
-    // Create toast element
+    document.querySelectorAll('[data-ajax-cart-toast]').forEach(el => el.remove());
+
     const toast = document.createElement('div');
-    toast.className = `fixed bottom-4 left-1/2 -translate-x-1/2 px-4 py-2.5 rounded-xl text-sm font-medium shadow-lg z-50 transition-all duration-300 transform translate-y-2 opacity-0 ${type === 'success'
-            ? 'bg-emerald-600 text-white'
-            : 'bg-red-600 text-white'
-        }`;
-    toast.textContent = message;
+    const isSuccess = type === 'success';
+    const iconColor = isSuccess ? '#047857' : '#b91c1c';
+    const iconBg = isSuccess ? '#ecfdf5' : '#fef2f2';
+    const borderColor = isSuccess ? '#d1fae5' : '#fee2e2';
+    const icon = isSuccess
+        ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" /></svg>'
+        : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 8v4m0 4h.01" stroke-linecap="round" /><circle cx="12" cy="12" r="9" /></svg>';
+
+    toast.setAttribute('data-ajax-cart-toast', 'true');
+    toast.setAttribute('role', 'status');
+    toast.style.cssText = [
+        'position: fixed',
+        'top: calc(env(safe-area-inset-top, 0px) + 5.25rem)',
+        'left: 50%',
+        'transform: translate(-50%, -10px)',
+        'z-index: 9999',
+        'width: min(calc(100vw - 2rem), 25rem)',
+        'display: flex',
+        'align-items: flex-start',
+        'gap: 12px',
+        'padding: 12px 14px',
+        'border-radius: 18px',
+        `border: 1px solid ${borderColor}`,
+        'background: rgba(255,255,255,0.98)',
+        'box-shadow: 0 24px 70px rgba(15, 23, 42, 0.16)',
+        'color: #0f172a',
+        'font-size: 14px',
+        'line-height: 1.45',
+        'opacity: 0',
+        'transition: opacity 220ms ease, transform 220ms ease',
+        'pointer-events: auto'
+    ].join(';');
+
+    toast.innerHTML = `
+        <span style="display:flex;height:32px;width:32px;flex-shrink:0;align-items:center;justify-content:center;border-radius:12px;background:${iconBg};color:${iconColor};margin-top:1px;">
+            ${icon}
+        </span>
+        <span style="min-width:0;flex:1;padding-top:4px;font-weight:700;color:#1f2937;">${escapeHtml(message)}</span>
+        ${isSuccess ? '<a href="/landing/cart" style="flex-shrink:0;margin-top:1px;border-radius:12px;background:#0f172a;color:#fff;padding:7px 10px;font-size:12px;font-weight:800;text-decoration:none;">Lihat</a>' : ''}
+    `;
+
     document.body.appendChild(toast);
 
-    // Animate in
+    if (window.matchMedia('(min-width: 768px)').matches) {
+        toast.style.left = 'auto';
+        toast.style.right = '24px';
+        toast.style.transform = 'translateY(-10px)';
+    }
+
     requestAnimationFrame(() => {
-        toast.classList.remove('translate-y-2', 'opacity-0');
+        toast.style.opacity = '1';
+        toast.style.transform = window.matchMedia('(min-width: 768px)').matches ? 'translateY(0)' : 'translate(-50%, 0)';
     });
 
-    // Remove after delay
     setTimeout(() => {
-        toast.classList.add('translate-y-2', 'opacity-0');
-        setTimeout(() => toast.remove(), 300);
-    }, 2500);
+        toast.style.opacity = '0';
+        toast.style.transform = window.matchMedia('(min-width: 768px)').matches ? 'translateY(-10px)' : 'translate(-50%, -10px)';
+        setTimeout(() => toast.remove(), 260);
+    }, 2400);
 }
+
+function escapeHtml(value) {
+    const div = document.createElement('div');
+    div.textContent = value;
+    return div.innerHTML;
+}
+

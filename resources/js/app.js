@@ -1,16 +1,9 @@
-// Dark mode pre-init to avoid flash
 try {
-    const stored = localStorage.getItem('darkMode');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const isDark = stored === 'true' || (stored === null && prefersDark);
-    if (isDark) {
-        document.documentElement.style.backgroundColor = 'rgb(17 24 39)';
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.style.backgroundColor = 'rgb(243 244 246)';
-        document.documentElement.classList.remove('dark');
-    }
-} catch (e) { }
+    localStorage.removeItem('darkMode');
+    document.documentElement.classList.remove('dark');
+    document.documentElement.style.backgroundColor = 'rgb(249 250 251)';
+} catch (e) {}
+
 // Import dependencies
 import './bootstrap';           // Axios setup and basic configurations
 
@@ -29,67 +22,6 @@ import './currency-input'; // Shared Currency Input logic
 
 // Make checkout form data globally available
 window.checkoutFormData = checkoutFormData;
-
-/**
- * Dark Mode Management
- * 
- * IMPORTANT: This uses Livewire's bundled Alpine.js
- * - Livewire 3 includes Alpine.js automatically via @livewireScripts
- * - We listen to 'livewire:init' event (NOT 'alpine:init')
- * - Alpine is available as window.Alpine after Livewire initializes
- * 
- * The dark mode store provides:
- * - Persistent dark mode state (localStorage)
- * - System preference detection
- * - Toggle functionality for UI buttons
- */
-document.addEventListener('livewire:init', () => {
-    // Ensure Alpine is available before creating store
-    if (window.Alpine) {
-        window.Alpine.store('darkMode', {
-            // Initialize from localStorage or system preference
-            on: localStorage.getItem('darkMode') === 'true' ||
-                (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches),
-
-            /**
-             * Initialize dark mode on page load
-             */
-            init() {
-                this.updateClass();
-            },
-
-            /**
-             * Toggle dark mode on/off
-             * Called by theme toggle buttons in navigation
-             */
-            toggle() {
-                this.on = !this.on;
-                localStorage.setItem('darkMode', this.on);
-                this.updateClass();
-            },
-
-            /**
-             * Apply/remove 'dark' class to <html> element
-             * Tailwind CSS uses this class for dark mode styles
-             */
-            updateClass() {
-                const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-                if (this.on) {
-                    document.documentElement.classList.add('dark');
-                    document.documentElement.style.backgroundColor = '#111827';
-                    if (metaThemeColor) metaThemeColor.setAttribute('content', '#111827');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                    document.documentElement.style.backgroundColor = '#f3f4f6';
-                    if (metaThemeColor) metaThemeColor.setAttribute('content', '#f3f4f6');
-                }
-            }
-        });
-
-        // Initialize dark mode immediately
-        window.Alpine.store('darkMode').init();
-    }
-});
 
 /**
  * Dashboard Chart Rendering
@@ -159,11 +91,6 @@ document.addEventListener('livewire:navigated', () => {
     initLoginModal();
     initScrollAnimations();
     initCheckoutAlerts();
-
-    // Re-apply dark mode after navigation to prevent flicker
-    if (window.Alpine?.store('darkMode')) {
-        window.Alpine.store('darkMode').updateClass();
-    }
 });
 
 // Initialize on first load as well
@@ -175,3 +102,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollAnimations();
     initCheckoutAlerts();
 });
+
+

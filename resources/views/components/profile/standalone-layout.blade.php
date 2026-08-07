@@ -1,49 +1,27 @@
 @props(['title' => 'Profile', 'breadcrumb' => null])
 
-@php
-    $homeUrl = auth()->user()?->homePath() ?? url('/');
-@endphp
-
 <x-clean-layout>
-    <div class="bg-white dark:bg-gray-800 shadow">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between">
-                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                    {{ $title }}
-                </h2>
-                @if($breadcrumb)
-                    <nav class="hidden md:flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                        <a href="{{ route('profile') }}" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Profile</a>
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                        <span class="text-gray-900 dark:text-gray-100 font-medium">{{ $breadcrumb }}</span>
-                    </nav>
-                @endif
-            </div>
-        </div>
-    </div>
-
-    <div class="py-8 sm:py-12">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Back Button -->
-            <div class="mb-6">
-                <a
-                    href="{{ route('profile') }}"
-                    class="inline-flex items-center gap-2 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-2.5 text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-sm transition-all duration-300 hover:border-slate-400 dark:hover:border-slate-500 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-500"
-                >
-                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 12H5" />
-                        <path d="M12 19l-7-7 7-7" />
+    <div class="min-h-screen bg-[#f7faf9] px-4 py-5 text-slate-950 sm:px-6 lg:px-8 lg:py-10">
+        <div class="mx-auto max-w-4xl">
+            <header class="flex items-center justify-between gap-3 rounded-[1.75rem] border border-slate-200 bg-white/90 p-3 shadow-[0_18px_60px_rgba(15,23,42,0.06)] backdrop-blur-xl sm:p-4">
+                <a href="{{ route('profile') }}" class="inline-flex min-h-11 items-center gap-2 rounded-2xl px-3 text-sm font-extrabold text-slate-700 transition hover:bg-slate-50 hover:text-slate-950" aria-label="Kembali ke profile">
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    Kembali
+                    Profile
                 </a>
-            </div>
 
-            <!-- Content -->
-            <div class="space-y-6">
+                <div class="text-right leading-tight">
+                    <p class="text-sm font-extrabold tracking-tight text-slate-950">{{ $title }}</p>
+                    @if($breadcrumb)
+                        <p class="text-xs font-semibold text-slate-500">{{ $breadcrumb }}</p>
+                    @endif
+                </div>
+            </header>
+
+            <main class="py-6 sm:py-8">
                 {{ $slot }}
-            </div>
+            </main>
         </div>
     </div>
 </x-clean-layout>

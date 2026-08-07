@@ -14,6 +14,15 @@ class MidtransService
         Config::$isProduction = (bool) config('services.midtrans.is_production', false);
         Config::$isSanitized  = (bool) config('services.midtrans.is_sanitized', true);
         Config::$is3ds        = (bool) config('services.midtrans.is_3ds', true);
+
+        $caInfoPath = base_path('vendor/midtrans/midtrans-php/data/cacert.pem');
+
+        if (is_file($caInfoPath)) {
+            Config::$curlOptions = array_replace(Config::$curlOptions, [
+                CURLOPT_HTTPHEADER => [],
+                CURLOPT_CAINFO => $caInfoPath,
+            ]);
+        }
     }
 
     public function createSnapToken(array $params): string

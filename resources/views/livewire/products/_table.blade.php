@@ -85,3 +85,4 @@
 <div class="pagination-wrapper">
     {{ $products->links() }}
 </div>
+

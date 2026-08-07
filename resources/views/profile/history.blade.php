@@ -4,3 +4,4 @@
         @livewire('orders.customer-receipt-modal')
     </section>
 </x-profile.standalone-layout>
+

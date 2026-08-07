@@ -73,3 +73,4 @@
 <div class="pagination-wrapper">
     {{ $transactions->links() }}
 </div>
+

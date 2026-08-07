@@ -12,20 +12,6 @@
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" />
 
         <!-- Dark mode pre-init untuk mencegah flicker putih -->
-        <script>
-            try {
-                const stored = localStorage.getItem('darkMode');
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const isDark = stored === 'true' || (stored === null && prefersDark);
-                if (isDark) {
-                    document.documentElement.classList.add('dark');
-                    document.documentElement.style.backgroundColor = '#111827';
-                } else {
-                    document.documentElement.classList.remove('dark');
-                    document.documentElement.style.backgroundColor = '#f3f4f6';
-                }
-            } catch (e) {}
-        </script>
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/ajax-cart.js'])
@@ -48,3 +34,4 @@
         @livewireScripts
     </body>
 </html>
+

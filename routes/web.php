@@ -23,6 +23,7 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LandingCartController;
 use App\Http\Controllers\LandingProductCheckoutController;
 use App\Http\Controllers\LandingProductOrderController;
+use App\Http\Controllers\LandingProductActionController;
 use App\Http\Controllers\CustomerOrderHistoryController;
 use App\Http\Controllers\OrderExportController;
 use App\Http\Controllers\TransactionExportController;
@@ -95,6 +96,9 @@ Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
     Route::get('/landing/products/{product}/checkout', LandingProductCheckoutController::class)
         ->name('landing.products.checkout');
 
+    Route::post('/landing/products/action', [LandingProductActionController::class, 'handle'])
+        ->name('landing.products.action');
+
     Route::post('/landing/products/{product}/order', LandingProductOrderController::class)
         ->name('landing.products.order');
 
@@ -151,3 +155,4 @@ Route::get('/auth/google/callback', [AuthGoogleController::class, 'callback'])->
 Route::post('/midtrans/notification', [App\Http\Controllers\MidtransNotificationController::class, 'handle'])->name('midtrans.notification');
 
 require __DIR__ . '/auth.php';
+

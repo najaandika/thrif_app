@@ -1,65 +1,54 @@
-<section class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl p-6 space-y-4">
-    <p class="{{ $labelClass }}">Produk</p>
-
-    <div class="space-y-4">
-        {{-- Image Section --}}
-        <div class="w-full">
-            <div class="rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 w-full aspect-square mx-auto group relative shadow-sm">
-                @php $gallery = $product->gallery; @endphp
-                @if ($gallery->isNotEmpty())
-                    <div class="flex overflow-x-auto snap-x snap-mandatory h-full w-full no-scrollbar">
-                        @foreach($gallery as $img)
-                            <img src="{{ media_url($img->image_path) }}" 
-                                 alt="{{ $product->name }}" 
-                                 class="w-full h-full object-cover flex-shrink-0 snap-center">
-                        @endforeach
-                    </div>
-                @else
-                    <div class="w-full h-full bg-gradient-to-br from-slate-200 via-slate-100 to-slate-300 dark:from-slate-800 dark:via-slate-700 dark:to-slate-900 flex items-center justify-center text-[10px] text-gray-500 dark:text-gray-300 text-center p-2">
-                        Foto produk menyusul
-                    </div>
-                @endif
-                @if ($product->is_on_sale)
-                    <div class="absolute top-2 left-2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg animate-pulse">
-                        -{{ $product->discount_percent }}% OFF
-                    </div>
-                @endif
-            </div>
-        </div>
-
-        {{-- Details Section --}}
-        <div class="space-y-3">
-            <div class="text-center">
-                <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight px-2">{{ $product->name }}</h1>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1.5">{{ $product->category ?? 'Tanpa kategori' }}</p>
-            </div>
-            
-            <div class="flex flex-wrap items-center justify-center gap-2">
-                <span class="inline-flex items-center px-2.5 py-1 rounded-lg font-bold text-xs text-white shadow-sm {{ $product->condition_class }}">
-                    {{ $product->condition_label }}
-                </span>
-                <span class="px-3 py-1 rounded-lg bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-bold shadow-md ring-1 ring-gray-900/10 dark:ring-gray-100/20">
-                    Size {{ $product->size ?? '-' }}
-                </span>
-            </div>
-
-            <div class="text-center pt-1">
-                @if ($product->is_on_sale)
-                    <p class="text-lg text-gray-400 line-through">{{ rupiah($product->price) }}</p>
-                    <p class="text-3xl font-extrabold text-red-500 tracking-tight">{{ rupiah($product->final_price) }}</p>
-                    <p class="text-xs text-red-500 font-medium">Hemat {{ rupiah($product->price - $product->final_price) }}!</p>
-                @else
-                    <p class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 tracking-tight">{{ rupiah($product->price) }}</p>
-                @endif
-            </div>
-
-            @if ($product->description)
-                <div class="p-4 rounded-2xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 text-left">
-                    <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2 border-b border-gray-200 dark:border-gray-700 pb-2">Deskripsi Produk</h3>
-                    <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{{ strip_tags($product->description) }}</p>
-                </div>
-            @endif
+<section class="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_18px_60px_rgba(15,23,42,0.06)] lg:sticky lg:top-24">
+    <div class="p-5 sm:p-6">
+        <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">Item dipilih</p>
+        <h2 class="mt-2 text-2xl font-extrabold tracking-[-0.03em] text-slate-950">{{ Str::title($product->name) }}</h2>
+        <div class="mt-4 flex flex-wrap gap-2">
+            <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold text-slate-600">{{ $product->category ?? 'Tanpa kategori' }}</span>
+            <span class="rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">{{ $product->condition_label }}</span>
+            <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold text-slate-600">Size {{ $product->size ?? '-' }}</span>
         </div>
     </div>
-</section>
 
+    <div class="relative border-y border-slate-100 bg-slate-50">
+        <div class="aspect-[4/5] w-full overflow-hidden bg-slate-100 sm:aspect-[5/4] lg:aspect-square">
+            @php $gallery = $product->gallery; @endphp
+            @if ($gallery->isNotEmpty())
+                <div class="flex h-full w-full snap-x snap-mandatory overflow-x-auto no-scrollbar">
+                    @foreach($gallery as $img)
+                        <img src="{{ media_url($img->image_path) }}"
+                             alt="{{ $product->name }}"
+                             class="h-full w-full flex-shrink-0 snap-center object-contain p-3">
+                    @endforeach
+                </div>
+            @else
+                <div class="flex h-full w-full items-center justify-center p-6 text-center text-xs font-bold text-slate-400">Foto produk menyusul</div>
+            @endif
+        </div>
+
+        @if ($product->is_on_sale)
+            <span class="absolute left-4 top-4 rounded-full bg-red-600 px-3 py-1 text-xs font-bold text-white shadow-sm">-{{ $product->discount_percent }}%</span>
+        @endif
+    </div>
+
+    <div class="space-y-4 p-5 sm:p-6">
+        <div class="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
+            @if ($product->is_on_sale)
+                <p class="text-sm font-semibold text-slate-400 line-through">{{ rupiah($product->price) }}</p>
+                <div class="mt-1 flex flex-wrap items-center gap-2">
+                    <p class="text-3xl font-extrabold tracking-[-0.04em] text-red-600">{{ rupiah($product->final_price) }}</p>
+                    <span class="rounded-full bg-red-50 px-2.5 py-1 text-xs font-bold text-red-600">Hemat {{ rupiah($product->price - $product->final_price) }}</span>
+                </div>
+            @else
+                <p class="text-3xl font-extrabold tracking-[-0.04em] text-slate-950">{{ rupiah($product->price) }}</p>
+            @endif
+            <p class="mt-2 text-xs font-medium leading-5 text-slate-500">Harga final sesuai item yang ditampilkan. Stok thrift terbatas satuan.</p>
+        </div>
+
+        @if ($product->description)
+            <div class="border-t border-slate-100 pt-4">
+                <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">Catatan produk</p>
+                <p class="mt-2 text-sm font-medium leading-7 text-slate-600">{{ strip_tags($product->description) }}</p>
+            </div>
+        @endif
+    </div>
+</section>

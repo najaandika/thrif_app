@@ -1,264 +1,249 @@
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="mx-auto max-w-6xl px-4 pb-28 pt-6 sm:px-6 lg:px-8 lg:pb-14 lg:pt-10">
     @if (session()->has('error'))
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-            <span class="block sm:inline">{{ session('error') }}</span>
+        <div class="mb-5 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700" role="alert">
+            {{ session('error') }}
         </div>
     @endif
 
-    <div class="{{ count($cartItems) > 0 ? 'lg:grid lg:grid-cols-[0.85fr,1.15fr] gap-6 lg:items-start' : 'max-w-xl mx-auto' }}">
-        <section class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl p-6 space-y-6 h-fit relative overflow-hidden">
+    @if(count($cartItems) > 0)
+        <div class="mb-7 grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end">
+            <div>
+                <p class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500 shadow-sm">
+                    <span class="h-1.5 w-1.5 rounded-full bg-slate-950"></span>
+                    Keranjang
+                </p>
+                <h1 class="mt-4 max-w-2xl text-3xl font-extrabold leading-[1.02] tracking-[-0.05em] text-slate-950 sm:text-5xl">
+                    Cek item sebelum bayar.
+                </h1>
+                <p class="mt-4 max-w-xl text-sm font-medium leading-7 text-slate-600">
+                    Pastikan item dan ukuran sudah cocok. Setelah itu isi kontak, pilih pengiriman, lalu checkout.
+                </p>
+            </div>
+
+            <div class="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-[0_18px_50px_rgba(15,23,42,0.05)]">
+                <div class="grid grid-cols-2 divide-x divide-slate-100 text-center">
+                    <div class="px-2">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">Item</p>
+                        <p class="mt-1 text-2xl font-extrabold text-slate-950">{{ count($cartItems) }}</p>
+                    </div>
+                    <div class="px-2">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">Total</p>
+                        <p class="mt-1 text-lg font-extrabold text-slate-950">{{ rupiah($total) }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <div class="{{ count($cartItems) > 0 ? 'grid gap-6 lg:grid-cols-[minmax(0,0.95fr)_minmax(420px,1.05fr)] lg:items-start' : 'mx-auto max-w-xl' }}">
+        <section class="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_18px_60px_rgba(15,23,42,0.06)]">
             @if(count($cartItems) > 0)
-                <div class="flex items-center justify-between">
-                    <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">Keranjang Belanja</h2>
-                    <span class="text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2.5 py-1 rounded-full">{{ count($cartItems) }} Item</span>
+                <div class="flex items-center justify-between border-b border-slate-100 px-5 py-4 sm:px-6">
+                    <div>
+                        <h2 class="text-lg font-extrabold tracking-tight text-slate-950">Item dipilih</h2>
+                        <p class="mt-1 text-xs font-semibold text-slate-500">Stok thrift terbatas satuan.</p>
+                    </div>
+                    <a href="{{ route('landing.products.index') }}" class="hidden rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 transition hover:border-slate-300 hover:text-slate-950 sm:inline-flex">
+                        Tambah item
+                    </a>
                 </div>
 
-                <div class="space-y-6">
-                    <ul class="divide-y divide-gray-100 dark:divide-gray-800">
-                        @foreach($cartItems as $key => $item)
-                            <li class="flex py-4 first:pt-0 last:pb-0 gap-4">
-                                <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 relative">
-                                    @if(isset($item['image']) && $item['image'])
-                                        <img src="{{ media_url($item['image']) }}" alt="{{ $item['name'] }}" class="h-full w-full object-cover object-center">
-                                    @else
-                                        <div class="h-full w-full flex items-center justify-center text-xs text-gray-400">
-                                            No Img
+                <ul class="divide-y divide-slate-100">
+                    @foreach($cartItems as $key => $item)
+                        <li class="grid grid-cols-[5.25rem_minmax(0,1fr)] gap-3 p-4 transition hover:bg-slate-50/60 sm:grid-cols-[6.5rem_minmax(0,1fr)] sm:gap-4 sm:p-6">
+                            <div class="relative aspect-square overflow-hidden rounded-[1.25rem] border border-slate-200 bg-slate-100">
+                                @if(isset($item['image']) && $item['image'])
+                                    <img src="{{ media_url($item['image']) }}" alt="{{ $item['name'] }}" class="h-full w-full object-cover object-center">
+                                @else
+                                    <div class="flex h-full w-full items-center justify-center text-[11px] font-bold text-slate-400">No Img</div>
+                                @endif
+                                @if(isset($item['is_on_sale']) && $item['is_on_sale'])
+                                    <span class="absolute left-2 top-2 rounded-full bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">-{{ $item['discount_percent'] }}%</span>
+                                @endif
+                            </div>
+
+                            <div class="min-w-0">
+                                <div class="flex items-start justify-between gap-3">
+                                    <div class="min-w-0">
+                                        <h3 class="line-clamp-2 text-sm font-bold leading-snug tracking-[-0.015em] text-slate-950 sm:text-base">{{ Str::title($item['name']) }}</h3>
+                                        <div class="mt-2 flex flex-wrap gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">
+                                            <span>Qty {{ $item['quantity'] }}</span>
+                                            <span>Size {{ $item['size'] ?? '-' }}</span>
                                         </div>
-                                    @endif
-                                    @if(isset($item['is_on_sale']) && $item['is_on_sale'])
-                                        <div class="absolute top-1 left-1 bg-gradient-to-r from-red-500 to-orange-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full shadow">
-                                            -{{ $item['discount_percent'] }}%
-                                        </div>
-                                    @endif
+                                    </div>
+
+                                    <button type="button" wire:click="removeFromCart({{ $key }})" class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-400 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600" aria-label="Hapus {{ $item['name'] }} dari keranjang">
+                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                            <path d="M4 7h16M10 11v6M14 11v6M6 7l1 14h10l1-14M9 7V4h6v3" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </button>
                                 </div>
 
-                                <div class="flex flex-1 flex-col justify-between">
+                                <div class="mt-3 flex items-end justify-between gap-3">
                                     <div>
-                                        <div class="flex justify-between text-base font-medium text-gray-900 dark:text-gray-100">
-                                            <h3 class="line-clamp-2 leading-snug">
-                                                <a href="#">{{ $item['name'] }}</a>
-                                            </h3>
-                                        </div>
-                                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Size: {{ $item['size'] ?? '-' }}</p>
+                                        @if(isset($item['is_on_sale']) && $item['is_on_sale'])
+                                            <p class="text-xs font-semibold text-slate-400 line-through">{{ rupiah($item['original_price']) }}</p>
+                                            <p class="text-base font-extrabold text-red-600">{{ rupiah($item['price']) }}</p>
+                                        @else
+                                            <p class="text-base font-extrabold text-slate-950">{{ rupiah($item['price']) }}</p>
+                                        @endif
                                     </div>
-                                    <div class="flex items-end justify-between text-sm">
-                                        <div>
-                                            @if(isset($item['is_on_sale']) && $item['is_on_sale'])
-                                                <p class="text-xs text-gray-400 line-through">{{ rupiah($item['original_price']) }}</p>
-                                                <p class="font-bold text-red-500 font-mono">{{ rupiah($item['price']) }}</p>
-                                            @else
-                                                <p class="font-bold text-emerald-600 dark:text-emerald-400 font-mono">{{ rupiah($item['price']) }}</p>
-                                            @endif
-                                        </div>
-
-                                        <div class="flex items-center gap-3">
-                                            <p class="text-gray-500 dark:text-gray-400">Qty {{ $item['quantity'] }}</p>
-                                            <button type="button" wire:click="removeFromCart({{ $key }})" class="font-medium text-red-500 hover:text-red-600 transition-colors p-1 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20">
-                                                <span class="sr-only">Remove</span>
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-                                                    <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </div>
+                                    <p class="rounded-full border border-emerald-100 bg-emerald-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-emerald-700">Siap order</p>
                                 </div>
-                            </li>
-                        @endforeach
-                    </ul>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+
+                <div class="border-t border-slate-100 p-5 sm:hidden">
+                    <a href="{{ route('landing.products.index') }}" class="inline-flex h-11 w-full items-center justify-center rounded-2xl border border-slate-200 bg-white text-sm font-bold text-slate-700 transition hover:bg-slate-50">
+                        Tambah item lain
+                    </a>
                 </div>
             @else
-                <div class="text-center py-16 px-4">
-                    <div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
-                        <div class="w-64 h-64 bg-emerald-500 rounded-full blur-3xl"></div>
-                    </div>
-
-                    <div class="relative bg-gray-50 dark:bg-gray-800 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 ring-4 ring-gray-50 dark:ring-gray-800">
-                        <svg class="h-10 w-10 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                <div class="relative overflow-hidden px-5 py-10 text-center sm:px-8 sm:py-12">
+                    <div class="absolute inset-x-8 top-6 h-20 rounded-full bg-slate-100 blur-3xl"></div>
+                    <div class="relative mx-auto flex h-16 w-16 items-center justify-center rounded-[1.25rem] border border-slate-200 bg-white shadow-lg shadow-slate-950/8">
+                        <svg class="h-7 w-7 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path d="M6 8h15l-2 9H8L6 8ZM6 8 5 4H2" stroke-linecap="round" stroke-linejoin="round" />
+                            <circle cx="9" cy="20" r="1" />
+                            <circle cx="18" cy="20" r="1" />
                         </svg>
                     </div>
-                    
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">Keranjang masih kosong</h3>
-                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400 max-w-xs mx-auto">Yuk isi dengan barang-barang favoritmu sebelum kehabisan!</p>
-                    
-                    <div class="mt-8">
-                        <a href="{{ route('landing.products.index') }}" class="group relative inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-8 py-3.5 text-sm font-bold text-white shadow-xl shadow-emerald-600/20 transition-all duration-300 hover:bg-emerald-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-emerald-600/40">
-                            <span>Mulai Belanja</span>
-                            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                        </a>
+                    <h2 class="relative mt-5 text-2xl font-extrabold tracking-[-0.035em] text-slate-950 sm:text-3xl">Keranjang masih kosong.</h2>
+                    <p class="relative mx-auto mt-3 max-w-sm text-sm font-medium leading-7 text-slate-500">Pilih item yang masih ready, lalu checkout saat detail produk sudah cocok.</p>
+
+                    <div class="relative mx-auto mt-6 grid max-w-sm grid-cols-3 divide-x divide-slate-100 rounded-2xl border border-slate-200 bg-slate-50/80 px-2 py-3 text-center">
+                        <div class="px-2">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">Stok</p>
+                            <p class="mt-1 text-xs font-semibold text-slate-950">Satuan</p>
+                        </div>
+                        <div class="px-2">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">Kondisi</p>
+                            <p class="mt-1 text-xs font-semibold text-slate-950">Dicek</p>
+                        </div>
+                        <div class="px-2">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">Order</p>
+                            <p class="mt-1 text-xs font-semibold text-slate-950">Cepat</p>
+                        </div>
                     </div>
+
+                    <a href="{{ route('landing.products.index') }}" class="relative mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 text-sm font-bold text-white shadow-lg shadow-slate-950/12 transition hover:-translate-y-0.5 hover:bg-slate-800">
+                        Buka katalog
+                        <span aria-hidden="true">&rarr;</span>
+                    </a>
                 </div>
             @endif
         </section>
 
         @if(count($cartItems) > 0)
-        <section class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl p-6 h-fit" x-data="{ 
-            deliveryMethod: 'shipping', 
-            paymentMethod: 'cash',
-            buyerName: @entangle('buyerName'),
-            buyerContact: @entangle('buyerContact'),
-            shippingAddress: @entangle('shippingAddress'),
-            notes: @entangle('notes')
-        }">
-            <div class="space-y-1 mb-6">
-                <p class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Form Pembelian</p>
-                <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Isi data pengirimanmu</h2>
-            </div>
-            
-            <div>
+            <section class="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-[0_18px_60px_rgba(15,23,42,0.06)] sm:p-6 lg:sticky lg:top-24" x-data="{
+                deliveryMethod: 'shipping',
+                paymentMethod: 'cash',
+                buyerName: @entangle('buyerName'),
+                buyerContact: @entangle('buyerContact'),
+                shippingAddress: @entangle('shippingAddress'),
+                notes: @entangle('notes')
+            }">
+                <div class="mb-6 flex items-start justify-between gap-4">
+                    <div>
+                        <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">Checkout</p>
+                        <h2 class="mt-2 text-2xl font-extrabold tracking-[-0.03em] text-slate-950">Checkout keranjang.</h2>
+                    </div>
+                    <span class="rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-emerald-700">Ready</span>
+                </div>
+
                 <form wire:submit="checkout" class="space-y-6">
                     <div class="space-y-3">
-                        <div class="space-y-1">
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Metode Pengiriman</label>
-                            <div class="grid grid-cols-2 gap-3">
-                                <label class="cursor-pointer relative">
-                                    <input type="radio" wire:model="deliveryType" value="shipping" x-model="deliveryMethod" class="peer sr-only">
-                                    <div class="rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 peer-checked:border-slate-900 peer-checked:bg-slate-50 dark:peer-checked:border-slate-400 dark:peer-checked:bg-slate-900/50 transition-all text-center">
-                                        <div class="text-sm font-semibold text-gray-900 dark:text-gray-100">Pesan Antar</div>
-                                        <div class="text-xs text-gray-500 mt-0.5">Kurir Toko (Balam) / Ekspedisi</div>
-                                    </div>
-                                </label>
-                                <label class="cursor-pointer relative">
-                                    <input type="radio" wire:model="deliveryType" value="pickup" x-model="deliveryMethod" class="peer sr-only">
-                                    <div class="rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 peer-checked:border-slate-900 peer-checked:bg-slate-50 dark:peer-checked:border-slate-400 dark:peer-checked:bg-slate-900/50 transition-all text-center">
-                                        <div class="text-sm font-semibold text-gray-900 dark:text-gray-100">Ambil di Toko</div>
-                                        <div class="text-xs text-gray-500 mt-0.5">Gratis Ongkir</div>
-                                    </div>
-                                </label>
-                            </div>
+                        <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">Metode</p>
+                        <div class="grid gap-3 sm:grid-cols-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="delivery_type" wire:model="deliveryType" value="shipping" x-model="deliveryMethod" class="peer sr-only">
+                                <span class="block rounded-2xl border border-slate-200 bg-white p-4 transition peer-checked:border-slate-950 peer-checked:bg-slate-50">
+                                    <span class="block text-sm font-bold text-slate-950">Pesan antar</span>
+                                    <span class="mt-1 block text-xs font-medium leading-5 text-slate-500">Kurir toko atau ekspedisi.</span>
+                                </span>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="delivery_type" wire:model="deliveryType" value="pickup" x-model="deliveryMethod" class="peer sr-only">
+                                <span class="block rounded-2xl border border-slate-200 bg-white p-4 transition peer-checked:border-slate-950 peer-checked:bg-slate-50">
+                                    <span class="block text-sm font-bold text-slate-950">Ambil toko</span>
+                                    <span class="mt-1 block text-xs font-medium leading-5 text-slate-500">Gratis ongkir.</span>
+                                </span>
+                            </label>
                         </div>
 
-                        <div class="space-y-1">
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Metode Pembayaran</label>
-                            <select wire:model="paymentMethod" class="w-full rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-sm text-gray-900 dark:text-gray-100 transition-all duration-300 focus:border-slate-900 dark:focus:border-slate-500 focus:ring-4 focus:ring-slate-900/20 dark:focus:ring-slate-500/20 hover:border-gray-300 dark:hover:border-gray-600 focus:outline-none">
-                                <option value="cash" x-text="deliveryMethod === 'pickup' ? 'Bayar di Toko (Cash / QRIS)' : 'Cash On Delivery'"></option>
+                        <label class="block">
+                            <span class="mb-1.5 block text-sm font-bold text-slate-700">Pembayaran</span>
+                            <select name="payment_method" wire:model="paymentMethod" x-model="paymentMethod" class="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-950 outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-950/10">
+                                <option value="cash" x-text="deliveryMethod === 'pickup' ? 'Bayar di toko (Cash / QRIS)' : 'Cash on Delivery'"></option>
                                 <option value="midtrans">Midtrans (Transfer / QRIS)</option>
                             </select>
-                            @error('paymentMethod') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
-                        </div>
+                            @error('paymentMethod') <span class="mt-1 block text-xs font-bold text-red-600">{{ $message }}</span> @enderror
+                        </label>
                     </div>
 
-                    <div class="pt-2"></div>
-
                     <div class="space-y-3">
-                        <div class="flex items-center gap-2">
-                            <div class="h-8 w-8 rounded-xl bg-slate-900 text-slate-100 dark:bg-slate-800 dark:text-slate-100 flex items-center justify-center">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                            </div>
-                            <span class="text-xs font-bold tracking-wider text-gray-500 uppercase">Data Pembeli</span>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="space-y-1">
-                                <label for="buyerName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama penerima</label>
-                                <input type="text" id="buyerName" x-model="buyerName" class="w-full rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-sm text-gray-900 dark:text-gray-100 transition-all duration-300 focus:border-slate-900 dark:focus:border-slate-500 focus:ring-4 focus:ring-slate-900/20 dark:focus:ring-slate-500/20 hover:border-gray-300 dark:hover:border-gray-600 focus:outline-none">
-                                @error('buyerName') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
-                            </div>
-        
-                            <div class="space-y-1">
-                                <label for="buyerContact" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Kontak (WA / IG)</label>
-                                <input type="text" id="buyerContact" x-model="buyerContact" class="w-full rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-sm text-gray-900 dark:text-gray-100 transition-all duration-300 focus:border-slate-900 dark:focus:border-slate-500 focus:ring-4 focus:ring-slate-900/20 dark:focus:ring-slate-500/20 hover:border-gray-300 dark:hover:border-gray-600 focus:outline-none">
-                                @error('buyerContact') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
-                            </div>
+                        <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">Data pembeli</p>
+                        <div class="grid gap-3 sm:grid-cols-2">
+                            <label class="block">
+                                <span class="mb-1.5 block text-sm font-bold text-slate-700">Nama penerima</span>
+                                <input type="text" id="buyerName" name="buyer_name" x-model="buyerName" autocomplete="name" class="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-slate-950 focus:ring-4 focus:ring-slate-950/10">
+                                @error('buyerName') <span class="mt-1 block text-xs font-bold text-red-600">{{ $message }}</span> @enderror
+                            </label>
+                            <label class="block">
+                                <span class="mb-1.5 block text-sm font-bold text-slate-700">Kontak WA / IG</span>
+                                <input type="text" id="buyerContact" name="buyer_contact" x-model="buyerContact" autocomplete="tel" class="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-slate-950 focus:ring-4 focus:ring-slate-950/10">
+                                @error('buyerContact') <span class="mt-1 block text-xs font-bold text-red-600">{{ $message }}</span> @enderror
+                            </label>
                         </div>
                     </div>
 
                     <div class="space-y-3">
-                         <div class="flex items-center gap-2">
-                            <div class="h-8 w-8 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center text-white">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            </div>
-                            <span class="text-xs font-bold tracking-wider text-gray-500 uppercase">Detail Pengiriman</span>
-                        </div>
-
-                        <div class="space-y-1" x-show="deliveryMethod === 'shipping'" x-transition>
-                            <label for="shippingAddress" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Alamat pengiriman</label>
-                            <textarea id="shippingAddress" x-model="shippingAddress" rows="3" placeholder="Tulis alamat lengkap (Kecamatan & Kota wajib diisi untuk cek ongkir)" class="w-full rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-sm text-gray-900 dark:text-gray-100 transition-all duration-300 focus:border-slate-900 dark:focus:border-slate-500 focus:ring-4 focus:ring-slate-900/20 dark:focus:ring-slate-500/20 hover:border-gray-300 dark:hover:border-gray-600 focus:outline-none"></textarea>
-                            @error('shippingAddress') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
-                        </div>
-                        
-                        <div class="space-y-1">
-                            <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Catatan (Opsional)</label>
-                            <textarea id="notes" x-model="notes" rows="2" class="w-full rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-sm text-gray-900 dark:text-gray-100 transition-all duration-300 focus:border-slate-900 dark:focus:border-slate-500 focus:ring-4 focus:ring-slate-900/20 dark:focus:ring-slate-500/20 hover:border-gray-300 dark:hover:border-gray-600 focus:outline-none"></textarea>
-                        </div>
+                        <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">Pengiriman</p>
+                        <label class="block" x-show="deliveryMethod === 'shipping'" x-transition>
+                            <span class="mb-1.5 block text-sm font-bold text-slate-700">Alamat pengiriman</span>
+                            <textarea id="shippingAddress" name="shipping_address" x-model="shippingAddress" rows="3" placeholder="Tulis alamat lengkap untuk cek ongkir" autocomplete="street-address" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold leading-6 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-slate-950 focus:ring-4 focus:ring-slate-950/10"></textarea>
+                            @error('shippingAddress') <span class="mt-1 block text-xs font-bold text-red-600">{{ $message }}</span> @enderror
+                        </label>
+                        <label class="block">
+                            <span class="mb-1.5 block text-sm font-bold text-slate-700">Catatan opsional</span>
+                            <textarea id="notes" name="notes" x-model="notes" rows="2" placeholder="Contoh: warna/packing, patokan alamat, atau request lain" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold leading-6 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-slate-950 focus:ring-4 focus:ring-slate-950/10"></textarea>
+                        </label>
                     </div>
 
-                    <div class="space-y-3">
-                        <div class="flex items-center gap-2">
-                            <div class="h-8 w-8 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                            </div>
-                            <p class="text-[11px] font-semibold tracking-[0.2em] text-gray-500 dark:text-gray-400 uppercase">Ringkasan Order</p>
-                        </div>
-                        <div class="rounded-2xl border-2 border-gray-200 dark:border-gray-700 p-5 bg-gradient-to-br from-gray-50 to-gray-100/50 dark:from-gray-800/40 dark:to-gray-800/20 space-y-4 text-sm text-gray-600 dark:text-gray-300">
-                            <div class="space-y-2">
-                                <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">Info Penerima</h4>
-                                <div class="flex justify-between">
-                                    <span>Nama</span>
-                                    <span class="font-medium text-gray-900 dark:text-gray-100 text-right" x-text="buyerName || '-'"></span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span>Kontak</span>
-                                    <span class="font-medium text-gray-900 dark:text-gray-100 text-right" x-text="buyerContact || '-'"></span>
-                                </div>
-                                
-                                <div x-show="deliveryMethod === 'shipping'" class="flex justify-between items-start gap-4">
-                                    <span class="shrink-0">Alamat</span>
-                                    <span class="font-medium text-gray-900 dark:text-gray-100 text-right line-clamp-2" x-text="shippingAddress || '-'"></span>
-                                </div>
-                            </div>
-                    
-                            <div class="border-b border-dashed border-gray-300 dark:border-gray-600"></div>
-                    
-                            <div class="space-y-2">
-                                <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">Transaksi</h4>
-                                 <div class="flex justify-between">
-                                    <span>Metode Kirim</span>
-                                    <span class="font-medium text-gray-900 dark:text-gray-100" x-text="deliveryMethod === 'pickup' ? 'Ambil di Toko' : 'Pesan Antar'"></span>
-                                </div>
-                                 <div class="flex justify-between">
-                                    <span>Pembayaran</span>
-                                    <span class="font-medium text-gray-900 dark:text-gray-100" x-text="paymentMethod === 'midtrans' ? 'Non-Tunai (Midtrans)' : (deliveryMethod === 'pickup' ? 'Bayar di Kasir' : 'COD')"></span>
-                                </div>
-                                
-                                <div x-show="notes" class="pt-2 border-t border-dashed border-gray-200 dark:border-gray-700">
-                                    <span class="block text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">Catatan</span>
-                                    <p class="text-xs italic text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg" x-text="notes"></p>
-                                </div>
-                            </div>
-                            
-                            <div class="border-b border-dashed border-gray-300 dark:border-gray-600"></div>
-                    
-                            <div class="flex items-center justify-between pt-1">
-                                <span class="font-medium">Total Harga</span>
+                    <div class="rounded-[1.5rem] border border-slate-200 bg-slate-950 p-4 text-white">
+                        <div class="space-y-2 text-sm font-semibold text-white/70">
+                            <div class="flex items-center justify-between gap-4">
+                                <span>Subtotal</span>
                                 @if($originalTotal > $total)
-                                    <div class="text-right">
-                                        <span class="text-xs text-gray-400 line-through block">{{ rupiah($originalTotal) }}</span>
-                                        <span class="font-bold text-lg text-red-500">{{ rupiah($total) }}</span>
-                                    </div>
+                                    <span class="text-white/45 line-through">{{ rupiah($originalTotal) }}</span>
                                 @else
-                                    <span class="font-bold text-lg text-emerald-600 dark:text-emerald-400">{{ rupiah($total) }}</span>
+                                    <span class="text-white">{{ rupiah($total) }}</span>
                                 @endif
                             </div>
                             @if($originalTotal > $total)
-                                <div class="text-right mt-1">
-                                    <span class="text-xs text-red-500 font-medium">Kamu hemat {{ rupiah($originalTotal - $total) }}!</span>
+                                <div class="flex items-center justify-between gap-4 text-red-200">
+                                    <span>Diskon produk</span>
+                                    <span>-{{ rupiah($originalTotal - $total) }}</span>
                                 </div>
                             @endif
+                            <div class="border-t border-white/10 pt-3">
+                                <div class="flex items-end justify-between gap-4">
+                                    <span class="font-bold text-white/80">Total bayar</span>
+                                    <span class="text-2xl font-extrabold tracking-[-0.04em] text-white">{{ rupiah($total) }}</span>
+                                </div>
+                                <p class="mt-2 text-xs font-medium leading-5 text-white/55">Ongkir dan konfirmasi final mengikuti metode pengiriman yang dipilih.</p>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="pt-2">
-                        <button type="submit" class="group w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gray-800 px-6 py-4 text-base font-bold text-white shadow-xl shadow-gray-900/40 transition-all duration-300 hover:bg-gray-700 hover:scale-[1.02] hover:shadow-2xl hover:shadow-gray-900/60 disabled:opacity-50 disabled:cursor-not-allowed">
-                            <svg class="w-5 h-5 text-emerald-400 group-hover:text-emerald-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            Checkout Sekarang
-                        </button>
-                    </div>
+                    <button type="submit" class="inline-flex min-h-[3.25rem] w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 px-6 py-4 text-base font-bold text-white shadow-xl shadow-slate-950/15 transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50">
+                        Lanjut Checkout
+                        <span aria-hidden="true">&rarr;</span>
+                    </button>
                 </form>
-            </div>
-        </section>
+            </section>
         @endif
     </div>
 
@@ -273,3 +258,7 @@
 
     @vite(['resources/js/cart-checkout.js'])
 </div>
+
+
+
+

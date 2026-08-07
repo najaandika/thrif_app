@@ -13,8 +13,43 @@ document.addEventListener('DOMContentLoaded', function () {
         submitBtn.disabled = isLoading;
     };
 
+    const loadMidtransSnap = () => new Promise((resolve, reject) => {
+        if (window.snap) {
+            resolve(window.snap);
+            return;
+        }
 
-    form.addEventListener('submit', function (e) {
+        const clientKey = document.querySelector('meta[name="midtrans-client-key"]')?.content;
+        if (!clientKey) {
+            reject(new Error('Client key Midtrans tidak ditemukan.'));
+            return;
+        }
+
+        const existingScript = document.querySelector('script[data-midtrans-snap="true"]');
+        if (existingScript) {
+            existingScript.addEventListener('load', () => resolve(window.snap), { once: true });
+            existingScript.addEventListener('error', () => reject(new Error('Gagal memuat Midtrans Snap.')), { once: true });
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
+        script.async = true;
+        script.dataset.midtransSnap = 'true';
+        script.dataset.clientKey = clientKey;
+        script.onload = () => {
+            if (window.snap) {
+                resolve(window.snap);
+                return;
+            }
+
+            reject(new Error('Midtrans Snap belum siap.'));
+        };
+        script.onerror = () => reject(new Error('Gagal memuat Midtrans Snap.'));
+        document.head.appendChild(script);
+    });
+
+    form.addEventListener('submit', async function (e) {
         const method = paymentSelect.value;
         setLoading(true);
 
@@ -90,10 +125,13 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        if (!window.snap) {
+        try {
+            await loadMidtransSnap();
+        } catch (error) {
+            console.error('Midtrans load error:', error);
             Swal.fire({
                 icon: 'error',
-                text: 'Sistem pembayaran (Snap) belum siap. Silakan refresh halaman.',
+                text: error.message || 'Sistem pembayaran belum siap. Silakan coba lagi.',
                 confirmButtonText: 'OK'
             });
             setLoading(false);

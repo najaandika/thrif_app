@@ -59,3 +59,4 @@ $sendPasswordResetLink = function () {
         </div>
     </form>
 </div>
+

@@ -24,3 +24,4 @@
 
     @include('livewire.orders._modal')
 </div>
+
