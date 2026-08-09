@@ -1,10 +1,5 @@
-<div class="hidden lg:flex lg:w-64 flex-shrink-0">
-    <div class="sticky top-16 w-full px-3">
-        <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 overflow-hidden shadow-md rounded-xl border border-gray-100 dark:border-gray-700 h-fit w-56">
-            <div class="p-3 sm:p-4">
-                @livewire('sidebar.menu')
-            </div>
-        </div>
+<aside class="hidden w-72 shrink-0 border-r border-slate-200 bg-slate-50/80 px-5 py-6 lg:block">
+    <div class="sticky top-6">
+        @livewire('sidebar.menu')
     </div>
-</div>
-
+</aside>

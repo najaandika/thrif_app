@@ -1,42 +1,60 @@
-<!-- Stats & Chart -->
+@php
+    $totalProducts = max(1, ($stats['available_products'] ?? 0) + ($stats['sold_products'] ?? 0));
+    $availablePercent = min(100, round((($stats['available_products'] ?? 0) / $totalProducts) * 100));
+    $soldPercent = min(100, round((($stats['sold_products'] ?? 0) / $totalProducts) * 100));
+@endphp
+
+<!-- Product health + value -->
 <div class="stats-grid">
-    <!-- Donut chart card -->
     <div class="card-base card-chart">
-        <div class="flex flex-col sm:flex-row items-center gap-6">
-            <div class="flex-1 w-full">
-                <div class="chart-header">
+        <div class="chart-header">
+            <div>
+                <p class="chart-title-sm">Kesehatan etalase</p>
+                <h3 class="chart-title-lg">Stok ready masih dominan.</h3>
+            </div>
+            <span class="dashboard-kpi-badge dashboard-kpi-badge-emerald">{{ $availablePercent }}% ready</span>
+        </div>
+
+        <div class="space-y-5">
+            <div>
+                <div class="mb-2 flex items-center justify-between gap-3">
+                    <p class="text-sm font-extrabold text-slate-700">Produk tersedia</p>
+                    <p class="text-sm font-extrabold text-slate-950">{{ $stats['available_products'] }} item</p>
+                </div>
+                <div class="h-3 overflow-hidden rounded-full bg-slate-100">
+                    <div class="h-full rounded-full bg-emerald-500" style="width: {{ $availablePercent }}%"></div>
+                </div>
+            </div>
+
+            <div class="chart-legend-grid">
+                <div class="chart-legend-item">
+                    <div class="legend-icon-wrapper bg-emerald-100">
+                        <div class="legend-dot bg-emerald-500"></div>
+                    </div>
                     <div>
-                        <p class="chart-title-sm">Status Produk</p>
-                        <h3 class="chart-title-lg">Ringkasan</h3>
+                        <p class="legend-text-sm">Ready dijual</p>
+                        <p class="legend-text-lg">{{ $stats['available_products'] }}</p>
                     </div>
                 </div>
-
-                <div class="chart-legend-grid">
-                    <div class="chart-legend-item">
-                        <div class="legend-icon-wrapper bg-emerald-100 dark:bg-emerald-900/30">
-                            <div class="legend-dot bg-emerald-500"></div>
-                        </div>
-                        <div>
-                            <p class="legend-text-sm">Tersedia</p>
-                            <p class="legend-text-lg">{{ $stats['available_products'] }}</p>
-                        </div>
+                <div class="chart-legend-item">
+                    <div class="legend-icon-wrapper bg-rose-100">
+                        <div class="legend-dot bg-rose-500"></div>
                     </div>
-                    <div class="chart-legend-item">
-                        <div class="legend-icon-wrapper bg-rose-100 dark:bg-rose-900/30">
-                            <div class="legend-dot bg-rose-500"></div>
-                        </div>
-                        <div>
-                            <p class="legend-text-sm">Terjual</p>
-                            <p class="legend-text-lg">{{ $stats['sold_products'] }}</p>
-                        </div>
+                    <div>
+                        <p class="legend-text-sm">Sudah terjual</p>
+                        <p class="legend-text-lg">{{ $stats['sold_products'] }}</p>
                     </div>
                 </div>
             </div>
 
-            <div class="w-40 h-40 flex-shrink-0 relative" wire:ignore>
-                <canvas id="statusChart"
-                        data-available="{{ $stats['available_products'] }}"
-                        data-sold="{{ $stats['sold_products'] }}"></canvas>
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div class="flex items-center justify-between gap-4">
+                    <div>
+                        <p class="text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Terjual</p>
+                        <p class="mt-1 text-sm font-bold text-slate-600">{{ $soldPercent }}% dari total listing</p>
+                    </div>
+                    <a href="{{ route('products.index') }}" class="dashboard-secondary-link min-h-9 px-3 text-xs">Kelola stok</a>
+                </div>
             </div>
         </div>
     </div>

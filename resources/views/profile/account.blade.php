@@ -8,7 +8,7 @@
                 'show' => true,
                 'route' => route('profile.info'),
                 'label' => 'Informasi akun',
-                'description' => 'Nama, email, nomor HP, dan password.',
+                'description' => 'Update nama, email, WhatsApp, dan password.',
                 'tone' => 'bg-slate-950 text-white',
                 'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
             ],
@@ -16,7 +16,7 @@
                 'show' => $user?->isCustomer(),
                 'route' => route('profile.address'),
                 'label' => 'Alamat pengiriman',
-                'description' => 'Simpan alamat agar checkout lebih cepat.',
+                'description' => 'Alamat default untuk checkout dan pengiriman.',
                 'tone' => 'bg-emerald-50 text-emerald-700',
                 'icon' => 'M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z',
             ],
@@ -24,7 +24,7 @@
                 'show' => $user?->isCustomer(),
                 'route' => route('profile.history'),
                 'label' => 'Riwayat order',
-                'description' => 'Cek status, detail item, dan struk.',
+                'description' => 'Pantau status order dan lanjutkan pembayaran.',
                 'tone' => 'bg-amber-50 text-amber-700',
                 'icon' => 'M9 5h6M9 9h6M9 13h3M5 3h14v18l-7-3-7 3V3z',
             ],
@@ -41,7 +41,7 @@
 
     <div class="min-h-screen bg-[#f7faf9] px-4 py-5 text-slate-950 sm:px-6 lg:px-8 lg:py-10">
         <div class="mx-auto max-w-5xl">
-            <header class="flex items-center justify-between gap-3 rounded-[1.75rem] border border-slate-200 bg-white/90 p-3 shadow-[0_18px_60px_rgba(15,23,42,0.06)] backdrop-blur-xl sm:p-4">
+            <header class="flex items-center justify-between gap-3 rounded-[1.75rem] border border-slate-200 bg-white/95 p-3 shadow-[0_18px_60px_rgba(15,23,42,0.06)] backdrop-blur-xl sm:p-4">
                 <a href="{{ $homeUrl }}" class="inline-flex min-h-11 items-center gap-3 rounded-2xl px-2 text-sm font-extrabold text-slate-700 transition hover:bg-slate-50 hover:text-slate-950" aria-label="Kembali ke beranda">
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" />
@@ -64,20 +64,20 @@
                 <div>
                     <p class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500 shadow-sm">
                         <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                        Account center
+                        Akun pembeli
                     </p>
-                    <h1 class="mt-5 text-4xl font-black leading-[0.98] tracking-[-0.055em] text-slate-950 sm:text-5xl lg:text-6xl">
-                        Kelola akun tanpa ribet.
+                    <h1 class="mt-5 text-4xl font-extrabold leading-[0.98] tracking-[-0.05em] text-slate-950 sm:text-5xl lg:text-6xl">
+                        Semua detail belanja dalam satu akun.
                     </h1>
                     <p class="mt-4 max-w-md text-sm font-medium leading-7 text-slate-600 sm:text-base sm:leading-8">
-                        Atur data profil, alamat, dan pantau order thrift kamu dari satu tempat yang lebih jelas.
+                        Atur data profil, alamat utama, dan riwayat order supaya proses belanja thrift tetap jelas.
                     </p>
                 </div>
 
                 <div class="grid gap-3">
                     @foreach($cards as $card)
                         @if($card['show'])
-                            <a href="{{ $card['route'] }}" class="group flex items-center gap-4 rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+                            <a href="{{ $card['route'] }}" class="group flex items-center gap-4 rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
                                 <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl {{ $card['tone'] }}">
                                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="{{ $card['icon'] }}" />

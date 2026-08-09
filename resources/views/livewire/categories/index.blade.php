@@ -4,8 +4,6 @@
         @endif
 
         <div class="admin-layout">
-            <x-sidebar />
-
             <!-- Main Content -->
             <div class="admin-content">
                 <div class="admin-card">

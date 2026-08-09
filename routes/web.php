@@ -36,7 +36,6 @@ use App\Livewire\Products\Edit as ProductsEdit;
 // ShippingIndex import dihapus
 use App\Livewire\Orders\Index as OrdersIndex;
 use App\Livewire\LandingProducts\Index as LandingProductsIndex;
-use App\Livewire\Transactions\Index as TransactionsIndex;
 
 // --------------------------------------------------
 // Public routes
@@ -136,6 +135,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 
     // Orders (Livewire)
     Route::get('/orders', OrdersIndex::class)->name('orders.index');
+    Route::get('/promotions', \App\Livewire\Promotions\Index::class)->name('promotions.index');
+    Route::get('/customers', \App\Livewire\Customers\Index::class)->name('customers.index');
+    Route::get('/reports', \App\Livewire\Reports\Index::class)->name('reports.index');
+    Route::get('/transactions', \App\Livewire\Transactions\Index::class)->name('transactions.index');
 
     // Settings & Categories (Livewire)
 

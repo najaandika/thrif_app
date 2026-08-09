@@ -25,9 +25,30 @@
                 </div>
             </header>
         @endif
-        <main>
-            {{ $slot }}
-        </main>
+        @php
+            $showAdminSidebar = request()->routeIs([
+                'dashboard',
+                'pos.*',
+                'orders.*',
+                'products.*',
+                'categories.*',
+                'promotions.*',
+                'customers.*',
+                'reports.*',
+                'transactions.*',
+                'settings.*',
+            ]);
+        @endphp
+
+        <div class="{{ $showAdminSidebar ? 'flex min-h-[calc(100vh-4rem)]' : '' }}">
+            @if($showAdminSidebar)
+                <x-sidebar />
+            @endif
+
+            <main class="{{ $showAdminSidebar ? 'min-w-0 flex-1' : '' }}">
+                {{ $slot }}
+            </main>
+        </div>
     </div>
     @livewireScripts
 </body>

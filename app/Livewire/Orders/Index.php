@@ -152,6 +152,16 @@ class Index extends Component
 
     public function render()
     {
+        $baseQuery = Order::query();
+
+        $orderStats = [
+            'all' => (clone $baseQuery)->count(),
+            'pending' => (clone $baseQuery)->where('status', 'pending')->count(),
+            'paid' => (clone $baseQuery)->where('status', 'paid')->count(),
+            'online' => (clone $baseQuery)->where('type', 'online')->count(),
+            'pos' => (clone $baseQuery)->where('type', 'pos')->count(),
+        ];
+
         $orders = Order::with(['items.product', 'customer'])
             ->when($this->search, function ($query) {
                 $term = '%' . $this->search . '%';
@@ -170,6 +180,7 @@ class Index extends Component
 
         return view('livewire.orders.index', [
             'orders' => $orders,
+            'orderStats' => $orderStats,
         ]);
     }
 }

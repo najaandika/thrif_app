@@ -1,74 +1,138 @@
-<div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <thead class="bg-gray-50 dark:bg-gray-700">
+@php
+    $statusBadge = function ($order) {
+        return match ($order->status) {
+            'pending' => 'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
+            'paid' => 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
+            default => 'bg-slate-100 text-slate-600 ring-1 ring-slate-200',
+        };
+    };
+@endphp
+
+<div class="hidden overflow-hidden rounded-2xl border border-slate-200 bg-white lg:block">
+    <table class="min-w-full divide-y divide-slate-200">
+        <thead class="bg-slate-50">
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">No. Invoice</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Produk</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Pembeli</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Total</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Update</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-32">Actions</th>
+                <th class="px-5 py-4 text-left text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Invoice</th>
+                <th class="px-5 py-4 text-left text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Produk</th>
+                <th class="px-5 py-4 text-left text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Pembeli</th>
+                <th class="px-5 py-4 text-left text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Total</th>
+                <th class="px-5 py-4 text-left text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Status</th>
+                <th class="px-5 py-4 text-left text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Update</th>
+                <th class="px-5 py-4 text-right text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Aksi</th>
             </tr>
         </thead>
-        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+        <tbody class="divide-y divide-slate-100">
             @forelse ($orders as $order)
-                <tr class="hover:bg-indigo-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
-                    <td class="px-6 py-4">
-                        <div class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ $order->invoice_number }}</div>
+                <tr class="transition hover:bg-slate-50/80">
+                    <td class="px-5 py-4">
+                        <p class="font-mono text-sm font-extrabold text-slate-950">{{ $order->invoice_number }}</p>
+                        <p class="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-slate-400">{{ $order->type ?? 'online' }}</p>
                     </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $order->product_name ?? '-' }}</div>
+                    <td class="px-5 py-4">
+                        <p class="max-w-52 truncate text-sm font-extrabold text-slate-900">{{ $order->product_name ?? '-' }}</p>
                         @if($order->items->count() > 1)
-                            <div class="text-xs text-gray-500">+ {{ $order->items->count() - 1 }} lainnya</div>
+                            <p class="mt-1 text-xs font-bold text-slate-400">+ {{ $order->items->count() - 1 }} item lainnya</p>
                         @endif
                     </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $order->buyer_name }}</div>
+                    <td class="px-5 py-4">
+                        <p class="text-sm font-extrabold text-slate-900">{{ $order->buyer_name ?: 'Customer' }}</p>
+                        <p class="mt-1 text-xs font-bold text-slate-400">{{ $order->buyer_contact ?: '-' }}</p>
                     </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm font-bold text-gray-900 dark:text-gray-100">{{ rupiah($order->total_price) }}</div>
+                    <td class="px-5 py-4">
+                        <p class="text-sm font-extrabold text-slate-950">{{ rupiah($order->total_price) }}</p>
                     </td>
-                    <td class="px-6 py-4">
-                        <span class="px-3 py-1 inline-flex text-xs font-semibold rounded-full {{ $order->status_class }}">{{ $order->status_label }}</span>
+                    <td class="px-5 py-4">
+                        <span class="inline-flex rounded-full px-3 py-1 text-xs font-extrabold {{ $statusBadge($order) }}">
+                            {{ $order->status_label }}
+                        </span>
                     </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm text-gray-500 dark:text-gray-400">{{ $order->updated_at->diffForHumans() }}</div>
+                    <td class="px-5 py-4">
+                        <p class="text-xs font-bold text-slate-500">{{ $order->updated_at->diffForHumans() }}</p>
                     </td>
-                    <td class="px-6 py-4 text-right">
+                    <td class="px-5 py-4">
                         <div class="flex items-center justify-end gap-2">
-                            <button type="button" wire:click="viewOrder({{ $order->id }})" class="inline-flex items-center px-3 py-1.5 bg-gray-900 dark:bg-gray-700 text-white text-xs font-semibold rounded-lg hover:bg-gray-800 dark:hover:bg-gray-600 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105">
-                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                </svg>
-                                Lihat
+                            <button type="button" wire:click="viewOrder({{ $order->id }})" class="inline-flex h-9 items-center rounded-xl bg-slate-950 px-3 text-xs font-extrabold text-white shadow-sm transition hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-200">
+                                Detail
                             </button>
                             @if($order->status === 'pending')
-                                <form wire:submit.prevent="confirmOrder({{ $order->id }})" class="inline-block">
-                                    <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-green-500 text-white text-xs font-semibold rounded-lg hover:from-emerald-600 hover:to-green-600 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105">
-                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
+                                <form wire:submit.prevent="confirmOrder({{ $order->id }})">
+                                    <button type="submit" class="inline-flex h-9 items-center rounded-xl bg-emerald-50 px-3 text-xs font-extrabold text-emerald-700 ring-1 ring-emerald-200 transition hover:bg-emerald-100 focus:outline-none focus:ring-4 focus:ring-emerald-100">
                                         Konfirmasi
                                     </button>
                                 </form>
                             @endif
-                            <button type="button" onclick="confirmDelete({{ $order->id }})" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-semibold rounded-lg hover:from-red-600 hover:to-pink-600 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 relative z-10">
-                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                </svg>
-                                Delete
+                            <button type="button" onclick="confirmDelete({{ $order->id }})" class="inline-flex h-9 items-center rounded-xl bg-rose-50 px-3 text-xs font-extrabold text-rose-700 ring-1 ring-rose-200 transition hover:bg-rose-100 focus:outline-none focus:ring-4 focus:ring-rose-100">
+                                Hapus
                             </button>
                         </div>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="8" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">Belum ada order.</td>
+                    <td colspan="7" class="px-6 py-16 text-center">
+                        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-50 text-slate-400 ring-1 ring-slate-200">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3h10a2 2 0 012 2v16l-3-2-2 2-2-2-2 2-2-2-3 2V5a2 2 0 012-2Z" />
+                            </svg>
+                        </div>
+                        <p class="mt-4 text-lg font-extrabold text-slate-950">Belum ada order.</p>
+                        <p class="mt-1 text-sm font-bold text-slate-500">Order dari landing page atau POS akan tampil di sini.</p>
+                    </td>
                 </tr>
             @endforelse
         </tbody>
     </table>
 </div>
 
+<div class="space-y-3 lg:hidden">
+    @forelse ($orders as $order)
+        <article class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div class="flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                    <p class="font-mono text-xs font-extrabold text-slate-400">{{ $order->invoice_number }}</p>
+                    <h3 class="mt-2 line-clamp-2 text-base font-extrabold tracking-[-0.02em] text-slate-950">{{ $order->product_name ?? '-' }}</h3>
+                </div>
+                <span class="shrink-0 rounded-full px-3 py-1 text-[11px] font-extrabold {{ $statusBadge($order) }}">
+                    {{ $order->status === 'pending' ? 'Pending' : $order->status_label }}
+                </span>
+            </div>
+
+            <div class="mt-4 grid grid-cols-2 gap-2">
+                <div class="rounded-2xl bg-slate-50 p-3">
+                    <p class="text-[10px] font-extrabold uppercase tracking-[0.14em] text-slate-400">Pembeli</p>
+                    <p class="mt-1 truncate text-sm font-extrabold text-slate-950">{{ $order->buyer_name ?: 'Customer' }}</p>
+                </div>
+                <div class="rounded-2xl bg-slate-50 p-3">
+                    <p class="text-[10px] font-extrabold uppercase tracking-[0.14em] text-slate-400">Total</p>
+                    <p class="mt-1 text-sm font-extrabold text-slate-950">{{ rupiah($order->total_price) }}</p>
+                </div>
+            </div>
+
+            <div class="mt-4 flex items-center justify-between gap-3 border-t border-slate-100 pt-4">
+                <p class="text-xs font-bold text-slate-400">{{ strtoupper($order->type ?? 'online') }} · {{ $order->updated_at->diffForHumans() }}</p>
+                <div class="flex items-center gap-2">
+                    <button type="button" wire:click="viewOrder({{ $order->id }})" class="inline-flex h-10 items-center rounded-xl bg-slate-950 px-4 text-xs font-extrabold text-white shadow-sm">
+                        Detail
+                    </button>
+                    @if($order->status === 'pending')
+                        <form wire:submit.prevent="confirmOrder({{ $order->id }})">
+                            <button type="submit" class="inline-flex h-10 items-center rounded-xl bg-emerald-50 px-4 text-xs font-extrabold text-emerald-700 ring-1 ring-emerald-200">
+                                Lunas
+                            </button>
+                        </form>
+                    @endif
+                </div>
+            </div>
+        </article>
+    @empty
+        <div class="rounded-3xl border border-slate-200 bg-white px-5 py-12 text-center shadow-sm">
+            <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-50 text-slate-400 ring-1 ring-slate-200">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3h10a2 2 0 012 2v16l-3-2-2 2-2-2-2 2-2-2-3 2V5a2 2 0 012-2Z" />
+                </svg>
+            </div>
+            <p class="mt-4 text-lg font-extrabold text-slate-950">Belum ada order.</p>
+            <p class="mt-1 text-sm font-bold text-slate-500">Coba ubah filter atau tunggu transaksi baru masuk.</p>
+        </div>
+    @endforelse
+</div>

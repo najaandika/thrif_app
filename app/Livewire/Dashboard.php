@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Product;
+use App\Models\Order;
 use App\Services\DashboardMetrics;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,11 @@ class Dashboard extends Component
             ->take(5)
             ->get();
 
+        $recent_orders = Order::with(['items.product'])
+            ->latest()
+            ->take(4)
+            ->get();
+
         // Sales data for chart based on selected range
         $chart_data = $this->metrics->buildSalesChartData($this->salesRange);
         $chart_max = $chart_data->max() ?: 1; // Prevent division by zero
@@ -35,6 +41,7 @@ class Dashboard extends Component
         return view('livewire.dashboard', [
             'stats' => $stats,
             'recent_products' => $recent_products,
+            'recent_orders' => $recent_orders,
             'chart_data' => $chart_data,
             'chart_max' => $chart_max,
             'salesRange' => $this->salesRange,

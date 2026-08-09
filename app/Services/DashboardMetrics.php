@@ -13,6 +13,20 @@ class DashboardMetrics
     {
         $totalProducts = Product::count();
         $availableProducts = Product::where('is_available', true)->count();
+        $pendingOrders = Order::where('status', 'pending')->count();
+        $paidOrders = Order::whereIn('status', ['paid', 'shipped', 'completed'])->count();
+        $discountProducts = Product::query()
+            ->where('is_available', true)
+            ->where('discount_percentage', '>', 0)
+            ->where(function ($query) {
+                $query->whereNull('discount_start')
+                    ->orWhere('discount_start', '<=', now());
+            })
+            ->where(function ($query) {
+                $query->whereNull('discount_end')
+                    ->orWhere('discount_end', '>=', now());
+            })
+            ->count();
 
         // Calculate sold products using OrderItem via Order
         $soldProducts = \App\Models\OrderItem::whereHas('order', function ($query) {
@@ -20,12 +34,17 @@ class DashboardMetrics
         })->sum('quantity');
 
         $totalValue = Product::where('is_available', true)->sum('price');
+        $paidRevenue = Order::whereIn('status', ['paid', 'shipped', 'completed'])->sum('total_price');
 
         return [
             'total_products'     => $totalProducts,
             'available_products' => $availableProducts,
             'sold_products'      => $soldProducts,
             'total_value'        => $totalValue,
+            'paid_revenue'       => $paidRevenue,
+            'pending_orders'     => $pendingOrders,
+            'paid_orders'        => $paidOrders,
+            'discount_products'  => $discountProducts,
         ];
     }
 

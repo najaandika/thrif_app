@@ -1,7 +1,5 @@
 <div class="py-12">
     <div class="flex flex-row gap-6">
-        <x-sidebar />
-        
         <div class="flex-1 min-w-0 px-4 sm:px-6 lg:px-8">
             <div class="mx-auto max-w-6xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 overflow-hidden shadow-xl sm:rounded-2xl border border-gray-100 dark:border-gray-700">
                 <div class="p-8">

@@ -1,7 +1,5 @@
 <div class="py-10 lg:py-12">
     <div class="flex flex-col lg:flex-row gap-6">
-        <x-sidebar />
-
         <div class="flex-1 min-w-0 px-4 sm:px-6 lg:px-8">
             <div class="admin-form-shell">
                 <div class="admin-form-header">

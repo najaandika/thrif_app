@@ -1,8 +1,6 @@
 <div class="py-12">
     <div>
         <div class="flex flex-col lg:flex-row gap-6">
-            <x-sidebar />
-
             <!-- Main Content -->
             <div class="flex-1 min-w-0 px-4 sm:px-6 lg:px-8">
                 <!-- Page Header -->

@@ -3,7 +3,6 @@
         <x-alert :message="session('message')" type="success" />
     @endif
     <div class="settings-layout">
-        <x-sidebar />
         <div class="settings-content">
             <div class="settings-card">
                 <div class="settings-card-body">

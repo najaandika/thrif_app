@@ -8,12 +8,14 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="font-sans antialiased bg-gray-100 dark:bg-gray-900">
-    <div class="min-h-screen flex flex-row"> <!-- Added flex-row for layout -->
-        <x-sidebar /> <!-- Sidebar component -->
-        <main class="flex-1"> <!-- Main content area -->
+<body class="font-sans antialiased bg-slate-50 text-slate-950">
+    <div class="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(15,23,42,0.04),transparent_32rem)]">
+        <div class="flex min-h-screen">
+            <x-sidebar />
+            <main class="min-w-0 flex-1">
             {{ $slot }}
-        </main>
+            </main>
+        </div>
     </div>
     @livewireScripts
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

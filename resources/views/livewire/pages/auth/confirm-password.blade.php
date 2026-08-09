@@ -33,18 +33,23 @@ $confirmPassword = function () {
 ?>
 
 <div>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
+    <div class="auth-header">
+        <div class="auth-icon-wrapper">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0-1.105.895-2 2-2h1a2 2 0 012 2v2m-6-2V9a4 4 0 118 0v2m-8 0h8m-10 0h12v9H5v-9z" />
+            </svg>
+        </div>
+        <h2 class="auth-title">Konfirmasi password.</h2>
+        <p class="auth-subtitle">Masukkan password akun untuk melanjutkan ke area yang lebih sensitif.</p>
     </div>
 
-    <form wire:submit="confirmPassword">
-        <!-- Password -->
+    <form wire:submit="confirmPassword" class="auth-form">
         <div>
-            <x-input-label for="password" :value="__('Password')" />
+            <x-input-label for="password" value="Password" />
 
             <x-text-input wire:model="password"
                           id="password"
-                          class="block mt-1 w-full"
+                          class="auth-input !pl-4"
                           type="password"
                           name="password"
                           required autocomplete="current-password" />
@@ -52,11 +57,7 @@ $confirmPassword = function () {
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
-        <div class="flex justify-end mt-4">
-            <x-primary-button>
-                {{ __('Confirm') }}
-            </x-primary-button>
-        </div>
+        <button type="submit" class="auth-primary-btn w-full">Konfirmasi</button>
     </form>
 </div>
 

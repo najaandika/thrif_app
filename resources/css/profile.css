@@ -1,78 +1,50 @@
-/* Profile Pages Styles */
+/* Profile and customer account surfaces */
 
-/* Profile Form Sections */
-.profile-section {
-    @apply space-y-6;
+.profile-panel {
+    @apply rounded-[2rem] border border-slate-200 bg-white p-5 shadow-[0_18px_60px_rgba(15,23,42,0.06)] sm:p-7;
 }
 
-.profile-section-header {
-    @apply border-b border-gray-200 dark:border-gray-700 pb-4;
+.profile-kicker {
+    @apply inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500;
 }
 
-.profile-section-title {
-    @apply text-lg font-semibold text-gray-900 dark:text-white;
+.profile-kicker::before {
+    content: "";
+    @apply h-1.5 w-1.5 rounded-full bg-emerald-500;
 }
 
-.profile-section-description {
-    @apply mt-1 text-sm text-gray-600 dark:text-gray-400;
+.profile-title {
+    @apply mt-4 text-3xl font-extrabold leading-tight tracking-[-0.04em] text-slate-950;
 }
 
-/* Form Elements */
+.profile-copy {
+    @apply mt-2 max-w-xl text-sm font-medium leading-7 text-slate-600;
+}
+
+.profile-card {
+    @apply rounded-[1.5rem] border border-slate-200 bg-slate-50/70 p-4 sm:p-5;
+}
+
 .profile-form {
-    @apply mt-6 space-y-6;
+    @apply mt-5 space-y-4;
 }
 
-.profile-form-actions {
-    @apply flex items-center gap-4;
+.profile-form label {
+    @apply text-sm font-bold text-slate-700;
 }
 
-/* Order History */
-.order-history-card {
-    @apply bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-shadow;
+.profile-field {
+    @apply mt-2 block w-full rounded-2xl border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-950 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-slate-950 focus:ring-4 focus:ring-slate-950/10;
 }
 
-.order-history-header {
-    @apply flex justify-between items-start mb-3;
+.profile-primary-btn {
+    @apply inline-flex min-h-11 items-center justify-center rounded-2xl bg-slate-950 px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-slate-950/15 transition hover:-translate-y-0.5 hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-950/10;
 }
 
-.order-id {
-    @apply text-sm font-semibold text-gray-900 dark:text-white;
+.profile-secondary-btn {
+    @apply inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-extrabold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-950 focus:outline-none focus:ring-4 focus:ring-slate-950/10;
 }
 
-.order-date {
-    @apply text-xs text-gray-500 dark:text-gray-400;
-}
-
-.order-product-name {
-    @apply text-sm font-medium text-gray-700 dark:text-gray-300;
-}
-
-.order-price {
-    @apply text-xs text-gray-500 dark:text-gray-400;
-}
-
-.order-status-badge {
-    @apply px-2 py-1 text-xs font-medium rounded-full;
-}
-
-/* Address Form */
-.address-grid {
-    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
-}
-
-/* Delete Account */
-.danger-section {
-    @apply border border-red-200 dark:border-red-800 rounded-lg p-6 bg-red-50 dark:bg-red-900/10;
-}
-
-.danger-title {
-    @apply text-lg font-semibold text-red-900 dark:text-red-200;
-}
-
-.danger-description {
-    @apply mt-1 text-sm text-red-700 dark:text-red-300;
-}
-
-.danger-button {
-    @apply mt-4 inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all;
+.profile-danger-panel {
+    @apply rounded-[1.5rem] border border-red-100 bg-red-50/60 p-4 sm:p-5;
 }

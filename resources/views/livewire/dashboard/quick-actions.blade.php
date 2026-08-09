@@ -18,7 +18,7 @@
                     <p class="action-desc">Tambah barang baru untuk dijual</p>
                 </div>
             </div>
-            <span class="shortcut-badge">⌘N</span>
+            <span class="shortcut-badge">N</span>
         </a>
 
         <a href="{{ route('products.index') }}" class="action-item">
@@ -33,7 +33,7 @@
                     <p class="action-desc">Lihat dan edit semua listing</p>
                 </div>
             </div>
-            <span class="shortcut-badge">⌘P</span>
+            <span class="shortcut-badge">P</span>
         </a>
 
         <div class="action-item weekly-sales-container">
@@ -66,7 +66,7 @@
                             id="sales_range"
                             name="sales_range"
                             aria-label="Pilih rentang waktu penjualan"
-                            class="text-xs border border-gray-200 dark:border-gray-700 rounded-lg px-2 py-1 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-1 focus:ring-gray-400"
+                            class="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs font-bold text-slate-600 outline-none transition focus:border-slate-400 focus:ring-4 focus:ring-slate-200"
                         >
                             <option value="weekly">Mingguan</option>
                             <option value="monthly">Bulanan</option>
