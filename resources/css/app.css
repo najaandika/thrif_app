@@ -77,6 +77,100 @@
     min-width: auto !important;
 }
 
+.swal2-popup.swal-admin-popup {
+    width: min(92vw, 25rem) !important;
+    padding: 1.5rem !important;
+    border: 1px solid rgb(226 232 240) !important;
+    border-radius: 1.5rem !important;
+    box-shadow: 0 24px 80px rgba(15, 23, 42, 0.18) !important;
+}
+
+.swal2-icon.swal-admin-icon {
+    display: flex !important;
+    width: 3.25rem !important;
+    height: 3.25rem !important;
+    margin: 0 auto 1rem !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 1px solid rgb(254 205 211) !important;
+    border-radius: 1.25rem !important;
+    background: rgb(255 241 242) !important;
+    color: rgb(190 18 60) !important;
+}
+
+.swal-delete-mark {
+    font-size: 1.35rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.swal2-title.swal-admin-title {
+    margin: 0 !important;
+    padding: 0 !important;
+    color: rgb(2 6 23) !important;
+    font-size: 1.35rem !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.035em !important;
+}
+
+.swal2-html-container.swal-admin-html {
+    margin: 0.65rem 0 0 !important;
+    padding: 0 !important;
+    color: rgb(71 85 105) !important;
+    font-size: 0.92rem !important;
+    font-weight: 600 !important;
+    line-height: 1.65 !important;
+}
+
+.swal-delete-copy {
+    margin: 0;
+}
+
+.swal2-actions.swal-admin-actions {
+    width: 100% !important;
+    margin: 1.25rem 0 0 !important;
+    gap: 0.75rem !important;
+}
+
+.swal-admin-confirm-danger,
+.swal-admin-cancel {
+    display: inline-flex !important;
+    min-height: 2.85rem !important;
+    flex: 1 1 0 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 1rem !important;
+    padding: 0 1rem !important;
+    font-size: 0.88rem !important;
+    font-weight: 900 !important;
+    transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease !important;
+}
+
+.swal-admin-confirm-danger {
+    border: 1px solid rgb(225 29 72) !important;
+    background: rgb(225 29 72) !important;
+    color: white !important;
+    box-shadow: 0 14px 34px rgba(225, 29, 72, 0.2) !important;
+}
+
+.swal-admin-confirm-danger:hover {
+    transform: translateY(-1px);
+    background: rgb(190 18 60) !important;
+}
+
+.swal-admin-cancel {
+    border: 1px solid rgb(226 232 240) !important;
+    background: white !important;
+    color: rgb(51 65 85) !important;
+}
+
+.swal-admin-cancel:hover {
+    transform: translateY(-1px);
+    border-color: rgb(203 213 225) !important;
+    background: rgb(248 250 252) !important;
+    color: rgb(2 6 23) !important;
+}
+
 @media (max-width: 640px) {
     .swal-compact {
         width: 90% !important;

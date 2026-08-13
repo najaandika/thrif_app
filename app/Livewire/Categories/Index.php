@@ -29,12 +29,18 @@ class Index extends Component
         
         if ($category) {
             $category->delete();
-            session()->flash('message', 'Category deleted successfully.');
+            session()->flash('message', 'Kategori berhasil dihapus.');
         }
     }
 
     public function render()
     {
+        $categoryStats = [
+            'total' => Category::count(),
+            'used' => Category::has('products')->count(),
+            'empty' => Category::doesntHave('products')->count(),
+        ];
+
         $categories = Category::query()
             ->withCount('products')
             ->when($this->search, function ($query) {
@@ -45,6 +51,7 @@ class Index extends Component
 
         return view('livewire.categories.index', [
             'categories' => $categories,
+            'categoryStats' => $categoryStats,
         ]);
     }
 }

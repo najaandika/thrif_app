@@ -1,98 +1,111 @@
-<!-- Left Column: Search + Products -->
-<div class="flex-1 space-y-6">
-    <!-- Pencarian Produk -->
-    <div class="bg-white dark:bg-gray-800/50 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-        <div class="flex gap-3 items-center">
-            <div class="flex-1">
-                <div class="relative">
-                    <label for="search" class="sr-only">Cari Produk</label>
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </div>
-                    <input 
-                        type="search" 
-                        id="search"
-                        name="search"
-                        wire:model.live.debounce.300ms="search" 
-                        class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl leading-5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-900 dark:focus:ring-white focus:border-gray-900 dark:focus:border-gray-100 sm:text-sm transition duration-150 ease-in-out" 
-                        placeholder="Ketik nama/kode/barcode produk..." 
-                        autofocus
-                    >
-                </div>
+<section class="space-y-5">
+    <div class="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-[0_20px_70px_rgba(15,23,42,0.06)]">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+                <h2 class="text-xl font-black text-slate-950">Pilih produk</h2>
+                <p class="mt-1 text-sm font-semibold text-slate-500">Klik item untuk masuk ke keranjang transaksi.</p>
             </div>
 
+            <div class="relative w-full lg:max-w-md">
+                <label for="search" class="sr-only">Cari produk POS</label>
+                <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-4.35-4.35m1.1-5.15a6.25 6.25 0 1 1-12.5 0 6.25 6.25 0 0 1 12.5 0Z" />
+                </svg>
+                <input
+                    type="search"
+                    id="search"
+                    name="search"
+                    wire:model.live.debounce.300ms="search"
+                    class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 pl-12 pr-4 text-sm font-bold text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-100"
+                    placeholder="Cari nama, kategori, atau kondisi"
+                    autofocus
+                >
+            </div>
         </div>
     </div>
 
-    <!-- Daftar Produk -->
     @if($loadProducts)
-        <div class="bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-6">
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div class="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-[0_20px_70px_rgba(15,23,42,0.06)] sm:p-5">
+            <div class="mb-4 flex items-center justify-between gap-3">
+                <p class="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-400">Produk ready</p>
+                <p class="text-sm font-extrabold text-slate-500">{{ $products->count() }} item</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
                 @forelse ($products as $product)
-                    <button type="button" wire:click="addToCart({{ $product->id }})" class="group relative flex flex-col bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-lg hover:border-gray-900 dark:hover:border-gray-100 transition-all duration-200 overflow-hidden text-left w-full aspect-square">
-                        <!-- Product Image (60% height) -->
-                        <div class="h-[60%] w-full bg-gray-100 dark:bg-gray-700 overflow-hidden relative">
+                    <button
+                        type="button"
+                        wire:click="addToCart({{ $product->id }})"
+                        wire:loading.attr="disabled"
+                        wire:target="addToCart({{ $product->id }})"
+                        class="group overflow-hidden rounded-3xl border border-slate-200 bg-white text-left shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_18px_45px_rgba(15,23,42,0.12)] focus:outline-none focus:ring-4 focus:ring-slate-100"
+                    >
+                        <div class="relative aspect-[4/3] overflow-hidden bg-slate-100">
                             @if($product->image)
-                                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200">
+                                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
                             @else
-                                <div class="w-full h-full flex items-center justify-center text-gray-400">
-                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                <div class="flex h-full w-full items-center justify-center text-slate-300">
+                                    <svg class="h-9 w-9" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.6-4.6a2 2 0 0 1 2.8 0L16 16m-2-2 1.6-1.6a2 2 0 0 1 2.8 0L20 14m-6-6h.01M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z" />
                                     </svg>
                                 </div>
                             @endif
-                            
-                            <!-- Badges Overlay -->
-                            <div class="absolute top-1 left-1 flex flex-col gap-1">
+
+                            <div class="absolute left-2 top-2 flex flex-wrap gap-1.5">
                                 @if($product->is_on_sale)
-                                    <span class="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow">
+                                    <span class="rounded-full bg-red-500 px-2 py-1 text-[10px] font-black text-white shadow-sm">
                                         -{{ $product->discount_percent }}%
                                     </span>
                                 @endif
-                            </div>
-                            
-                            <div class="absolute top-1 right-1">
-                                <span class="px-1.5 py-0.5 inline-flex text-[8px] font-bold rounded shadow-sm text-white uppercase tracking-wider {{ $product->condition_class }}">
+                                <span class="rounded-full bg-white/95 px-2 py-1 text-[10px] font-black text-slate-700 shadow-sm">
                                     {{ $product->condition_label }}
                                 </span>
                             </div>
                         </div>
-                        
-                        <!-- Card Content (40% height) -->
-                        <div class="h-[40%] p-2 flex flex-col justify-between bg-white dark:bg-gray-800 relative z-10">
-                            <!-- Product Name -->
-                            <h3 class="text-[10px] font-medium text-gray-900 dark:text-white leading-tight line-clamp-2 mb-1 group-hover:text-black dark:group-hover:text-white transition-colors">
-                                {{ $product->name }}
-                            </h3>
-                            
-                            <!-- Price -->
-                            <div class="mt-auto">
-                                @if($product->is_on_sale)
-                                    <div class="flex flex-col">
-                                        <span class="text-[9px] text-gray-400 line-through leading-none mb-0.5">{{ rupiah($product->price) }}</span>
-                                        <span class="text-xs font-bold text-red-500 leading-none">{{ rupiah($product->final_price) }}</span>
-                                    </div>
-                                @else
-                                    <span class="text-xs font-bold text-gray-900 dark:text-white leading-none">{{ rupiah($product->price) }}</span>
-                                @endif
+
+                        <div class="space-y-3 p-3">
+                            <div>
+                                <h3 class="line-clamp-2 min-h-[2.4rem] text-sm font-black leading-5 text-slate-950">
+                                    {{ $product->name }}
+                                </h3>
+                                <p class="mt-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-slate-400">
+                                    {{ $product->category ?? 'Produk' }}
+                                </p>
+                            </div>
+
+                            <div class="flex items-end justify-between gap-2">
+                                <div>
+                                    @if($product->is_on_sale)
+                                        <p class="text-xs font-bold text-slate-400 line-through">{{ rupiah($product->price) }}</p>
+                                        <p class="text-base font-black text-red-500">{{ rupiah($product->final_price) }}</p>
+                                    @else
+                                        <p class="text-base font-black text-slate-950">{{ rupiah($product->price) }}</p>
+                                    @endif
+                                </div>
+                                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-white shadow-sm transition group-hover:bg-slate-800">
+                                    <svg wire:loading.remove wire:target="addToCart({{ $product->id }})" class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m7-7H5" />
+                                    </svg>
+                                    <svg wire:loading wire:target="addToCart({{ $product->id }})" class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8v4a4 4 0 0 0-4 4H4Z"></path>
+                                    </svg>
+                                </span>
                             </div>
                         </div>
-                        
-                        <!-- Hover Effect -->
-                        <div class="absolute inset-0 bg-gray-900/0 group-hover:bg-gray-900/5 transition-colors duration-200 pointer-events-none z-0"></div>
                     </button>
                 @empty
-                    <div class="col-span-full flex flex-col items-center justify-center py-12 text-gray-400">
-                        <svg class="w-12 h-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                        </svg>
-                        <p>Produk tidak ditemukan.</p>
+                    <div class="col-span-full py-16 text-center">
+                        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-3xl bg-slate-100 text-slate-400">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7m16 0v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-5m16 0h-2.6a1 1 0 0 0-.7.3l-2.4 2.4a1 1 0 0 1-.7.3h-3.2a1 1 0 0 1-.7-.3l-2.4-2.4a1 1 0 0 0-.7-.3H4" />
+                            </svg>
+                        </div>
+                        <h3 class="mt-4 text-lg font-black text-slate-950">Produk tidak ditemukan.</h3>
+                        <p class="mt-2 text-sm font-semibold text-slate-500">Coba kata kunci lain atau cek kembali status produk.</p>
                     </div>
                 @endforelse
             </div>
         </div>
     @endif
-</div>
-
+</section>

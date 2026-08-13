@@ -11,8 +11,6 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" />
 
-        <!-- Dark mode pre-init untuk mencegah flicker putih -->
-
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -51,7 +49,19 @@
             @endphp
 
             <!-- Page Content -->
-            <div class="{{ $showAdminSidebar ? 'flex min-h-[calc(100vh-4rem)]' : '' }}">
+            <div
+                @if($showAdminSidebar)
+                    x-data="{
+                        collapsed: localStorage.getItem('adminSidebarCollapsed') === 'true',
+                        toggleSidebar() {
+                            this.collapsed = ! this.collapsed;
+                            localStorage.setItem('adminSidebarCollapsed', this.collapsed ? 'true' : 'false');
+                        }
+                    }"
+                    x-bind:class="collapsed ? 'admin-sidebar-collapsed' : ''"
+                @endif
+                class="{{ $showAdminSidebar ? 'flex min-h-[calc(100vh-4rem)]' : '' }}"
+            >
                 @if($showAdminSidebar)
                     <x-sidebar />
                 @endif
@@ -68,21 +78,6 @@
             </div>
         </div>
         @livewireScripts
-        <script>
-            // Configure Livewire to reduce flicker
-            document.addEventListener('livewire:init', () => {
-                Livewire.hook('commit', ({ component, commit, respond, succeed, fail }) => {
-                    succeed(({ snapshot, effect }) => {
-                        // Smooth transition
-                        document.body.style.opacity = '0.95';
-                        setTimeout(() => {
-                            document.body.style.opacity = '1';
-                        }, 50);
-                    });
-                });
-            });
-        </script>
         @vite(['resources/js/swal.js'])
     </body>
 </html>
-

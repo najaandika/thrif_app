@@ -1,4 +1,4 @@
-<div wire:poll.5s>
+<div wire:key="sidebar-menu-{{ $mobile ? 'mobile' : 'desktop' }}">
     @include('components.sidebar.menu', [
         'pendingOrdersCount' => $this->pendingOrdersCount,
         'readyProductsCount' => $this->readyProductsCount,

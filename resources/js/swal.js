@@ -5,20 +5,21 @@ import Swal from 'sweetalert2';
 window.Swal = Swal;
 
 const swalConfig = {
-    icon: 'warning',
+    iconHtml: '<span class="swal-delete-mark">!</span>',
     showCancelButton: true,
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#3085d6',
-    confirmButtonText: 'Ya, hapus!',
+    reverseButtons: true,
+    focusCancel: true,
+    buttonsStyling: false,
+    confirmButtonText: 'Hapus',
     cancelButtonText: 'Batal',
-    width: '320px',
-    padding: '1rem',
     customClass: {
-        popup: 'swal-compact',
-        title: 'swal-title-compact',
-        htmlContainer: 'swal-text-compact',
-        confirmButton: 'swal-btn-compact',
-        cancelButton: 'swal-btn-compact'
+        popup: 'swal-admin-popup',
+        icon: 'swal-admin-icon',
+        title: 'swal-admin-title',
+        htmlContainer: 'swal-admin-html',
+        actions: 'swal-admin-actions',
+        confirmButton: 'swal-admin-confirm-danger',
+        cancelButton: 'swal-admin-cancel',
     }
 };
 
@@ -26,7 +27,7 @@ window.showDeleteConfirmation = function (id, title, eventName) {
     Swal.fire({
         ...swalConfig,
         title: title,
-        text: 'Data yang dihapus tidak bisa dikembalikan!'
+        html: '<p class="swal-delete-copy">Data akan dihapus permanen dan tidak bisa dikembalikan.</p>'
     }).then((result) => {
         if (result.isConfirmed) {
             window.Livewire.dispatch(eventName, [id]);

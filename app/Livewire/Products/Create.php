@@ -55,6 +55,16 @@ class Create extends Component
 
 
 
+    public function updatedDiscountPercentage($value)
+    {
+        if ($value === '' || $value === null) {
+            $this->discount_percentage = null;
+            return;
+        }
+
+        $this->discount_percentage = min(100, max(0, (int) preg_replace('/\D/', '', (string) $value)));
+    }
+
     public function updatedImage($value)
     {
         $this->resetErrorBag('image');

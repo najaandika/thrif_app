@@ -19,23 +19,28 @@ $shopName = computed(fn() => cache()->remember('shop_name', 3600, fn() => Settin
 
 ?>
 
-<nav wire:key="main-navigation" x-data="{ sidebarOpen: false }" @close-drawer.window="sidebarOpen = false" class="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur-xl">
+<nav wire:key="main-navigation" x-data="{ sidebarOpen: false }" @close-drawer.window="sidebarOpen = false" class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-xl">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-[112rem] px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex min-w-0 items-center gap-3">
                 <!-- Logo/Brand or Account name on profile pages -->
                 @unless($this->hideBrand)
                 <div class="flex min-w-0 shrink-0 items-center">
-                    <a href="{{ $this->homeUrl }}" class="flex items-center gap-3 text-slate-950 transition-colors hover:text-slate-700">
+                    <a href="{{ $this->homeUrl }}" class="group flex min-w-0 items-center gap-3 rounded-2xl px-1.5 py-1 text-slate-950 transition-colors hover:text-slate-700 focus:outline-none focus:ring-4 focus:ring-slate-200">
                         @if($this->shopLogo)
-                            <img src="{{ media_url($this->shopLogo) }}" alt="{{ $this->shopName }}" width="38" height="38" class="h-10 w-10 rounded-xl object-cover ring-1 ring-slate-200">
+                            <img src="{{ media_url($this->shopLogo) }}" alt="{{ $this->shopName }}" width="44" height="44" class="h-11 w-11 rounded-2xl object-cover ring-1 ring-slate-200 transition group-hover:ring-slate-300">
                         @else
-                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-950 text-sm font-extrabold text-white shadow-sm">
+                            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-sm font-extrabold text-white shadow-sm">
                                 {{ strtoupper(substr($this->shopName, 0, 1)) }}
                             </div>
                         @endif
-                        <span class="max-w-40 truncate text-base font-extrabold tracking-[-0.02em] sm:max-w-none">{{ $this->shopName }}</span>
+                        <span class="min-w-0">
+                            <span class="block max-w-44 truncate text-base font-extrabold leading-5 tracking-[-0.02em] sm:max-w-none">{{ $this->shopName }}</span>
+                            @if($this->isAdmin)
+                                <span class="hidden text-[11px] font-bold leading-4 text-slate-400 sm:block">Admin workspace</span>
+                            @endif
+                        </span>
                     </a>
                 </div>
                 @else
@@ -123,4 +128,3 @@ $shopName = computed(fn() => cache()->remember('shop_name', 3600, fn() => Settin
     </div>
 
 </nav>
-

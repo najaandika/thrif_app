@@ -22,14 +22,24 @@
     <script>
     function confirmDelete(id) {
         Swal.fire({
-            title: 'Yakin hapus data ini?',
-            text: 'Data yang dihapus tidak bisa dikembalikan!',
-            icon: 'warning',
+            title: 'Hapus data ini?',
+            html: '<p class="swal-delete-copy">Data akan dihapus permanen dan tidak bisa dikembalikan.</p>',
+            iconHtml: '<span class="swal-delete-mark">!</span>',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Ya, hapus!',
-            cancelButtonText: 'Batal'
+            reverseButtons: true,
+            focusCancel: true,
+            buttonsStyling: false,
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal',
+            customClass: {
+                popup: 'swal-admin-popup',
+                icon: 'swal-admin-icon',
+                title: 'swal-admin-title',
+                htmlContainer: 'swal-admin-html',
+                actions: 'swal-admin-actions',
+                confirmButton: 'swal-admin-confirm-danger',
+                cancelButton: 'swal-admin-cancel',
+            },
         }).then((result) => {
             if (result.isConfirmed) {
                 if (typeof Livewire !== 'undefined') {

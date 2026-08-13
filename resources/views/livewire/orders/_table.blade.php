@@ -6,6 +6,8 @@
             default => 'bg-slate-100 text-slate-600 ring-1 ring-slate-200',
         };
     };
+
+    $actionButton = 'inline-flex h-10 items-center justify-center rounded-2xl px-4 text-xs font-extrabold transition focus:outline-none focus:ring-4';
 @endphp
 
 <div class="hidden overflow-hidden rounded-2xl border border-slate-200 bg-white lg:block">
@@ -51,17 +53,17 @@
                     </td>
                     <td class="px-5 py-4">
                         <div class="flex items-center justify-end gap-2">
-                            <button type="button" wire:click="viewOrder({{ $order->id }})" class="inline-flex h-9 items-center rounded-xl bg-slate-950 px-3 text-xs font-extrabold text-white shadow-sm transition hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-200">
+                            <button type="button" wire:click="viewOrder({{ $order->id }})" class="{{ $actionButton }} border border-slate-200 bg-white text-slate-700 shadow-sm hover:border-slate-300 hover:bg-slate-50 hover:text-slate-950 focus:ring-slate-100">
                                 Detail
                             </button>
                             @if($order->status === 'pending')
                                 <form wire:submit.prevent="confirmOrder({{ $order->id }})">
-                                    <button type="submit" class="inline-flex h-9 items-center rounded-xl bg-emerald-50 px-3 text-xs font-extrabold text-emerald-700 ring-1 ring-emerald-200 transition hover:bg-emerald-100 focus:outline-none focus:ring-4 focus:ring-emerald-100">
+                                    <button type="submit" class="{{ $actionButton }} border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 focus:ring-emerald-100">
                                         Konfirmasi
                                     </button>
                                 </form>
                             @endif
-                            <button type="button" onclick="confirmDelete({{ $order->id }})" class="inline-flex h-9 items-center rounded-xl bg-rose-50 px-3 text-xs font-extrabold text-rose-700 ring-1 ring-rose-200 transition hover:bg-rose-100 focus:outline-none focus:ring-4 focus:ring-rose-100">
+                            <button type="button" onclick="confirmDelete({{ $order->id }})" class="{{ $actionButton }} border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 focus:ring-rose-100">
                                 Hapus
                             </button>
                         </div>
@@ -111,16 +113,19 @@
             <div class="mt-4 flex items-center justify-between gap-3 border-t border-slate-100 pt-4">
                 <p class="text-xs font-bold text-slate-400">{{ strtoupper($order->type ?? 'online') }} · {{ $order->updated_at->diffForHumans() }}</p>
                 <div class="flex items-center gap-2">
-                    <button type="button" wire:click="viewOrder({{ $order->id }})" class="inline-flex h-10 items-center rounded-xl bg-slate-950 px-4 text-xs font-extrabold text-white shadow-sm">
+                    <button type="button" wire:click="viewOrder({{ $order->id }})" class="{{ $actionButton }} border border-slate-200 bg-white text-slate-700 shadow-sm">
                         Detail
                     </button>
                     @if($order->status === 'pending')
                         <form wire:submit.prevent="confirmOrder({{ $order->id }})">
-                            <button type="submit" class="inline-flex h-10 items-center rounded-xl bg-emerald-50 px-4 text-xs font-extrabold text-emerald-700 ring-1 ring-emerald-200">
+                            <button type="submit" class="{{ $actionButton }} border border-emerald-200 bg-emerald-50 text-emerald-700">
                                 Lunas
                             </button>
                         </form>
                     @endif
+                    <button type="button" onclick="confirmDelete({{ $order->id }})" class="{{ $actionButton }} border border-rose-200 bg-rose-50 text-rose-700">
+                        Hapus
+                    </button>
                 </div>
             </div>
         </article>

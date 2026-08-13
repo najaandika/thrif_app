@@ -57,13 +57,13 @@
                         @endif
                     </td>
                     <td class="px-5 py-4">
-                        <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold text-slate-600">{{ $product->category ?: '-' }}</span>
+                        <span class="inline-flex items-center whitespace-nowrap rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold leading-none text-slate-600">{{ $product->category ?: '-' }}</span>
                     </td>
                     <td class="px-5 py-4">
-                        <span class="rounded-full border px-3 py-1 text-xs font-bold {{ $conditionTone($product) }}">{{ $product->condition_label }}</span>
+                        <span class="inline-flex items-center whitespace-nowrap rounded-full border px-3 py-1 text-xs font-bold leading-none {{ $conditionTone($product) }}">{{ $product->condition_label }}</span>
                     </td>
                     <td class="px-5 py-4">
-                        <span class="rounded-full border px-3 py-1 text-xs font-bold {{ $statusBadge($product) }}">{{ $product->is_available ? 'Ready' : 'Terjual' }}</span>
+                        <span class="inline-flex items-center whitespace-nowrap rounded-full border px-3 py-1 text-xs font-bold leading-none {{ $statusBadge($product) }}">{{ $product->is_available ? 'Ready' : 'Terjual' }}</span>
                     </td>
                     <td class="px-5 py-4">
                         <div class="flex justify-end gap-2">
@@ -111,7 +111,7 @@
                             <h3 class="line-clamp-2 text-base font-black leading-tight text-slate-950">{{ $product->name }}</h3>
                             <p class="mt-1 text-xs font-extrabold uppercase tracking-[0.16em] text-slate-400">{{ $product->category ?: '-' }} - Size {{ $product->size ?: '-' }}</p>
                         </div>
-                        <span class="shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black {{ $statusBadge($product) }}">{{ $product->is_available ? 'Ready' : 'Sold' }}</span>
+                        <span class="inline-flex shrink-0 items-center whitespace-nowrap rounded-full border px-2.5 py-1 text-[10px] font-black leading-none {{ $statusBadge($product) }}">{{ $product->is_available ? 'Ready' : 'Sold' }}</span>
                     </div>
 
                     <div class="mt-3 flex items-end justify-between gap-2">
@@ -123,7 +123,7 @@
                                 <p class="text-base font-black text-slate-950">{{ rupiah($product->price) }}</p>
                             @endif
                         </div>
-                        <span class="rounded-full border px-2.5 py-1 text-[10px] font-black {{ $conditionTone($product) }}">{{ $product->condition_label }}</span>
+                        <span class="inline-flex items-center whitespace-nowrap rounded-full border px-2.5 py-1 text-[10px] font-black leading-none {{ $conditionTone($product) }}">{{ $product->condition_label }}</span>
                     </div>
                 </div>
             </div>
